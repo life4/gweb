@@ -8,21 +8,27 @@ type Canvas struct {
 	value js.Value
 }
 
+// getters
+
 func (canvas *Canvas) GetContext(name string) Value {
 	value := canvas.value.Call("getContext")
 	return Value{value: value}
 }
 
-// CONTEXT
-
-type RenderingContext struct {
-	value js.Value
+func (canvas *Canvas) Width() int {
+	return canvas.value.Get("width").Int()
 }
 
-func (context *RenderingContext) RenderingContext2D() RenderingContext2D {
-	return RenderingContext2D{value: context.value}
+func (canvas *Canvas) Height() int {
+	return canvas.value.Get("height").Int()
 }
 
-type RenderingContext2D struct {
-	value js.Value
+// setters
+
+func (canvas *Canvas) SetWidth(value int) {
+	canvas.value.Set("width", value)
+}
+
+func (canvas *Canvas) SetHeight(value int) {
+	canvas.value.Set("height", value)
 }
