@@ -247,12 +247,24 @@ func (context *Text) Align() string {
 	return context.value.Get("align").String()
 }
 
+func (context *Line) SetAlign(value string) {
+	context.value.Set("align", value)
+}
+
 func (context *Text) Baseline() string {
 	return context.value.Get("baseline").String()
 }
 
+func (context *Line) SetBaseline(value string) {
+	context.value.Set("baseline", value)
+}
+
 func (context *Text) Font() string {
 	return context.value.Get("font").String()
+}
+
+func (context *Line) SetFont(value string) {
+	context.value.Set("font", value)
 }
 
 func (context *Text) Fill(text string, x, y, maxWidth int) {
