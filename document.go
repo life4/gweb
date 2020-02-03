@@ -100,14 +100,14 @@ func (doc *Document) XMLStandalone() bool {
 
 // JS FUNCS
 
-func (doc *Document) CreateElement(name string, opts ...interface{}) Value {
-	value := doc.value.Call("createElement")
+func (doc *Document) CreateElement(name string) Value {
+	value := doc.value.Call("createElement", name)
 	return Value{value: value}
 }
 
 // HELPER FUNCS
 
-func (doc *Document) CreateCanvas(name string, opts ...interface{}) Canvas {
+func (doc *Document) CreateCanvas() Canvas {
 	value := doc.CreateElement("canvas")
 	return value.Canvas()
 }
