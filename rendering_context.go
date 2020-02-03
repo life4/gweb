@@ -5,11 +5,11 @@ import (
 )
 
 type RenderingContext struct {
-	value js.Value
+	js.Value
 }
 
 func (context *RenderingContext) Context2D() Context2D {
-	return Context2D{value: context.value}
+	return Context2D{value: context.Value}
 }
 
 type Context2D struct {

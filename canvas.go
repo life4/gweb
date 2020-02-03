@@ -8,7 +8,7 @@ type Canvas struct {
 
 func (canvas *Canvas) Context(name string) RenderingContext {
 	value := canvas.Call("getContext")
-	return RenderingContext{value: value}
+	return RenderingContext{Value: value}
 }
 
 func (canvas *Canvas) Context2D(name string) Context2D {
