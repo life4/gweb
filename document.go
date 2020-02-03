@@ -43,14 +43,7 @@ func (doc *Document) ContentType() string {
 
 func (doc *Document) Domain() string {
 	v := doc.value.Get("domain")
-	switch v.Type() {
-	case js.TypeUndefined, js.TypeNull:
-		return ""
-	case js.TypeString:
-		return v.String()
-	default:
-		panic("bad type")
-	}
+	return Value{Value: v}.OptionalString()
 }
 
 func (doc *Document) Referrer() string {

@@ -4,6 +4,7 @@ import (
 	"syscall/js"
 )
 
+// Value is an extended js.Value with more types support
 type Value struct {
 	js.Value
 }
@@ -28,4 +29,16 @@ func (v *Value) Strings() (items []string) {
 		items = append(items, item.String())
 	}
 	return items
+}
+
+// OptionalString returns empty string if Value is null
+func (v Value) OptionalString() string {
+	switch v.Type() {
+	case js.TypeNull:
+		return ""
+	case js.TypeString:
+		return v.String()
+	default:
+		panic("bad type")
+	}
 }
