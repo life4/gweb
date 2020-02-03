@@ -5,109 +5,109 @@ import (
 )
 
 type Element struct {
-	value js.Value
+	js.Value
 }
 
 // PROPERTIES
 
 func (el *Element) AssignedSlot() string {
-	v := el.value.Get("assignedSlot")
+	v := el.Get("assignedSlot")
 	return Value{Value: v}.OptionalString()
 }
 
 func (el *Element) Attribute(namespace, name string) Attribute {
-	return Attribute{value: el.value, namespace: namespace, name: name}
+	return Attribute{value: el.Value, namespace: namespace, name: name}
 }
 
 func (el *Element) Class() string {
-	return el.value.Get("className").String()
+	return el.Get("className").String()
 }
 
 func (el *Element) Classes() []string {
-	value := Value{Value: el.value.Get("classList")}
+	value := Value{Value: el.Get("classList")}
 	return value.Strings()
 }
 
 func (el *Element) ClientHeight() int {
-	return el.value.Get("clientHeight").Int()
+	return el.Get("clientHeight").Int()
 }
 
 func (el *Element) ClientLeft() int {
-	return el.value.Get("clientLeft").Int()
+	return el.Get("clientLeft").Int()
 }
 
 func (el *Element) ClientTop() int {
-	return el.value.Get("clientTop").Int()
+	return el.Get("clientTop").Int()
 }
 
 func (el *Element) ClientWidth() int {
-	return el.value.Get("ClientWidth").Int()
+	return el.Get("ClientWidth").Int()
 }
 
 func (el *Element) ID() string {
-	return el.value.Get("id").String()
+	return el.Get("id").String()
 }
 
 func (el *Element) InnerHTML() string {
-	return el.value.Get("innerHTML").String()
+	return el.Get("innerHTML").String()
 }
 
 func (el *Element) LocalName() string {
-	return el.value.Get("localName").String()
+	return el.Get("localName").String()
 }
 
 func (el *Element) OuterHTML() string {
-	return el.value.Get("outerHTML").String()
+	return el.Get("outerHTML").String()
 }
 
 func (el *Element) ScrollHeight() int {
-	return el.value.Get("scrollHeight").Int()
+	return el.Get("scrollHeight").Int()
 }
 
 func (el *Element) ScrollLeft() int {
-	return el.value.Get("scrollLeft").Int()
+	return el.Get("scrollLeft").Int()
 }
 
 func (el *Element) ScrollTop() int {
-	return el.value.Get("scrollTop").Int()
+	return el.Get("scrollTop").Int()
 }
 
 func (el *Element) ScrollWidth() int {
-	return el.value.Get("scrollWidth").Int()
+	return el.Get("scrollWidth").Int()
 }
 
 func (el *Element) Slot() string {
-	v := el.value.Get("slot")
+	v := el.Get("slot")
 	return Value{Value: v}.OptionalString()
 }
 
 func (el *Element) Tag() string {
-	return el.value.Get("tagName").String()
+	return el.Get("tagName").String()
 }
 
 // POINTER METHODS
 
 func (el *Element) ReleasePointerCapture(pointerID string) {
-	el.value.Call("releasePointerCapture", pointerID)
+	el.Call("releasePointerCapture", pointerID)
 }
 
 func (el *Element) RequestPointerLock() {
-	el.value.Call("requestPointerLock")
+	el.Call("requestPointerLock")
 }
 
 func (el *Element) SetPointerCapture(pointerID string) {
-	el.value.Call("setPointerCapture", pointerID)
+	el.Call("setPointerCapture", pointerID)
 }
 
 // OTHER METHODS
 
 func (el *Element) Matches(selector string) bool {
-	return el.value.Call("matches", selector).Bool()
+	return el.Call("matches", selector).Bool()
 }
 
 func (el *Element) ScrollBy(x, y int, smooth bool) {
 	if !smooth {
-		el.value.Call("scrollBy", x, y)
+		el.Call("scrollBy", x, y)
 		return
 	}
 
@@ -115,12 +115,12 @@ func (el *Element) ScrollBy(x, y int, smooth bool) {
 	opts.Set("left", x)
 	opts.Set("top", y)
 	opts.Set("behavior", "smooth")
-	el.value.Call("scrollBy", opts)
+	el.Call("scrollBy", opts)
 }
 
 func (el *Element) ScrollTo(x, y int, smooth bool) {
 	if !smooth {
-		el.value.Call("scrollTo", x, y)
+		el.Call("scrollTo", x, y)
 		return
 	}
 
@@ -128,7 +128,7 @@ func (el *Element) ScrollTo(x, y int, smooth bool) {
 	opts.Set("left", x)
 	opts.Set("top", y)
 	opts.Set("behavior", "smooth")
-	el.value.Call("scrollTo", opts)
+	el.Call("scrollTo", opts)
 }
 
 func (el *Element) ScrollIntoView(smooth bool, block, inline string) {
@@ -140,7 +140,7 @@ func (el *Element) ScrollIntoView(smooth bool, block, inline string) {
 	} else {
 		opts.Set("behavior", "auto")
 	}
-	el.value.Call("scrollIntoView", opts)
+	el.Call("scrollIntoView", opts)
 }
 
 // ELEMENT SUBTYPES
