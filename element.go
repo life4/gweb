@@ -71,9 +71,98 @@ func (el *Element) Tag() string {
 	return el.value.Get("tagName").String()
 }
 
-// METHODS
+// ATTRIBUTE METHODS
 
-func (el *Element) Attribute(name string) string {
-	v := el.value.Get("getAttribute")
+func (el *Element) GetAttribute(namespace, name string) string {
+	var v js.Value
+	if namespace == "" {
+		v = el.value.Call("getAttribute", name)
+	} else {
+		v = el.value.Call("getAttributeNS", namespace, name)
+	}
 	return Value{Value: v}.OptionalString()
+}
+
+func (el *Element) HasAttribute(namespace, name string) bool {
+	var v js.Value
+	if namespace == "" {
+		v = el.value.Call("hasAttribute", name)
+	} else {
+		v = el.value.Call("hasAttributeNS", namespace, name)
+	}
+	return v.Bool()
+}
+
+func (el *Element) RemoveAttribute(namespace, name string) bool {
+	var v js.Value
+	if namespace == "" {
+		v = el.value.Call("removeAttribute", name)
+	} else {
+		v = el.value.Call("removeAttributeNS", namespace, name)
+	}
+	return v.Bool()
+}
+
+func (el *Element) SetAttribute(namespace, name, value string) bool {
+	var v js.Value
+	if namespace == "" {
+		v = el.value.Call("setAttribute", name, value)
+	} else {
+		v = el.value.Call("setAttributeNS", namespace, name, value)
+	}
+	return v.Bool()
+}
+
+// POINTER METHODS
+
+func (el *Element) ReleasePointerCapture(pointerID string) {
+	el.value.Call("releasePointerCapture", pointerID)
+}
+
+func (el *Element) RequestPointerLock() {
+	el.value.Call("requestPointerLock")
+}
+
+// OTHER METHODS
+
+func (el *Element) Matches(selector string) bool {
+	return el.value.Call("matches", selector).Bool()
+}
+
+func (el *Element) ScrollBy(x, y int, smooth bool) {
+	if !smooth {
+		el.value.Call("scrollBy", x, y)
+		return
+	}
+
+	opts := js.Global().Get("Object").New()
+	opts.Set("left", x)
+	opts.Set("top", y)
+	opts.Set("behavior", "smooth")
+	el.value.Call("scrollBy", opts)
+}
+
+func (el *Element) ScrollTo(x, y int, smooth bool) {
+	if !smooth {
+		el.value.Call("scrollTo", x, y)
+		return
+	}
+
+	opts := js.Global().Get("Object").New()
+	opts.Set("left", x)
+	opts.Set("top", y)
+	opts.Set("behavior", "smooth")
+	el.value.Call("scrollTo", opts)
+}
+
+func (el *Element) ScrollIntoView(smooth bool, block, inline string) {
+	opts := js.Global().Get("Object").New()
+	opts.Set("block", block)
+	opts.Set("inline", inline)
+	if smooth {
+		opts.Set("behavior", "smooth")
+	} else {
+		opts.Set("behavior", "auto")
+	}
+	el.value.Call("scrollIntoView", opts)
 }
