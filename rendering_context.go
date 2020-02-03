@@ -38,6 +38,25 @@ func (context *Context2D) Shadow() Shadow {
 	return Shadow{value: context.value}
 }
 
+// OTHER ATTRS
+
+// GlobalAlpha returns the current alpha or transparency value of the drawing
+func (context *Context2D) GlobalAlpha() float64 {
+	return context.value.Get("globalAlpha").Float()
+}
+
+func (context *Context2D) SetGlobalAlpha(value float64) {
+	context.value.Set("globalAlpha", value)
+}
+
+func (context *Context2D) GlobalCompositeOperation() string {
+	return context.value.Get("globalCompositeOperation").String()
+}
+
+func (context *Context2D) SetGlobalCompositeOperation(value string) {
+	context.value.Set("globalCompositeOperation", value)
+}
+
 // PATH API
 
 func (context *Context2D) BeginPath() {
