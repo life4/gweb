@@ -10,6 +10,11 @@ type Element struct {
 
 // PROPERTIES
 
+func (el *Element) AssignedSlot() string {
+	v := el.value.Get("assignedSlot")
+	return Value{Value: v}.OptionalString()
+}
+
 func (el *Element) Attribute(namespace, name string) Attribute {
 	return Attribute{value: el.value, namespace: namespace, name: name}
 }
@@ -71,6 +76,11 @@ func (el *Element) ScrollWidth() int {
 	return el.value.Get("scrollWidth").Int()
 }
 
+func (el *Element) Slot() string {
+	v := el.value.Get("slot")
+	return Value{Value: v}.OptionalString()
+}
+
 func (el *Element) Tag() string {
 	return el.value.Get("tagName").String()
 }
@@ -83,6 +93,10 @@ func (el *Element) ReleasePointerCapture(pointerID string) {
 
 func (el *Element) RequestPointerLock() {
 	el.value.Call("requestPointerLock")
+}
+
+func (el *Element) SetPointerCapture(pointerID string) {
+	el.value.Call("setPointerCapture", pointerID)
 }
 
 // OTHER METHODS
@@ -165,10 +179,14 @@ func (attr *Attribute) Remove() {
 	}
 }
 
-func (attr *Attribute) Set() {
+func (attr *Attribute) Set(value string) {
 	if attr.namespace == "" {
-		attr.value.Call("setAttribute", attr.name, attr.value)
+		attr.value.Call("setAttribute", attr.name, value)
 	} else {
-		attr.value.Call("setAttributeNS", attr.namespace, attr.name, attr.value)
+		attr.value.Call("setAttributeNS", attr.namespace, attr.name, value)
 	}
+}
+
+func (attr *Attribute) Toggle() {
+	attr.value.Call("toggleAttribute", attr.name)
 }
