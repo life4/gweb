@@ -10,7 +10,8 @@ type Value struct {
 }
 
 func (v *Value) Canvas() Canvas {
-	return Canvas{value: v.Value}
+	el := Element{Value: v.Value}
+	return Canvas{Element: el}
 }
 
 func (v *Value) Values() (items []Value) {

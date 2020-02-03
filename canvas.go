@@ -1,17 +1,13 @@
 package glowasm
 
-import (
-	"syscall/js"
-)
-
 type Canvas struct {
-	value js.Value
+	Element
 }
 
 // getters
 
 func (canvas *Canvas) Context(name string) RenderingContext {
-	value := canvas.value.Call("getContext")
+	value := canvas.Call("getContext")
 	return RenderingContext{value: value}
 }
 
@@ -21,19 +17,19 @@ func (canvas *Canvas) Context2D(name string) Context2D {
 }
 
 func (canvas *Canvas) Width() int {
-	return canvas.value.Get("width").Int()
+	return canvas.Get("width").Int()
 }
 
 func (canvas *Canvas) Height() int {
-	return canvas.value.Get("height").Int()
+	return canvas.Get("height").Int()
 }
 
 // setters
 
 func (canvas *Canvas) SetWidth(value int) {
-	canvas.value.Set("width", value)
+	canvas.Set("width", value)
 }
 
 func (canvas *Canvas) SetHeight(value int) {
-	canvas.value.Set("height", value)
+	canvas.Set("height", value)
 }
