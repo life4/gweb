@@ -145,38 +145,74 @@ type Shadow struct {
 	value js.Value
 }
 
-func (shadow *Shadow) Blur() float64 {
-	return shadow.value.Get("shadowBlur").Float()
+func (context *Shadow) Blur() float64 {
+	return context.value.Get("shadowBlur").Float()
 }
 
-func (shadow *Shadow) Color() string {
-	return shadow.value.Get("shadowColor").String()
+func (context *Shadow) Color() string {
+	return context.value.Get("shadowColor").String()
 }
 
-func (shadow *Shadow) OffsetX() float64 {
-	return shadow.value.Get("shadowOffsetX").Float()
+func (context *Shadow) OffsetX() float64 {
+	return context.value.Get("shadowOffsetX").Float()
 }
 
-func (shadow *Shadow) OffsetY() float64 {
-	return shadow.value.Get("shadowOffsetY").Float()
+func (context *Shadow) OffsetY() float64 {
+	return context.value.Get("shadowOffsetY").Float()
 }
 
 type Line struct {
 	value js.Value
 }
 
-func (line *Line) Cap() string {
-	return line.value.Get("lineCap").String()
+func (context *Line) Cap() string {
+	return context.value.Get("lineCap").String()
 }
 
-func (line *Line) Join() string {
-	return line.value.Get("lineJoin").String()
+func (context *Line) Join() string {
+	return context.value.Get("lineJoin").String()
 }
 
-func (line *Line) MiterLimit() string {
-	return line.value.Get("miterLimit").String()
+func (context *Line) MiterLimit() string {
+	return context.value.Get("miterLimit").String()
 }
 
-func (line *Line) Width() int {
-	return line.value.Get("lineWidth").Int()
+func (context *Line) Width() int {
+	return context.value.Get("lineWidth").Int()
+}
+
+type Text struct {
+	value js.Value
+}
+
+func (context *Text) Align() string {
+	return context.value.Get("align").String()
+}
+
+func (context *Text) Baseline() string {
+	return context.value.Get("baseline").String()
+}
+
+func (context *Text) Font() string {
+	return context.value.Get("font").String()
+}
+
+func (context *Text) Fill(text string, x, y, maxWidth int) {
+	if maxWidth == 0 {
+		context.value.Call("fillText", x, y)
+	} else {
+		context.value.Call("fillText", x, y, maxWidth)
+	}
+}
+
+func (context *Text) Stroke(text string, x, y, maxWidth int) {
+	if maxWidth == 0 {
+		context.value.Call("strokeText", x, y)
+	} else {
+		context.value.Call("strokeText", x, y, maxWidth)
+	}
+}
+
+func (context *Text) Width(text string) int {
+	return context.value.Call("measureText", text).Get("width").Int()
 }
