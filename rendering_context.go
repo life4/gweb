@@ -93,6 +93,24 @@ func (context *Context2D) QuadraticCurveTo(cpx, cpy, x, y int) {
 	context.value.Call("quadraticCurveTo", cpx, cpy, x, y)
 }
 
+// RECTANGLES
+
+func (context *Context2D) Rect(x, y, width, height int) {
+	context.value.Call("rect", x, y, width, height)
+}
+
+func (context *Context2D) FillRect(x, y, width, height int) {
+	context.value.Call("fillRect", x, y, width, height)
+}
+
+func (context *Context2D) StrokeRect(x, y, width, height int) {
+	context.value.Call("strokeRect", x, y, width, height)
+}
+
+func (context *Context2D) ClearRect(x, y, width, height int) {
+	context.value.Call("clearRect", x, y, width, height)
+}
+
 // TRANSFORMATION API
 
 // Rotate rotates the current drawing
