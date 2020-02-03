@@ -5,9 +5,27 @@ import (
 )
 
 type Value struct {
-	value js.Value
+	js.Value
 }
 
 func (v *Value) Canvas() Canvas {
-	return Canvas{value: v.value}
+	return Canvas{value: v.Value}
+}
+
+func (v *Value) Values() (items []Value) {
+	len := v.Get("length").Int()
+	for i := 0; i < len; i++ {
+		item := v.Call("item", i)
+		items = append(items, Value{Value: item})
+	}
+	return items
+}
+
+func (v *Value) Strings() (items []string) {
+	len := v.Get("length").Int()
+	for i := 0; i < len; i++ {
+		item := v.Call("item", i)
+		items = append(items, item.String())
+	}
+	return items
 }

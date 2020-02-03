@@ -102,7 +102,7 @@ func (doc *Document) XMLStandalone() bool {
 
 func (doc *Document) CreateElement(name string) Value {
 	value := doc.value.Call("createElement", name)
-	return Value{value: value}
+	return Value{Value: value}
 }
 
 // HELPER FUNCS
