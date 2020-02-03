@@ -10,6 +10,10 @@ type Element struct {
 
 // PROPERTIES
 
+func (el *Element) Attribute(namespace, name string) Attribute {
+	return Attribute{value: el.value, namespace: namespace, name: name}
+}
+
 func (el *Element) Class() string {
 	return el.value.Get("className").String()
 }
@@ -71,48 +75,6 @@ func (el *Element) Tag() string {
 	return el.value.Get("tagName").String()
 }
 
-// ATTRIBUTE METHODS
-
-func (el *Element) GetAttribute(namespace, name string) string {
-	var v js.Value
-	if namespace == "" {
-		v = el.value.Call("getAttribute", name)
-	} else {
-		v = el.value.Call("getAttributeNS", namespace, name)
-	}
-	return Value{Value: v}.OptionalString()
-}
-
-func (el *Element) HasAttribute(namespace, name string) bool {
-	var v js.Value
-	if namespace == "" {
-		v = el.value.Call("hasAttribute", name)
-	} else {
-		v = el.value.Call("hasAttributeNS", namespace, name)
-	}
-	return v.Bool()
-}
-
-func (el *Element) RemoveAttribute(namespace, name string) bool {
-	var v js.Value
-	if namespace == "" {
-		v = el.value.Call("removeAttribute", name)
-	} else {
-		v = el.value.Call("removeAttributeNS", namespace, name)
-	}
-	return v.Bool()
-}
-
-func (el *Element) SetAttribute(namespace, name, value string) bool {
-	var v js.Value
-	if namespace == "" {
-		v = el.value.Call("setAttribute", name, value)
-	} else {
-		v = el.value.Call("setAttributeNS", namespace, name, value)
-	}
-	return v.Bool()
-}
-
 // POINTER METHODS
 
 func (el *Element) ReleasePointerCapture(pointerID string) {
@@ -165,4 +127,48 @@ func (el *Element) ScrollIntoView(smooth bool, block, inline string) {
 		opts.Set("behavior", "auto")
 	}
 	el.value.Call("scrollIntoView", opts)
+}
+
+// ELEMENT SUBTYPES
+
+type Attribute struct {
+	value     js.Value
+	namespace string
+	name      string
+}
+
+func (attr *Attribute) Value() string {
+	var v js.Value
+	if attr.namespace == "" {
+		v = attr.value.Call("getAttribute", attr.name)
+	} else {
+		v = attr.value.Call("getAttributeNS", attr.namespace, attr.name)
+	}
+	return Value{Value: v}.OptionalString()
+}
+
+func (attr *Attribute) Exists() bool {
+	var v js.Value
+	if attr.namespace == "" {
+		v = attr.value.Call("hasAttribute", attr.name)
+	} else {
+		v = attr.value.Call("hasAttributeNS", attr.namespace, attr.name)
+	}
+	return v.Bool()
+}
+
+func (attr *Attribute) Remove() {
+	if attr.namespace == "" {
+		attr.value.Call("removeAttribute", attr.name)
+	} else {
+		attr.value.Call("removeAttributeNS", attr.namespace, attr.name)
+	}
+}
+
+func (attr *Attribute) Set() {
+	if attr.namespace == "" {
+		attr.value.Call("setAttribute", attr.name, attr.value)
+	} else {
+		attr.value.Call("setAttributeNS", attr.namespace, attr.name, attr.value)
+	}
 }
