@@ -10,9 +10,14 @@ type Canvas struct {
 
 // getters
 
-func (canvas *Canvas) GetContext(name string) Value {
+func (canvas *Canvas) Context(name string) RenderingContext {
 	value := canvas.value.Call("getContext")
-	return Value{value: value}
+	return RenderingContext{value: value}
+}
+
+func (canvas *Canvas) Context2D(name string) Context2D {
+	context := canvas.Context("2d")
+	return context.Context2D()
 }
 
 func (canvas *Canvas) Width() int {
