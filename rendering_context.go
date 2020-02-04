@@ -1,11 +1,7 @@
 package glowasm
 
-import (
-	"syscall/js"
-)
-
 type RenderingContext struct {
-	js.Value
+	Value
 }
 
 func (context *RenderingContext) Context2D() Context2D {
@@ -13,7 +9,7 @@ func (context *RenderingContext) Context2D() Context2D {
 }
 
 type Context2D struct {
-	value js.Value
+	value Value
 }
 
 // STYLES
@@ -161,7 +157,7 @@ func (context *Context2D) Translate(x float64, y float64) {
 // CONTEXT SUBTYPES
 
 type Shadow struct {
-	value js.Value
+	value Value
 }
 
 func (context *Shadow) Blur() float64 {
@@ -197,7 +193,7 @@ func (context *Shadow) SetOffsetY(value float64) {
 }
 
 type Line struct {
-	value js.Value
+	value Value
 }
 
 func (context *Line) Cap() string {
@@ -240,7 +236,7 @@ func (context *Line) Draw(x1, y1, x2, y2 int) {
 }
 
 type Text struct {
-	value js.Value
+	value Value
 }
 
 func (context *Text) Align() string {

@@ -6,12 +6,13 @@ import (
 )
 
 type Document struct {
-	js.Value
+	Value
 }
 
 func GetDocument() Document {
 	window := js.Global()
-	return Document{Value: window.Get("document")}
+	value := window.Get("document")
+	return Document{Value: Value{Value: value}}
 }
 
 // DOCUMENT STRING PROPERTIES
@@ -43,7 +44,7 @@ func (doc *Document) ContentType() string {
 
 func (doc *Document) Domain() string {
 	v := doc.Get("domain")
-	return Value{Value: v}.OptionalString()
+	return v.OptionalString()
 }
 
 func (doc *Document) Referrer() string {
@@ -94,8 +95,7 @@ func (doc *Document) XMLStandalone() bool {
 // JS FUNCS
 
 func (doc *Document) CreateElement(name string) Value {
-	value := doc.Call("createElement", name)
-	return Value{Value: value}
+	return doc.Call("createElement", name)
 }
 
 // HELPER FUNCS

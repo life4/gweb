@@ -9,19 +9,33 @@ type Value struct {
 	js.Value
 }
 
+// overloaded methods
+
+func (v Value) Call(method string, args ...interface{}) Value {
+	result := v.Value.Call(method, args...)
+	return Value{Value: result}
+}
+
+func (v Value) Get(property string) Value {
+	result := v.Value.Get(property)
+	return Value{Value: result}
+}
+
+// new methods
+
 func (v *Value) Canvas() Canvas {
 	return Canvas{Element: v.Element()}
 }
 
 func (v *Value) Element() Element {
-	return Element{Value: v.Value}
+	return Element{Value: *v}
 }
 
 func (v *Value) Values() (items []Value) {
 	len := v.Get("length").Int()
 	for i := 0; i < len; i++ {
 		item := v.Call("item", i)
-		items = append(items, Value{Value: item})
+		items = append(items, item)
 	}
 	return items
 }

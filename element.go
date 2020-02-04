@@ -5,14 +5,13 @@ import (
 )
 
 type Element struct {
-	js.Value
+	Value
 }
 
 // PROPERTIES
 
 func (el *Element) AssignedSlot() string {
-	v := el.Get("assignedSlot")
-	return Value{Value: v}.OptionalString()
+	return el.Get("assignedSlot").OptionalString()
 }
 
 func (el *Element) Attribute(namespace, name string) Attribute {
@@ -24,8 +23,8 @@ func (el *Element) Class() string {
 }
 
 func (el *Element) Classes() []string {
-	value := Value{Value: el.Get("classList")}
-	return value.Strings()
+	v := el.Get("classList")
+	return v.Strings()
 }
 
 func (el *Element) ClientHeight() int {
@@ -78,7 +77,7 @@ func (el *Element) ScrollWidth() int {
 
 func (el *Element) Slot() string {
 	v := el.Get("slot")
-	return Value{Value: v}.OptionalString()
+	return v.OptionalString()
 }
 
 func (el *Element) Tag() string {
@@ -146,23 +145,23 @@ func (el *Element) ScrollIntoView(smooth bool, block, inline string) {
 // ELEMENT SUBTYPES
 
 type Attribute struct {
-	value     js.Value
+	value     Value
 	namespace string
 	name      string
 }
 
 func (attr *Attribute) Value() string {
-	var v js.Value
+	var v Value
 	if attr.namespace == "" {
 		v = attr.value.Call("getAttribute", attr.name)
 	} else {
 		v = attr.value.Call("getAttributeNS", attr.namespace, attr.name)
 	}
-	return Value{Value: v}.OptionalString()
+	return v.OptionalString()
 }
 
 func (attr *Attribute) Exists() bool {
-	var v js.Value
+	var v Value
 	if attr.namespace == "" {
 		v = attr.value.Call("hasAttribute", attr.name)
 	} else {
