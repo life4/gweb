@@ -15,6 +15,12 @@ func GetDocument() Document {
 	return Document{Value: value}
 }
 
+// SUBTYPE GETTERS
+
+func (doc *Document) Fullscreen() Fullscreen {
+	return Fullscreen{value: doc.Value}
+}
+
 // DOCUMENT STRING PROPERTIES
 
 // URL returns the URL for the current document.
@@ -63,7 +69,7 @@ func (doc *Document) Title() string {
 	return doc.Get("title").String()
 }
 
-// DOCUMENT NON-STRING PROPERTIES
+// NON-STRING PROPERTIES
 
 func (doc *Document) ChildElementCount() int {
 	return doc.Get("childElementCount").Int()
@@ -107,4 +113,14 @@ func (doc *Document) CreateCanvas() Canvas {
 
 func (doc *Document) Node() Node {
 	return Node{value: doc.Value}
+}
+
+// SUBTYPES
+
+type Fullscreen struct {
+	value Value
+}
+
+func (scroll *Scroll) Available() bool {
+	return scroll.value.Get("fullscreenEnabled").Bool()
 }
