@@ -8,14 +8,28 @@ type Element struct {
 	Value
 }
 
-// PROPERTIES
-
-func (el *Element) AssignedSlot() string {
-	return el.Get("assignedSlot").OptionalString()
-}
+// SUBTYPES GETTERS
 
 func (el *Element) Attribute(namespace, name string) Attribute {
 	return Attribute{value: el.Value, namespace: namespace, name: name}
+}
+
+func (el *Element) Client() Client {
+	return Client{value: el.Value}
+}
+
+func (el *Element) Node() Node {
+	return Node{value: el.Value}
+}
+
+func (el *Element) Scroll() Scroll {
+	return Scroll{value: el.Value}
+}
+
+// GETTERS
+
+func (el *Element) AssignedSlot() string {
+	return el.Get("assignedSlot").OptionalString()
 }
 
 func (el *Element) Class() string {
@@ -25,22 +39,6 @@ func (el *Element) Class() string {
 func (el *Element) Classes() []string {
 	v := el.Get("classList")
 	return v.Strings()
-}
-
-func (el *Element) ClientHeight() int {
-	return el.Get("clientHeight").Int()
-}
-
-func (el *Element) ClientLeft() int {
-	return el.Get("clientLeft").Int()
-}
-
-func (el *Element) ClientTop() int {
-	return el.Get("clientTop").Int()
-}
-
-func (el *Element) ClientWidth() int {
-	return el.Get("ClientWidth").Int()
 }
 
 func (el *Element) ID() string {
@@ -55,28 +53,8 @@ func (el *Element) LocalName() string {
 	return el.Get("localName").String()
 }
 
-func (el *Element) Node() Node {
-	return Node{value: el.Value}
-}
-
 func (el *Element) OuterHTML() string {
 	return el.Get("outerHTML").String()
-}
-
-func (el *Element) ScrollHeight() int {
-	return el.Get("scrollHeight").Int()
-}
-
-func (el *Element) ScrollLeft() int {
-	return el.Get("scrollLeft").Int()
-}
-
-func (el *Element) ScrollTop() int {
-	return el.Get("scrollTop").Int()
-}
-
-func (el *Element) ScrollWidth() int {
-	return el.Get("scrollWidth").Int()
 }
 
 func (el *Element) Slot() string {
@@ -192,4 +170,44 @@ func (attr *Attribute) Set(value string) {
 
 func (attr *Attribute) Toggle() {
 	attr.value.Call("toggleAttribute", attr.name)
+}
+
+type Client struct {
+	value Value
+}
+
+func (client *Client) Height() int {
+	return client.value.Get("clientHeight").Int()
+}
+
+func (client *Client) Left() int {
+	return client.value.Get("clientLeft").Int()
+}
+
+func (client *Client) Top() int {
+	return client.value.Get("clientTop").Int()
+}
+
+func (client *Client) Width() int {
+	return client.value.Get("clientWidth").Int()
+}
+
+type Scroll struct {
+	value Value
+}
+
+func (scroll *Scroll) Height() int {
+	return scroll.value.Get("scrollHeight").Int()
+}
+
+func (scroll *Scroll) Left() int {
+	return scroll.value.Get("scrollLeft").Int()
+}
+
+func (scroll *Scroll) Top() int {
+	return scroll.value.Get("scrollTop").Int()
+}
+
+func (scroll *Scroll) Width() int {
+	return scroll.value.Get("scrollWidth").Int()
 }
