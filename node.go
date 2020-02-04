@@ -70,9 +70,9 @@ func (node *Node) Normalize() {
 func (node *Node) ChildNodes() []Element {
 	nodes := node.value.Get("childNodes")
 	values := nodes.Values()
-	elements := make([]Element, len(values))
+	elements := make([]Element, len(values), 0)
 	for i, value := range values {
-		elements[i] = Element{Value: value}
+		elements[i] = value.Element()
 	}
 	return elements
 }
@@ -87,6 +87,6 @@ func (node *Node) Parent() Element {
 	case js.TypeNull:
 		return Element{}
 	default:
-		return Element{Value: value}
+		return value.Element()
 	}
 }

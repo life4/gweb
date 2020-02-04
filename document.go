@@ -21,6 +21,10 @@ func (doc *Document) Fullscreen() Fullscreen {
 	return Fullscreen{value: doc.Value}
 }
 
+func (doc *Document) Node() Node {
+	return Node{value: doc.Value}
+}
+
 // DOCUMENT STRING PROPERTIES
 
 // URL returns the URL for the current document.
@@ -48,6 +52,10 @@ func (doc *Document) ContentType() string {
 	return doc.Get("contentType").String()
 }
 
+func (doc *Document) Doctype() string {
+	return doc.Get("doctype").String()
+}
+
 func (doc *Document) Domain() string {
 	v := doc.Get("domain")
 	return v.OptionalString()
@@ -67,6 +75,34 @@ func (doc *Document) ReadyState() string {
 
 func (doc *Document) Title() string {
 	return doc.Get("title").String()
+}
+
+// GETTING CONCRETE SUBELEMENTS
+
+// Body returns the <body> or <frameset> node of the current document.
+func (doc *Document) Body() HTMLElement {
+	return doc.Get("body").HTMLElement()
+}
+
+// HTML returns the Element that is a direct child of the document.
+// For HTML documents, this is normally the <html> element.
+func (doc *Document) HTML() HTMLElement {
+	return doc.Get("documentElement").HTMLElement()
+}
+
+// Head returns the <head> element of the current document.
+func (doc *Document) Head() HTMLElement {
+	return doc.Get("head").HTMLElement()
+}
+
+func (doc *Document) Embeds() []HTMLElement {
+	collection := doc.Get("embeds")
+	values := collection.Values()
+	elements := make([]HTMLElement, len(values), 0)
+	for i, value := range values {
+		elements[i] = value.HTMLElement()
+	}
+	return elements
 }
 
 // NON-STRING PROPERTIES
@@ -98,21 +134,14 @@ func (doc *Document) XMLStandalone() bool {
 	return doc.Get("xmlStandalone").Bool()
 }
 
-// JS FUNCS
+// METHODS
 
-func (doc *Document) CreateElement(name string) Value {
-	return doc.Call("createElement", name)
+func (doc *Document) CreateElement(name string) HTMLElement {
+	return doc.Call("createElement", name).HTMLElement()
 }
-
-// HELPER FUNCS
 
 func (doc *Document) CreateCanvas() Canvas {
-	value := doc.CreateElement("canvas")
-	return value.Canvas()
-}
-
-func (doc *Document) Node() Node {
-	return Node{value: doc.Value}
+	return doc.CreateElement("canvas").Canvas()
 }
 
 // SUBTYPES

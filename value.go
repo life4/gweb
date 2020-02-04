@@ -23,7 +23,7 @@ func (v Value) Get(property string) Value {
 
 // new methods
 
-func (v *Value) Canvas() Canvas {
+func (v Value) Canvas() Canvas {
 	return Canvas{HTMLElement: v.HTMLElement()}
 }
 
@@ -31,7 +31,7 @@ func (v Value) Element() Element {
 	return Element{Value: v}
 }
 
-func (v *Value) HTMLElement() HTMLElement {
+func (v Value) HTMLElement() HTMLElement {
 	return HTMLElement{Element: v.Element()}
 }
 
