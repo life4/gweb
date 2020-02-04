@@ -24,11 +24,19 @@ func (v Value) Get(property string) Value {
 // new methods
 
 func (v *Value) Canvas() Canvas {
-	return Canvas{Element: v.Element()}
+	return Canvas{HTMLElement: v.HTMLElement()}
 }
 
-func (v *Value) Element() Element {
-	return Element{Value: *v}
+func (v Value) Element() Element {
+	return Element{Value: v}
+}
+
+func (v *Value) HTMLElement() HTMLElement {
+	return HTMLElement{Element: v.Element()}
+}
+
+func (v Value) Node() Node {
+	return Node{value: v}
 }
 
 func (v *Value) Values() (items []Value) {

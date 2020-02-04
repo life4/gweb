@@ -20,6 +20,16 @@ type HTMLElement struct {
 	Element
 }
 
+// SUBTYPES GETTERS
+
+func (el *HTMLElement) Node() Node {
+	return Node{value: el.Value}
+}
+
+func (el *HTMLElement) Offset() Offset {
+	return Offset{value: el.Value}
+}
+
 // GETTERS
 
 func (el *HTMLElement) Direction() Direction {
@@ -52,10 +62,6 @@ func (el *HTMLElement) TabIndex() int {
 
 func (el *HTMLElement) Title() string {
 	return el.Get("title").String()
-}
-
-func (el *HTMLElement) Offset() Offset {
-	return Offset{value: el.Value}
 }
 
 // SETTERS

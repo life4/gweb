@@ -1,7 +1,7 @@
 package glowasm
 
 type Canvas struct {
-	Element
+	HTMLElement
 }
 
 // getters
