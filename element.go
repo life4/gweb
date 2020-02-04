@@ -55,6 +55,10 @@ func (el *Element) LocalName() string {
 	return el.Get("localName").String()
 }
 
+func (el *Element) Node() Node {
+	return Node{value: el.Value}
+}
+
 func (el *Element) OuterHTML() string {
 	return el.Get("outerHTML").String()
 }
@@ -80,7 +84,7 @@ func (el *Element) Slot() string {
 	return v.OptionalString()
 }
 
-func (el *Element) Tag() string {
+func (el *Element) TagName() string {
 	return el.Get("tagName").String()
 }
 

@@ -11,8 +11,8 @@ type Document struct {
 
 func GetDocument() Document {
 	window := js.Global()
-	value := window.Get("document")
-	return Document{Value: Value{Value: value}}
+	value := Value{Value: window.Get("document")}
+	return Document{Value: value}
 }
 
 // DOCUMENT STRING PROPERTIES
@@ -103,4 +103,8 @@ func (doc *Document) CreateElement(name string) Value {
 func (doc *Document) CreateCanvas() Canvas {
 	value := doc.CreateElement("canvas")
 	return value.Canvas()
+}
+
+func (doc *Document) Node() Node {
+	return Node{value: doc.Value}
 }
