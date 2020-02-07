@@ -137,6 +137,10 @@ func (doc *Document) CreateCanvas() Canvas {
 	return doc.CreateElement("canvas").Canvas()
 }
 
+func (doc *Document) Element(id string) HTMLElement {
+	return doc.Call("getElementById", id).HTMLElement()
+}
+
 // SUBTYPES
 
 type Fullscreen struct {
