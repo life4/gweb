@@ -13,8 +13,10 @@ func GetWindow() Window {
 	return Window{Value: value}
 }
 
-// SUBTYPE GETTERS
+func (window *Window) Console() Console {
+	return Console{Value: window.Get("console")}
+}
 
-func (doc *Document) Document() Document {
-	return Document{Value: doc.Value}
+func (window *Window) Document() Document {
+	return Document{Value: window.Get("document")}
 }
