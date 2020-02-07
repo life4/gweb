@@ -171,7 +171,7 @@ func (decl *CSSStyleDeclaration) Filter() string {
 	return decl.Get("filter")
 }
 
-func (decl *CSSStyleDeclaration) CssFloat() string {
+func (decl *CSSStyleDeclaration) Float() string {
 	return decl.Get("float")
 }
 
@@ -461,7 +461,7 @@ func (decl *CSSStyleDeclaration) SetFilter(value string, important bool) {
 	decl.Set("filter", value, important)
 }
 
-func (decl *CSSStyleDeclaration) SetCssFloat(value string, important bool) {
+func (decl *CSSStyleDeclaration) SetFloat(value string, important bool) {
 	decl.Set("float", value, important)
 }
 
