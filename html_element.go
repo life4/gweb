@@ -1,5 +1,9 @@
 package glowasm
 
+import (
+	"github.com/orsinium/glowasm/css"
+)
+
 type Editable string
 
 const (
@@ -28,6 +32,10 @@ func (el *HTMLElement) Node() Node {
 
 func (el *HTMLElement) Offset() Offset {
 	return Offset{value: el.Value}
+}
+
+func (el *HTMLElement) Style() css.CSSStyleDeclaration {
+	return css.CSSStyleDeclaration{Value: el.Value}
 }
 
 // GETTERS
