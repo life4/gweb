@@ -1,18 +1,11 @@
 package glowasm
 
 import (
-	"syscall/js"
 	"time"
 )
 
 type Document struct {
 	Value
-}
-
-func GetDocument() Document {
-	window := js.Global()
-	value := Value{Value: window.Get("document")}
-	return Document{Value: value}
 }
 
 // SUBTYPE GETTERS
