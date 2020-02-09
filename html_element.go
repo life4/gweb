@@ -26,10 +26,6 @@ type HTMLElement struct {
 
 // SUBTYPES GETTERS
 
-func (el *HTMLElement) Node() Node {
-	return Node{value: el.Value}
-}
-
 func (el *HTMLElement) Offset() Offset {
 	return Offset{value: el.Value}
 }

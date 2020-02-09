@@ -97,5 +97,12 @@ func TestDocumentLastModified(t *testing.T) {
 
 func TestDocumentCreateNode(t *testing.T) {
 	d := GetWindow().Document()
-	assert.WithinDuration(t, d.LastModified(), time.Now(), 5*time.Second)
+	bodyNode := d.Body().Node()
+	assert.Equal(t, bodyNode.ChildrenCount(), 3)
+	el := d.CreateElement("", "test")
+	assert.Equal(t, bodyNode.ChildrenCount(), 3)
+	bodyNode.AppendChild(el.Element)
+	assert.Equal(t, bodyNode.ChildrenCount(), 4)
+	bodyNode.RemoveChild(el.Element)
+	assert.Equal(t, bodyNode.ChildrenCount(), 3)
 }

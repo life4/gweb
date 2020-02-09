@@ -29,7 +29,7 @@ func (node *Node) BaseURI() string {
 	return node.value.Get("baseURI").String()
 }
 
-func (node *Node) ChildElementCount() int {
+func (node Node) ChildrenCount() int {
 	return node.value.Get("childElementCount").Int()
 }
 
@@ -71,6 +71,10 @@ func (node *Node) Normalize() {
 
 // TREE
 
+func (node *Node) AppendChild(child Element) {
+	node.value.Call("appendChild", child.Value)
+}
+
 func (node *Node) ChildNodes() []Element {
 	nodes := node.value.Get("childNodes")
 	values := nodes.Values()
@@ -81,16 +85,32 @@ func (node *Node) ChildNodes() []Element {
 	return elements
 }
 
+func (node *Node) FirstChild() Element {
+	return node.value.Get("firstChild").Element()
+}
+
 func (node *Node) HasChildNodes() bool {
 	return node.value.Call("hasChildNodes").Bool()
 }
 
 func (node *Node) Parent() Element {
-	value := node.value.Get("parentElement")
-	switch value.Type() {
-	case js.TypeNull:
-		return Element{}
-	default:
-		return value.Element()
+	return node.value.Get("parentElement").Element()
+}
+
+func (node *Node) RemoveChild(child Element) {
+	node.value.Call("removeChild", child.Value)
+}
+
+func (node *Node) RemoveChildren() {
+	for {
+		child := node.FirstChild()
+		if child.Type() == js.TypeNull {
+			return
+		}
+		node.value.Call("removeChild", child.Value)
 	}
+}
+
+func (node *Node) Remove() {
+	node.Parent().Call("removeChild", node.value)
 }

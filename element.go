@@ -18,10 +18,6 @@ func (el *Element) Client() Client {
 	return Client{value: el.Value}
 }
 
-func (el *Element) Node() Node {
-	return Node{value: el.Value}
-}
-
 func (el *Element) Scroll() Scroll {
 	return Scroll{value: el.Value}
 }
