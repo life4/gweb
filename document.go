@@ -1,6 +1,7 @@
 package glowasm
 
 import (
+	"syscall/js"
 	"time"
 )
 
@@ -84,9 +85,14 @@ func (doc *Document) HTML() HTMLElement {
 	return doc.Get("documentElement").HTMLElement()
 }
 
+// Embeds returns <object> and <embed> elements in the document.
 func (doc *Document) Embeds() []HTMLElement {
-	collection := doc.Get("embeds")
+	collection := doc.Get("plugins")
 	values := collection.Values()
+
+	collection = doc.Get("embeds")
+	values = append(values, collection.Values()...)
+
 	elements := make([]HTMLElement, len(values), 0)
 	for i, value := range values {
 		elements[i] = value.HTMLElement()
@@ -96,27 +102,20 @@ func (doc *Document) Embeds() []HTMLElement {
 
 // NON-STRING PROPERTIES
 
-func (doc *Document) ChildElementCount() int {
-	return doc.Get("childElementCount").Int()
-}
-
 // DesignMode indicates whether the document can be edited.
 func (doc *Document) DesignMode() bool {
 	return doc.Get("designMode").String() == "on"
 }
 
+// Hidden is true when the webpage is in the background and not visible to the user
 func (doc *Document) Hidden() bool {
 	return doc.Get("hidden").Bool()
 }
 
 func (doc *Document) LastModified() time.Time {
 	date := doc.Get("lastModified").String()
-	timestamp := doc.Get("Date").Call("parse", date).Float()
-	return time.Unix(0, int64(timestamp))
-}
-
-func (doc *Document) XMLStandalone() bool {
-	return doc.Get("xmlStandalone").Bool()
+	timestamp := js.Global().Get("Date").Call("parse", date).Float()
+	return time.Unix(int64(timestamp/1000), 0)
 }
 
 // METHODS

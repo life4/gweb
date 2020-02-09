@@ -4,6 +4,7 @@ import (
 	"strings"
 	"syscall/js"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -77,4 +78,19 @@ func TestDocumentHTML(t *testing.T) {
 	element := d.HTML()
 	assert.Equal(t, element.Type(), js.TypeObject)
 	assert.Equal(t, element.Call("toString").String(), "[object HTMLHtmlElement]")
+}
+
+func TestDocumentDesignMode(t *testing.T) {
+	d := GetWindow().Document()
+	assert.False(t, d.DesignMode())
+}
+
+func TestDocumentHidden(t *testing.T) {
+	d := GetWindow().Document()
+	assert.False(t, d.Hidden())
+}
+
+func TestDocumentLastModified(t *testing.T) {
+	d := GetWindow().Document()
+	assert.WithinDuration(t, d.LastModified(), time.Now(), 5*time.Second)
 }

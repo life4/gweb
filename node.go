@@ -29,6 +29,10 @@ func (node *Node) BaseURI() string {
 	return node.value.Get("baseURI").String()
 }
 
+func (node *Node) ChildElementCount() int {
+	return node.value.Get("childElementCount").Int()
+}
+
 func (node *Node) Connected() bool {
 	return node.value.Get("isConnected").Bool()
 }
