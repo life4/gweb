@@ -13,10 +13,10 @@ func GetWindow() Window {
 	return Window{Value: value}
 }
 
-func (window *Window) Console() Console {
+func (window Window) Console() Console {
 	return Console{Value: window.Get("console")}
 }
 
-func (window *Window) Document() Document {
+func (window Window) Document() Document {
 	return Document{Value: window.Get("document")}
 }
