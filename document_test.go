@@ -2,6 +2,7 @@ package glowasm
 
 import (
 	"strings"
+	"syscall/js"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -55,4 +56,25 @@ func TestDocumentReadyState(t *testing.T) {
 func TestDocumentTitle(t *testing.T) {
 	d := GetWindow().Document()
 	assert.Equal(t, d.Title(), "Go wasm")
+}
+
+func TestDocumentBody(t *testing.T) {
+	d := GetWindow().Document()
+	element := d.Body()
+	assert.Equal(t, element.Type(), js.TypeObject)
+	assert.Equal(t, element.Call("toString").String(), "[object HTMLBodyElement]")
+}
+
+func TestDocumentHead(t *testing.T) {
+	d := GetWindow().Document()
+	element := d.Head()
+	assert.Equal(t, element.Type(), js.TypeObject)
+	assert.Equal(t, element.Call("toString").String(), "[object HTMLHeadElement]")
+}
+
+func TestDocumentHTML(t *testing.T) {
+	d := GetWindow().Document()
+	element := d.HTML()
+	assert.Equal(t, element.Type(), js.TypeObject)
+	assert.Equal(t, element.Call("toString").String(), "[object HTMLHtmlElement]")
 }
