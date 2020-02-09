@@ -94,3 +94,8 @@ func TestDocumentLastModified(t *testing.T) {
 	d := GetWindow().Document()
 	assert.WithinDuration(t, d.LastModified(), time.Now(), 5*time.Second)
 }
+
+func TestDocumentCreateNode(t *testing.T) {
+	d := GetWindow().Document()
+	assert.WithinDuration(t, d.LastModified(), time.Now(), 5*time.Second)
+}

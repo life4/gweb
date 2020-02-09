@@ -31,6 +31,10 @@ func (v Value) Element() Element {
 	return Element{Value: v}
 }
 
+func (v Value) Embed() Embed {
+	return Embed{HTMLElement: v.HTMLElement()}
+}
+
 func (v Value) HTMLElement() HTMLElement {
 	return HTMLElement{Element: v.Element()}
 }
