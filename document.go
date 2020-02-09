@@ -28,7 +28,7 @@ func (doc *Document) URL() string {
 // Cookie returns the HTTP cookies that apply to the Document.
 // If there are no cookies or cookies can't be applied to this resource, the empty string will be returned.
 func (doc *Document) Cookie() string {
-	return doc.Get("URL").String()
+	return doc.Get("cookie").String()
 }
 
 // CharacterSet returns document's encoding.
@@ -36,17 +36,13 @@ func (doc *Document) CharacterSet() string {
 	return doc.Get("characterSet").String()
 }
 
-func (doc *Document) CompatMode() string {
-	return doc.Get("compatMode").String()
-}
-
 // ContentType returns document's content type.
 func (doc *Document) ContentType() string {
 	return doc.Get("contentType").String()
 }
 
-func (doc *Document) Doctype() string {
-	return doc.Get("doctype").String()
+func (doc *Document) DocType() string {
+	return doc.Get("doctype").Get("name").String()
 }
 
 func (doc *Document) Domain() string {
@@ -107,10 +103,6 @@ func (doc *Document) ChildElementCount() int {
 // DesignMode indicates whether the document can be edited.
 func (doc *Document) DesignMode() bool {
 	return doc.Get("designMode").String() == "on"
-}
-
-func (doc *Document) FullscreenEnabled() bool {
-	return doc.Get("fullscreenEnabled").Bool()
 }
 
 func (doc *Document) Hidden() bool {
