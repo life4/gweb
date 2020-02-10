@@ -1,6 +1,6 @@
-# golang + js + wasm
+# GWeb: golang + js + wasm
 
-**gweb** -- strictly typed `syscall/js`. Like [flow](https://github.com/facebook/flow) but for Go.
+**gweb** -- strictly typed [WebAPI](https://en.wikipedia.org/wiki/Web_API) library on top of [syscall/js](https://golang.org/pkg/syscall/js/). Like [flow](https://github.com/facebook/flow) or [TypeScript](https://www.typescriptlang.org/) but for Go.
 
 ## Features
 
