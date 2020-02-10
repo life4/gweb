@@ -1,4 +1,5 @@
 {
+    // set os and arch to be able to use `syscall/js` and run tests
     "go.toolsEnvVars": {
         "GOARCH": "wasm",
         "GOOS": "js",
@@ -7,4 +8,14 @@
         "GOARCH": "wasm",
         "GOOS": "js",
     },
+
+    // run tests in a headless chromium
+    "go.testFlags": ["-exec=wasmbrowsertest"],
+
+    // disable coverage since it requires to write output in a file
+    // but js+wasm compilation forbids file system access
+    "go.coverOnSave": false,
+    "go.coverOnSingleTest": false,
+    "go.coverOnTestPackage": false,
+    "go.coverOnSingleTestFile": false,
 }

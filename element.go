@@ -11,7 +11,7 @@ type Element struct {
 // SUBTYPES GETTERS
 
 func (el *Element) Attribute(namespace, name string) Attribute {
-	return Attribute{value: el.Value, namespace: namespace, name: name}
+	return Attribute{value: el.Value, Namespace: namespace, Name: name}
 }
 
 func (el *Element) Client() Client {
@@ -124,67 +124,67 @@ func (el *Element) ScrollIntoView(smooth bool, block, inline string) {
 
 type Attribute struct {
 	value     Value
-	namespace string
-	name      string
+	Namespace string
+	Name      string
 }
 
-func (attr *Attribute) Value() string {
+func (attr *Attribute) Get() string {
 	var v Value
-	if attr.namespace == "" {
-		v = attr.value.Call("getAttribute", attr.name)
+	if attr.Namespace == "" {
+		v = attr.value.Call("getAttribute", attr.Name)
 	} else {
-		v = attr.value.Call("getAttributeNS", attr.namespace, attr.name)
+		v = attr.value.Call("getAttributeNS", attr.Namespace, attr.Name)
 	}
 	return v.OptionalString()
 }
 
-func (attr *Attribute) Exists() bool {
+func (attr Attribute) Exists() bool {
 	var v Value
-	if attr.namespace == "" {
-		v = attr.value.Call("hasAttribute", attr.name)
+	if attr.Namespace == "" {
+		v = attr.value.Call("hasAttribute", attr.Name)
 	} else {
-		v = attr.value.Call("hasAttributeNS", attr.namespace, attr.name)
+		v = attr.value.Call("hasAttributeNS", attr.Namespace, attr.Name)
 	}
 	return v.Bool()
 }
 
-func (attr *Attribute) Remove() {
-	if attr.namespace == "" {
-		attr.value.Call("removeAttribute", attr.name)
+func (attr Attribute) Remove() {
+	if attr.Namespace == "" {
+		attr.value.Call("removeAttribute", attr.Name)
 	} else {
-		attr.value.Call("removeAttributeNS", attr.namespace, attr.name)
+		attr.value.Call("removeAttributeNS", attr.Namespace, attr.Name)
 	}
 }
 
-func (attr *Attribute) Set(value string) {
-	if attr.namespace == "" {
-		attr.value.Call("setAttribute", attr.name, value)
+func (attr Attribute) Set(value string) {
+	if attr.Namespace == "" {
+		attr.value.Call("setAttribute", attr.Name, value)
 	} else {
-		attr.value.Call("setAttributeNS", attr.namespace, attr.name, value)
+		attr.value.Call("setAttributeNS", attr.Namespace, attr.Name, value)
 	}
 }
 
-func (attr *Attribute) Toggle() {
-	attr.value.Call("toggleAttribute", attr.name)
+func (attr Attribute) Toggle() {
+	attr.value.Call("toggleAttribute", attr.Name)
 }
 
 type Client struct {
 	value Value
 }
 
-func (client *Client) Height() int {
+func (client Client) Height() int {
 	return client.value.Get("clientHeight").Int()
 }
 
-func (client *Client) Left() int {
+func (client Client) Left() int {
 	return client.value.Get("clientLeft").Int()
 }
 
-func (client *Client) Top() int {
+func (client Client) Top() int {
 	return client.value.Get("clientTop").Int()
 }
 
-func (client *Client) Width() int {
+func (client Client) Width() int {
 	return client.value.Get("clientWidth").Int()
 }
 
@@ -192,18 +192,18 @@ type Scroll struct {
 	value Value
 }
 
-func (scroll *Scroll) Height() int {
+func (scroll Scroll) Height() int {
 	return scroll.value.Get("scrollHeight").Int()
 }
 
-func (scroll *Scroll) Left() int {
+func (scroll Scroll) Left() int {
 	return scroll.value.Get("scrollLeft").Int()
 }
 
-func (scroll *Scroll) Top() int {
+func (scroll Scroll) Top() int {
 	return scroll.value.Get("scrollTop").Int()
 }
 
-func (scroll *Scroll) Width() int {
+func (scroll Scroll) Width() int {
 	return scroll.value.Get("scrollWidth").Int()
 }

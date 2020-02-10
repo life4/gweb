@@ -70,18 +70,18 @@ func (doc *Document) Title() string {
 // GETTING CONCRETE SUBELEMENTS
 
 // Body returns the <body> or <frameset> node of the current document.
-func (doc *Document) Body() HTMLElement {
+func (doc Document) Body() HTMLElement {
 	return doc.Get("body").HTMLElement()
 }
 
 // Head returns the <head> element of the current document.
-func (doc *Document) Head() HTMLElement {
+func (doc Document) Head() HTMLElement {
 	return doc.Get("head").HTMLElement()
 }
 
 // HTML returns the Element that is a direct child of the document.
 // For HTML documents, this is normally the <html> element.
-func (doc *Document) HTML() HTMLElement {
+func (doc Document) HTML() HTMLElement {
 	return doc.Get("documentElement").HTMLElement()
 }
 
