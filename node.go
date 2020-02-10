@@ -111,6 +111,11 @@ func (node Node) RemoveChildren() {
 	}
 }
 
-func (node Node) Remove() {
-	node.Parent().Call("removeChild", node.value)
+func (node Node) Remove() bool {
+	parent := node.Parent()
+	if parent.Type() == js.TypeNull {
+		return false
+	}
+	parent.Call("removeChild", node.value)
+	return true
 }
