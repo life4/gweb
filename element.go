@@ -10,8 +10,8 @@ type Element struct {
 
 // SUBTYPES GETTERS
 
-func (el *Element) Attribute(namespace, name string) Attribute {
-	return Attribute{value: el.Value, Namespace: namespace, Name: name}
+func (el *Element) Attribute(name string) Attribute {
+	return Attribute{value: el.Value, Namespace: "", Name: name}
 }
 
 func (el *Element) Class() Class {

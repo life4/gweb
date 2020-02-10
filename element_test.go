@@ -9,7 +9,7 @@ import (
 
 func TestElementAttribute(t *testing.T) {
 	b := GetWindow().Document().Body()
-	attr := b.Attribute("", "test")
+	attr := b.Attribute("test")
 	assert.False(t, attr.Exists())
 
 	attr.Set("val")
@@ -21,7 +21,7 @@ func TestElementAttribute(t *testing.T) {
 }
 
 func TestElementClass(t *testing.T) {
-	element := GetWindow().Document().CreateElement("", "lol")
+	element := GetWindow().Document().CreateElement("lol")
 	class := element.Class()
 
 	assert.Equal(t, class.String(), "")
@@ -62,17 +62,17 @@ func TestElementSlots(t *testing.T) {
 	body := d.Body()
 
 	// create <template>
-	template := d.CreateElement("", "template")
+	template := d.CreateElement("template")
 	body.Node().AppendChild(template.Node())
 
 	// add <slot> into template
-	slot := d.CreateElement("", "slot")
+	slot := d.CreateElement("slot")
 	slot.Set("name", "example")
 	slot.SetInnerHTML("default text")
 	template.Node().AppendChild(slot.Node())
 
 	// make <span> element that will fill the <slot>
-	span := d.CreateElement("", "span")
+	span := d.CreateElement("span")
 	assert.Equal(t, span.Slot(), "")
 	span.SetSlot("example")
 	assert.Equal(t, span.Slot(), "example")

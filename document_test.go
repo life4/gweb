@@ -99,7 +99,7 @@ func TestDocumentCreateNode(t *testing.T) {
 	d := GetWindow().Document()
 	bodyNode := d.Body().Node()
 	assert.Equal(t, bodyNode.ChildrenCount(), 3)
-	el := d.CreateElement("", "test")
+	el := d.CreateElement("test")
 	assert.Equal(t, bodyNode.ChildrenCount(), 3)
 	bodyNode.AppendChild(el.Node())
 	assert.Equal(t, bodyNode.ChildrenCount(), 4)

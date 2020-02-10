@@ -120,15 +120,12 @@ func (doc *Document) LastModified() time.Time {
 
 // METHODS
 
-func (doc Document) CreateElement(namespace, name string) HTMLElement {
-	if namespace == "" {
-		return doc.Call("createElement", name).HTMLElement()
-	}
-	return doc.Call("createElementNS", namespace, name).HTMLElement()
+func (doc Document) CreateElement(name string) HTMLElement {
+	return doc.Call("createElement", name).HTMLElement()
 }
 
 func (doc Document) CreateCanvas() Canvas {
-	return doc.CreateElement("", "canvas").Canvas()
+	return doc.CreateElement("canvas").Canvas()
 }
 
 func (doc Document) Element(id string) HTMLElement {
