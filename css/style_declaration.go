@@ -14,7 +14,7 @@ func (decl *CSSStyleDeclaration) Len() int {
 
 func (decl *CSSStyleDeclaration) Names() []string {
 	length := decl.Len()
-	items := make([]string, length, 0)
+	items := make([]string, length)
 	for i := 0; i < length; i++ {
 		items[i] = decl.Value.Call("item", i).String()
 	}

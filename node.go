@@ -78,7 +78,7 @@ func (node Node) AppendChild(child Node) {
 func (node Node) ChildNodes() []Element {
 	nodes := node.value.Get("childNodes")
 	values := nodes.Values()
-	elements := make([]Element, len(values), 0)
+	elements := make([]Element, len(values))
 	for i, value := range values {
 		elements[i] = value.Element()
 	}

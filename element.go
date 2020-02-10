@@ -14,6 +14,10 @@ func (el *Element) Attribute(namespace, name string) Attribute {
 	return Attribute{value: el.Value, Namespace: namespace, Name: name}
 }
 
+func (el *Element) Class() Class {
+	return Class{value: el.Value}
+}
+
 func (el *Element) Client() Client {
 	return Client{value: el.Value}
 }
@@ -47,15 +51,6 @@ func (el Element) SetSlot(name string) {
 }
 
 // GETTERS
-
-func (el *Element) Class() string {
-	return el.Get("className").String()
-}
-
-func (el *Element) Classes() []string {
-	v := el.Get("classList")
-	return v.Strings()
-}
 
 func (el *Element) ID() string {
 	return el.Get("id").String()
@@ -255,4 +250,53 @@ func (shadow ShadowDOM) Host() Element {
 // Root returns ShadowRoot hosted by the element.
 func (shadow ShadowDOM) Root() Element {
 	return shadow.value.Get("shadowRoot").Element()
+}
+
+type Class struct {
+	value Value
+}
+
+// String returns `class` attribute
+func (cls Class) String() string {
+	return cls.value.Get("className").String()
+}
+
+// Strings returns classes from `class` attribute
+func (cls Class) Strings() []string {
+	v := cls.value.Get("classList")
+	return v.Strings()
+}
+
+// Contains returns true if `class` attribute contains given class
+func (cls Class) Contains(name string) bool {
+	return cls.value.Get("classList").Call("contains", name).Bool()
+}
+
+// Add adds new class into `class` attribute
+func (cls Class) Append(names ...string) {
+	if len(names) == 0 {
+		return
+	}
+	casted := make([]interface{}, len(names))
+	for i, name := range names {
+		casted[i] = interface{}(name)
+	}
+	cls.value.Get("classList").Call("add", casted...)
+}
+
+// Remove removes class from classes list in `class` attribute
+func (cls Class) Remove(names ...string) {
+	if len(names) == 0 {
+		return
+	}
+	casted := make([]interface{}, len(names))
+	for i, name := range names {
+		casted[i] = interface{}(name)
+	}
+	cls.value.Get("classList").Call("remove", casted...)
+}
+
+// Set overwrites the whole `class` attribute
+func (cls Class) Set(name string) {
+	cls.value.Set("className", name)
 }

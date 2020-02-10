@@ -93,7 +93,7 @@ func (doc *Document) Embeds() []Embed {
 	collection = doc.Get("embeds")
 	values = append(values, collection.Values()...)
 
-	elements := make([]Embed, len(values), 0)
+	elements := make([]Embed, len(values))
 	for i, value := range values {
 		elements[i] = value.Embed()
 	}
@@ -120,18 +120,18 @@ func (doc *Document) LastModified() time.Time {
 
 // METHODS
 
-func (doc *Document) CreateElement(namespace, name string) HTMLElement {
+func (doc Document) CreateElement(namespace, name string) HTMLElement {
 	if namespace == "" {
 		return doc.Call("createElement", name).HTMLElement()
 	}
 	return doc.Call("createElementNS", namespace, name).HTMLElement()
 }
 
-func (doc *Document) CreateCanvas() Canvas {
+func (doc Document) CreateCanvas() Canvas {
 	return doc.CreateElement("", "canvas").Canvas()
 }
 
-func (doc *Document) Element(id string) HTMLElement {
+func (doc Document) Element(id string) HTMLElement {
 	return doc.Call("getElementById", id).HTMLElement()
 }
 

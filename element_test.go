@@ -20,6 +20,25 @@ func TestElementAttribute(t *testing.T) {
 	assert.False(t, attr.Exists())
 }
 
+func TestElementClass(t *testing.T) {
+	element := GetWindow().Document().CreateElement("", "lol")
+	class := element.Class()
+
+	assert.Equal(t, class.String(), "")
+	class.Set("one two")
+	assert.Equal(t, class.String(), "one two")
+
+	assert.Equal(t, class.Strings(), []string{"one", "two"})
+	class.Append("three", "four")
+	assert.Equal(t, class.Strings(), []string{"one", "two", "three", "four"})
+	class.Remove("two", "three")
+	assert.Equal(t, class.Strings(), []string{"one", "four"})
+	assert.Equal(t, class.String(), "one four")
+
+	assert.True(t, class.Contains("one"))
+	assert.False(t, class.Contains("two"))
+}
+
 func TestElementClient(t *testing.T) {
 	b := GetWindow().Document().Body()
 	c := b.Client()
