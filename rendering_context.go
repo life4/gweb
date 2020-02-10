@@ -1,4 +1,4 @@
-package glowasm
+package gweb
 
 type RenderingContext struct {
 	Value

@@ -1,4 +1,4 @@
-package glowasm
+package gweb
 
 type Console struct {
 	Value

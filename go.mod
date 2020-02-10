@@ -1,4 +1,4 @@
-module github.com/orsinium/glowasm
+module github.com/orsinium/gweb
 
 go 1.13
 

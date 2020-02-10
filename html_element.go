@@ -1,7 +1,7 @@
-package glowasm
+package gweb
 
 import (
-	"github.com/orsinium/glowasm/css"
+	"github.com/orsinium/gweb/css"
 )
 
 type Editable string

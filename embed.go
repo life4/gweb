@@ -1,4 +1,4 @@
-package glowasm
+package gweb
 
 // Embed represents HTMLEmbedElement and HTMLObjectElement.
 type Embed struct {
