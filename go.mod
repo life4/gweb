@@ -1,4 +1,4 @@
-module github.com/orsinium/gweb
+module github.com/life4/gweb
 
 go 1.13
 
