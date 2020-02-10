@@ -71,11 +71,11 @@ func (node *Node) Normalize() {
 
 // TREE
 
-func (node *Node) AppendChild(child Element) {
-	node.value.Call("appendChild", child.Value)
+func (node Node) AppendChild(child Node) {
+	node.value.Call("appendChild", child.value)
 }
 
-func (node *Node) ChildNodes() []Element {
+func (node Node) ChildNodes() []Element {
 	nodes := node.value.Get("childNodes")
 	values := nodes.Values()
 	elements := make([]Element, len(values), 0)
@@ -85,23 +85,23 @@ func (node *Node) ChildNodes() []Element {
 	return elements
 }
 
-func (node *Node) FirstChild() Element {
+func (node Node) FirstChild() Element {
 	return node.value.Get("firstChild").Element()
 }
 
-func (node *Node) HasChildNodes() bool {
+func (node Node) HasChildNodes() bool {
 	return node.value.Call("hasChildNodes").Bool()
 }
 
-func (node *Node) Parent() Element {
+func (node Node) Parent() Element {
 	return node.value.Get("parentElement").Element()
 }
 
-func (node *Node) RemoveChild(child Element) {
-	node.value.Call("removeChild", child.Value)
+func (node Node) RemoveChild(child Node) {
+	node.value.Call("removeChild", child.value)
 }
 
-func (node *Node) RemoveChildren() {
+func (node Node) RemoveChildren() {
 	for {
 		child := node.FirstChild()
 		if child.Type() == js.TypeNull {
@@ -111,6 +111,6 @@ func (node *Node) RemoveChildren() {
 	}
 }
 
-func (node *Node) Remove() {
+func (node Node) Remove() {
 	node.Parent().Call("removeChild", node.value)
 }

@@ -101,8 +101,8 @@ func TestDocumentCreateNode(t *testing.T) {
 	assert.Equal(t, bodyNode.ChildrenCount(), 3)
 	el := d.CreateElement("", "test")
 	assert.Equal(t, bodyNode.ChildrenCount(), 3)
-	bodyNode.AppendChild(el.Element)
+	bodyNode.AppendChild(el.Node())
 	assert.Equal(t, bodyNode.ChildrenCount(), 4)
-	bodyNode.RemoveChild(el.Element)
+	bodyNode.RemoveChild(el.Node())
 	assert.Equal(t, bodyNode.ChildrenCount(), 3)
 }

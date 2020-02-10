@@ -18,7 +18,13 @@ func (el *Element) Client() Client {
 	return Client{value: el.Value}
 }
 
-func (el *Element) Shadow() ShadowDOM {
+// Content returns Node that contains the DOM subtree
+// representing the <template> element's template contents.
+func (el Element) Content() Node {
+	return Node{value: el.Value}
+}
+
+func (el Element) Shadow() ShadowDOM {
 	return ShadowDOM{value: el.Value}
 }
 
@@ -26,11 +32,21 @@ func (el *Element) Scroll() Scroll {
 	return Scroll{value: el.Value}
 }
 
-// GETTERS
+// SLOTS
 
-func (el *Element) AssignedSlot() string {
-	return el.Get("assignedSlot").OptionalString()
+func (el Element) AssignedSlot() Element {
+	return el.Get("assignedSlot").Element()
 }
+
+func (el Element) Slot() string {
+	return el.Get("slot").OptionalString()
+}
+
+func (el Element) SetSlot(name string) {
+	el.Set("slot", name)
+}
+
+// GETTERS
 
 func (el *Element) Class() string {
 	return el.Get("className").String()
@@ -45,7 +61,7 @@ func (el *Element) ID() string {
 	return el.Get("id").String()
 }
 
-func (el *Element) InnerHTML() string {
+func (el Element) InnerHTML() string {
 	return el.Get("innerHTML").String()
 }
 
@@ -57,13 +73,18 @@ func (el *Element) OuterHTML() string {
 	return el.Get("outerHTML").String()
 }
 
-func (el *Element) Slot() string {
-	v := el.Get("slot")
-	return v.OptionalString()
-}
-
 func (el *Element) TagName() string {
 	return el.Get("tagName").String()
+}
+
+// SETTERS
+
+func (el Element) SetID(id string) {
+	el.Set("id", id)
+}
+
+func (el Element) SetInnerHTML(html string) {
+	el.Set("innerHTML", html)
 }
 
 // POINTER METHODS

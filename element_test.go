@@ -1,6 +1,7 @@
 package glowasm
 
 import (
+	"syscall/js"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -35,4 +36,33 @@ func TestElementScroll(t *testing.T) {
 	assert.Equal(t, s.Height(), 0)
 	assert.Equal(t, s.Left(), 0)
 	assert.Equal(t, s.Top(), 0)
+}
+
+func TestElementSlots(t *testing.T) {
+	d := GetWindow().Document()
+	body := d.Body()
+
+	// create <template>
+	template := d.CreateElement("", "template")
+	body.Node().AppendChild(template.Node())
+
+	// add <slot> into template
+	slot := d.CreateElement("", "slot")
+	slot.Set("name", "example")
+	slot.SetInnerHTML("default text")
+	template.Node().AppendChild(slot.Node())
+
+	// make <span> element that will fill the <slot>
+	span := d.CreateElement("", "span")
+	assert.Equal(t, span.Slot(), "")
+	span.SetSlot("example")
+	assert.Equal(t, span.Slot(), "example")
+	body.Node().AppendChild(span.Node())
+
+	// render template
+	shadow := body.Shadow().Attach()
+	assert.Equal(t, span.AssignedSlot().Type(), js.TypeNull)
+	shadow.Node().AppendChild(template.Content())
+	assert.NotEqual(t, span.AssignedSlot().Type(), js.TypeNull)
+	assert.Equal(t, span.AssignedSlot().InnerHTML(), "default text")
 }
