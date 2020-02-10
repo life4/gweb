@@ -33,9 +33,31 @@ If you're using VSCode, it's recommend to create in your project `.vscode/settin
 }
 ```
 
-## Examples
+## Example
 
-...
+```go
+doc := GetWindow().Document()
+body := doc.Body()
+
+// create <template>
+template := doc.CreateElement("template")
+body.Node().AppendChild(template.Node())
+
+// add <slot> into template
+slot := doc.CreateElement("slot")
+slot.Set("name", "example")  // here we call syscall/js-like method
+slot.SetInnerHTML("default text")
+template.Node().AppendChild(slot.Node())
+
+// make <span> element that will fill the <slot>
+span := doc.CreateElement("span")
+span.SetSlot("example")
+body.Node().AppendChild(span.Node())
+
+// render template
+shadow := body.Shadow().Attach()
+shadow.Node().AppendChild(template.Content())
+```
 
 ## Error handling
 

@@ -1,7 +1,7 @@
 package gweb
 
 import (
-	"github.com/orsinium/gweb/css"
+	"github.com/life4/gweb/css"
 )
 
 type Editable string
