@@ -18,6 +18,10 @@ func (el *Element) Client() Client {
 	return Client{value: el.Value}
 }
 
+func (el *Element) Shadow() ShadowDOM {
+	return ShadowDOM{value: el.Value}
+}
+
 func (el *Element) Scroll() Scroll {
 	return Scroll{value: el.Value}
 }
@@ -206,4 +210,28 @@ func (scroll Scroll) Top() int {
 
 func (scroll Scroll) Width() int {
 	return scroll.value.Get("scrollWidth").Int()
+}
+
+type ShadowDOM struct {
+	value Value
+}
+
+// Attach attaches a shadow DOM tree to the specified element and returns ShadowRoot.
+// We always create "open" shadow DOM because "closed" can't totally
+// forbid access to the DOM and give falls feeling of protection.
+// Read more: https://blog.revillweb.com/open-vs-closed-shadow-dom-9f3d7427d1af
+func (shadow ShadowDOM) Attach() Element {
+	opts := js.Global().Get("Object").New()
+	opts.Set("mode", "open")
+	return shadow.value.Call("attachShadow", opts).Element()
+}
+
+// Host returns a reference to the DOM element the ShadowRoot is attached to.
+func (shadow ShadowDOM) Host() Element {
+	return shadow.value.Get("host").Element()
+}
+
+// Root returns ShadowRoot hosted by the element.
+func (shadow ShadowDOM) Root() Element {
+	return shadow.value.Get("shadowRoot").Element()
 }
