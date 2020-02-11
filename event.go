@@ -32,8 +32,8 @@ func (event *Event) Trusted() bool {
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Event/type
-func (event *Event) EventType() string {
-	return event.Get("type").String()
+func (event *Event) EventType() EventType {
+	return EventType(event.Get("type").String())
 }
 
 // METHODS
@@ -57,260 +57,260 @@ func (event *Event) StopPropagation() {
 
 type EventType string
 
-// EVENT_TYPE_ERROR means that A resource failed to load.
-const EVENT_TYPE_ERROR = EventType("error")
+// EventTypeError means that A resource failed to load.
+const EventTypeError = EventType("error")
 
-// EVENT_TYPE_ABORT means that The loading of a resource has been aborted.
-const EVENT_TYPE_ABORT = EventType("abort")
+// EventTypeAbort means that The loading of a resource has been aborted.
+const EventTypeAbort = EventType("abort")
 
-// EVENT_TYPE_LOAD means that A resource and its dependent resources have finished loading.
-const EVENT_TYPE_LOAD = EventType("load")
+// EventTypeLoad means that A resource and its dependent resources have finished loading.
+const EventTypeLoad = EventType("load")
 
-// EVENT_TYPE_BEFOREUNLOAD means that The window, the document and its resources are about to be unloaded.
-const EVENT_TYPE_BEFOREUNLOAD = EventType("beforeunload")
+// EventTypeBeforeUnload means that The window, the document and its resources are about to be unloaded.
+const EventTypeBeforeUnload = EventType("beforeunload")
 
-// EVENT_TYPE_UNLOAD means that The document or a dependent resource is being unloaded.
-const EVENT_TYPE_UNLOAD = EventType("unload")
+// EventTypeUnload means that The document or a dependent resource is being unloaded.
+const EventTypeUnload = EventType("unload")
 
-// EVENT_TYPE_ONLINE means that The browser has gained access to the network.
-const EVENT_TYPE_ONLINE = EventType("online")
+// EventTypeOnline means that The browser has gained access to the network.
+const EventTypeOnline = EventType("online")
 
-// EVENT_TYPE_OFFLINE means that The browser has lost access to the network.
-const EVENT_TYPE_OFFLINE = EventType("offline")
+// EventTypeOffline means that The browser has lost access to the network.
+const EventTypeOffline = EventType("offline")
 
-// EVENT_TYPE_FOCUS means that An element has received focus (does not bubble).
-const EVENT_TYPE_FOCUS = EventType("focus")
+// EventTypeFocus means that An element has received focus (does not bubble).
+const EventTypeFocus = EventType("focus")
 
-// EVENT_TYPE_BLUR means that An element has lost focus (does not bubble).
-const EVENT_TYPE_BLUR = EventType("blur")
+// EventTypeBlur means that An element has lost focus (does not bubble).
+const EventTypeBlur = EventType("blur")
 
-// EVENT_TYPE_OPEN means that A WebSocket connection has been established.
-const EVENT_TYPE_OPEN = EventType("open")
+// EventTypeOpen means that A WebSocket connection has been established.
+const EventTypeOpen = EventType("open")
 
-// EVENT_TYPE_MESSAGE means that A message is received through a WebSocket.
-const EVENT_TYPE_MESSAGE = EventType("message")
+// EventTypeMessage means that A message is received through a WebSocket.
+const EventTypeMessage = EventType("message")
 
-// EVENT_TYPE_CLOSE means that A WebSocket connection has been closed.
-const EVENT_TYPE_CLOSE = EventType("close")
+// EventTypeClose means that A WebSocket connection has been closed.
+const EventTypeClose = EventType("close")
 
-// EVENT_TYPE_PAGEHIDE means that A session history entry is being traversed from.
-const EVENT_TYPE_PAGEHIDE = EventType("pagehide")
+// EventTypePageHide means that A session history entry is being traversed from.
+const EventTypePageHide = EventType("pagehide")
 
-// EVENT_TYPE_PAGESHOW means that A session history entry is being traversed to.
-const EVENT_TYPE_PAGESHOW = EventType("pageshow")
+// EventTypePageShow means that A session history entry is being traversed to.
+const EventTypePageShow = EventType("pageshow")
 
-// EVENT_TYPE_POPSTATE means that A session history entry is being navigated to (in certain cases).
-const EVENT_TYPE_POPSTATE = EventType("popstate")
+// EventTypePopState means that A session history entry is being navigated to (in certain cases).
+const EventTypePopState = EventType("popstate")
 
-// EVENT_TYPE_ANIMATIONSTART means that A CSS animation has started.
-const EVENT_TYPE_ANIMATIONSTART = EventType("animationstart")
+// EventTypeAnimationStart means that A CSS animation has started.
+const EventTypeAnimationStart = EventType("animationstart")
 
-// EVENT_TYPE_ANIMATIONCANCEL means that A CSS animation has aborted.
-const EVENT_TYPE_ANIMATIONCANCEL = EventType("animationcancel")
+// EventTypeAnimationCancel means that A CSS animation has aborted.
+const EventTypeAnimationCancel = EventType("animationcancel")
 
-// EVENT_TYPE_ANIMATIONEND means that A CSS animation has completed.
-const EVENT_TYPE_ANIMATIONEND = EventType("animationend")
+// EventTypeAnimationEnd means that A CSS animation has completed.
+const EventTypeAnimationEnd = EventType("animationend")
 
-// EVENT_TYPE_ANIMATIONITERATION means that A CSS animation is repeated.
-const EVENT_TYPE_ANIMATIONITERATION = EventType("animationiteration")
+// EventTypeAnimationiteration means that A CSS animation is repeated.
+const EventTypeAnimationIteration = EventType("animationiteration")
 
-// EVENT_TYPE_TRANSITIONSTART means that A CSS transition has actually started (fired after any delay).
-const EVENT_TYPE_TRANSITIONSTART = EventType("transitionstart")
+// EventTypeTransitionStart means that A CSS transition has actually started (fired after any delay).
+const EventTypeTransitionStart = EventType("transitionstart")
 
-// EVENT_TYPE_TRANSITIONCANCEL means that A CSS transition has been cancelled.
-const EVENT_TYPE_TRANSITIONCANCEL = EventType("transitioncancel")
+// EventTypeTransitionCancel means that A CSS transition has been cancelled.
+const EventTypeTransitionCancel = EventType("transitioncancel")
 
-// EVENT_TYPE_TRANSITIONEND means that A CSS transition has completed.
-const EVENT_TYPE_TRANSITIONEND = EventType("transitionend")
+// EventTypeTransitionEnd means that A CSS transition has completed.
+const EventTypeTransitionEnd = EventType("transitionend")
 
-// EVENT_TYPE_TRANSITIONRUN means that A CSS transition has begun running (fired before any delay starts).
-const EVENT_TYPE_TRANSITIONRUN = EventType("transitionrun")
+// EventTypeTransitionRun means that A CSS transition has begun running (fired before any delay starts).
+const EventTypeTransitionRun = EventType("transitionrun")
 
-// EVENT_TYPE_RESET means that The reset button is pressed
-const EVENT_TYPE_RESET = EventType("reset")
+// EventTypeReset means that The reset button is pressed
+const EventTypeReset = EventType("reset")
 
-// EVENT_TYPE_SUBMIT means that The submit button is pressed
-const EVENT_TYPE_SUBMIT = EventType("submit")
+// EventTypeSubmit means that The submit button is pressed
+const EventTypeSubmit = EventType("submit")
 
-// EVENT_TYPE_BEFOREPRINT means that The print dialog is opened
-const EVENT_TYPE_BEFOREPRINT = EventType("beforeprint")
+// EventTypeBeforePrint means that The print dialog is opened
+const EventTypeBeforePrint = EventType("beforeprint")
 
-// EVENT_TYPE_AFTERPRINT means that The print dialog is closed
-const EVENT_TYPE_AFTERPRINT = EventType("afterprint")
+// EventTypeAfterPrint means that The print dialog is closed
+const EventTypeAfterPrint = EventType("afterprint")
 
-// EVENT_TYPE_COMPOSITIONSTART means that The composition of a passage of text is prepared (similar to keydown for a keyboard input, but works with other inputs such as speech recognition).
-const EVENT_TYPE_COMPOSITIONSTART = EventType("compositionstart")
+// EventTypeCompositionStart means that The composition of a passage of text is prepared (similar to keydown for a keyboard input, but works with other inputs such as speech recognition).
+const EventTypeCompositionStart = EventType("compositionstart")
 
-// EVENT_TYPE_COMPOSITIONUPDATE means that A character is added to a passage of text being composed.
-const EVENT_TYPE_COMPOSITIONUPDATE = EventType("compositionupdate")
+// EventTypeCompositionUpdate means that A character is added to a passage of text being composed.
+const EventTypeCompositionUpdate = EventType("compositionupdate")
 
-// EVENT_TYPE_COMPOSITIONEND means that The composition of a passage of text has been completed or canceled.
-const EVENT_TYPE_COMPOSITIONEND = EventType("compositionend")
+// EventTypeCompositionEnd means that The composition of a passage of text has been completed or canceled.
+const EventTypeCompositionEnd = EventType("compositionend")
 
-// EVENT_TYPE_FULLSCREENCHANGE means that An element was turned to fullscreen mode or back to normal mode.
-const EVENT_TYPE_FULLSCREENCHANGE = EventType("fullscreenchange")
+// EventTypeFullscreenChange means that An element was turned to fullscreen mode or back to normal mode.
+const EventTypeFullscreenChange = EventType("fullscreenchange")
 
-// EVENT_TYPE_FULLSCREENERROR means that It was impossible to switch to fullscreen mode for technical reasons or because the permission was denied.
-const EVENT_TYPE_FULLSCREENERROR = EventType("fullscreenerror")
+// EventTypeFullscreenError means that It was impossible to switch to fullscreen mode for technical reasons or because the permission was denied.
+const EventTypeFullscreenError = EventType("fullscreenerror")
 
-// EVENT_TYPE_RESIZE means that The document view has been resized.
-const EVENT_TYPE_RESIZE = EventType("resize")
+// EventTypeResize means that The document view has been resized.
+const EventTypeResize = EventType("resize")
 
-// EVENT_TYPE_SCROLL means that The document view or an element has been scrolled.
-const EVENT_TYPE_SCROLL = EventType("scroll")
+// EventTypeScroll means that The document view or an element has been scrolled.
+const EventTypeScroll = EventType("scroll")
 
-// EVENT_TYPE_CUT means that The selection has been cut and copied to the clipboard
-const EVENT_TYPE_CUT = EventType("cut")
+// EventTypeCut means that The selection has been cut and copied to the clipboard
+const EventTypeCut = EventType("cut")
 
-// EVENT_TYPE_COPY means that The selection has been copied to the clipboard
-const EVENT_TYPE_COPY = EventType("copy")
+// EventTypeCopy means that The selection has been copied to the clipboard
+const EventTypeCopy = EventType("copy")
 
-// EVENT_TYPE_PASTE means that The item from the clipboard has been pasted
-const EVENT_TYPE_PASTE = EventType("paste")
+// EventTypePaste means that The item from the clipboard has been pasted
+const EventTypePaste = EventType("paste")
 
-// EVENT_TYPE_KEYDOWN means that ANY key is pressed
-const EVENT_TYPE_KEYDOWN = EventType("keydown")
+// EventTypeKeyDown means that ANY key is pressed
+const EventTypeKeyDown = EventType("keydown")
 
-// EVENT_TYPE_KEYPRESS means that ANY key except Shift, Fn, CapsLock is in pressed position. (Fired continously.)
-const EVENT_TYPE_KEYPRESS = EventType("keypress")
+// EventTypeKeyPress means that ANY key except Shift, Fn, CapsLock is in pressed position. (Fired continously.)
+const EventTypeKeyPress = EventType("keypress")
 
-// EVENT_TYPE_KEYUP means that ANY key is released
-const EVENT_TYPE_KEYUP = EventType("keyup")
+// EventTypeKeyUp means that ANY key is released
+const EventTypeKeyUp = EventType("keyup")
 
-// EVENT_TYPE_AUXCLICK means that A pointing device button (ANY non-primary button) has been pressed and released on an element.
-const EVENT_TYPE_AUXCLICK = EventType("auxclick")
+// EventTypeAuxClick means that A pointing device button (ANY non-primary button) has been pressed and released on an element.
+const EventTypeAuxClick = EventType("auxclick")
 
-// EVENT_TYPE_CLICK means that A pointing device button (ANY button; soon to be primary button only) has been pressed and released on an element.
-const EVENT_TYPE_CLICK = EventType("click")
+// EventTypeClick means that A pointing device button (ANY button; soon to be primary button only) has been pressed and released on an element.
+const EventTypeClick = EventType("click")
 
-// EVENT_TYPE_CONTEXTMENU means that The right button of the mouse is clicked (before the context menu is displayed).
-const EVENT_TYPE_CONTEXTMENU = EventType("contextmenu")
+// EventTypeContextMenu means that The right button of the mouse is clicked (before the context menu is displayed).
+const EventTypeContextMenu = EventType("contextmenu")
 
-// EVENT_TYPE_DBLCLICK means that A pointing device button is clicked twice on an element.
-const EVENT_TYPE_DBLCLICK = EventType("dblclick")
+// EventTypeDoubleClick means that A pointing device button is clicked twice on an element.
+const EventTypeDoubleClick = EventType("dblclick")
 
-// EVENT_TYPE_MOUSEDOWN means that A pointing device button is pressed on an element.
-const EVENT_TYPE_MOUSEDOWN = EventType("mousedown")
+// EventTypeMouseDown means that A pointing device button is pressed on an element.
+const EventTypeMouseDown = EventType("mousedown")
 
-// EVENT_TYPE_MOUSEENTER means that A pointing device is moved onto the element that has the listener attached.
-const EVENT_TYPE_MOUSEENTER = EventType("mouseenter")
+// EventTypeMouseEnter means that A pointing device is moved onto the element that has the listener attached.
+const EventTypeMouseEnter = EventType("mouseenter")
 
-// EVENT_TYPE_MOUSELEAVE means that A pointing device is moved off the element that has the listener attached.
-const EVENT_TYPE_MOUSELEAVE = EventType("mouseleave")
+// EventTypeMouseLeave means that A pointing device is moved off the element that has the listener attached.
+const EventTypeMouseLeave = EventType("mouseleave")
 
-// EVENT_TYPE_MOUSEMOVE means that A pointing device is moved over an element. (Fired continously as the mouse moves.)
-const EVENT_TYPE_MOUSEMOVE = EventType("mousemove")
+// EventTypeMouseMove means that A pointing device is moved over an element. (Fired continously as the mouse moves.)
+const EventTypeMouseMove = EventType("mousemove")
 
-// EVENT_TYPE_MOUSEOVER means that A pointing device is moved onto the element that has the listener attached or onto one of its children.
-const EVENT_TYPE_MOUSEOVER = EventType("mouseover")
+// EventTypeMouseOver means that A pointing device is moved onto the element that has the listener attached or onto one of its children.
+const EventTypeMouseOver = EventType("mouseover")
 
-// EVENT_TYPE_MOUSEOUT means that A pointing device is moved off the element that has the listener attached or off one of its children.
-const EVENT_TYPE_MOUSEOUT = EventType("mouseout")
+// EventTypeMouseOut means that A pointing device is moved off the element that has the listener attached or off one of its children.
+const EventTypeMouseOut = EventType("mouseout")
 
-// EVENT_TYPE_MOUSEUP means that A pointing device button is released over an element.
-const EVENT_TYPE_MOUSEUP = EventType("mouseup")
+// EventTypeMouseUp means that A pointing device button is released over an element.
+const EventTypeMouseUp = EventType("mouseup")
 
-// EVENT_TYPE_POINTERLOCKCHANGE means that The pointer was locked or released.
-const EVENT_TYPE_POINTERLOCKCHANGE = EventType("pointerlockchange")
+// EventTypePointerLockChange means that The pointer was locked or released.
+const EventTypePointerLockChange = EventType("pointerlockchange")
 
-// EVENT_TYPE_POINTERLOCKERROR means that It was impossible to lock the pointer for technical reasons or because the permission was denied.
-const EVENT_TYPE_POINTERLOCKERROR = EventType("pointerlockerror")
+// EventTypePointerLockError means that It was impossible to lock the pointer for technical reasons or because the permission was denied.
+const EventTypePointerLockError = EventType("pointerlockerror")
 
-// EVENT_TYPE_SELECT means that Some text is being selected.
-const EVENT_TYPE_SELECT = EventType("select")
+// EventTypeSelect means that Some text is being selected.
+const EventTypeSelect = EventType("select")
 
-// EVENT_TYPE_WHEEL means that A wheel button of a pointing device is rotated in any direction.
-const EVENT_TYPE_WHEEL = EventType("wheel")
+// EventTypeWheel means that A wheel button of a pointing device is rotated in any direction.
+const EventTypeWheel = EventType("wheel")
 
-// EVENT_TYPE_DRAG means that An element or text selection is being dragged (Fired continuously every 350ms).
-const EVENT_TYPE_DRAG = EventType("drag")
+// EventTypeDrag means that An element or text selection is being dragged (Fired continuously every 350ms).
+const EventTypeDrag = EventType("drag")
 
-// EVENT_TYPE_DRAGEND means that A drag operation is being ended (by releasing a mouse button or hitting the escape key).
-const EVENT_TYPE_DRAGEND = EventType("dragend")
+// EventTypeDragEnd means that A drag operation is being ended (by releasing a mouse button or hitting the escape key).
+const EventTypeDragEnd = EventType("dragend")
 
-// EVENT_TYPE_DRAGENTER means that A dragged element or text selection enters a valid drop target.
-const EVENT_TYPE_DRAGENTER = EventType("dragenter")
+// EventTypeDragEnter means that A dragged element or text selection enters a valid drop target.
+const EventTypeDragEnter = EventType("dragenter")
 
-// EVENT_TYPE_DRAGSTART means that The user starts dragging an element or text selection.
-const EVENT_TYPE_DRAGSTART = EventType("dragstart")
+// EventTypeDragStart means that The user starts dragging an element or text selection.
+const EventTypeDragStart = EventType("dragstart")
 
-// EVENT_TYPE_DRAGLEAVE means that A dragged element or text selection leaves a valid drop target.
-const EVENT_TYPE_DRAGLEAVE = EventType("dragleave")
+// EventTypeDragLeave means that A dragged element or text selection leaves a valid drop target.
+const EventTypeDragLeave = EventType("dragleave")
 
-// EVENT_TYPE_DRAGOVER means that An element or text selection is being dragged over a valid drop target. (Fired continuously every 350ms.)
-const EVENT_TYPE_DRAGOVER = EventType("dragover")
+// EventTypeDragOver means that An element or text selection is being dragged over a valid drop target. (Fired continuously every 350ms.)
+const EventTypeDragOver = EventType("dragover")
 
-// EVENT_TYPE_DROP means that An element is dropped on a valid drop target.
-const EVENT_TYPE_DROP = EventType("drop")
+// EventTypeDrop means that An element is dropped on a valid drop target.
+const EventTypeDrop = EventType("drop")
 
-// EVENT_TYPE_AUDIOPROCESS means that The input buffer of a ScriptProcessorNode is ready to be processed.
-const EVENT_TYPE_AUDIOPROCESS = EventType("audioprocess")
+// EventTypeAudioProcess means that The input buffer of a ScriptProcessorNode is ready to be processed.
+const EventTypeAudioProcess = EventType("audioprocess")
 
-// EVENT_TYPE_CANPLAY means that The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
-const EVENT_TYPE_CANPLAY = EventType("canplay")
+// EventTypeCanPlay means that The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
+const EventTypeCanPlay = EventType("canplay")
 
-// EVENT_TYPE_CANPLAYTHROUGH means that The browser estimates it can play the media up to its end without stopping for content buffering.
-const EVENT_TYPE_CANPLAYTHROUGH = EventType("canplaythrough")
+// EventTypeCanPlayThrough means that The browser estimates it can play the media up to its end without stopping for content buffering.
+const EventTypeCanPlayThrough = EventType("canplaythrough")
 
-// EVENT_TYPE_COMPLETE means that The rendering of an OfflineAudioContext is terminated.
-const EVENT_TYPE_COMPLETE = EventType("complete")
+// EventTypeComplete means that The rendering of an OfflineAudioContext is terminated.
+const EventTypeComplete = EventType("complete")
 
-// EVENT_TYPE_DURATIONCHANGE means that The duration attribute has been updated.
-const EVENT_TYPE_DURATIONCHANGE = EventType("durationchange")
+// EventTypeDurationChange means that The duration attribute has been updated.
+const EventTypeDurationChange = EventType("durationchange")
 
-// EVENT_TYPE_EMPTIED means that The media has become empty; for example, this event is sent if the media has already been loaded (or partially loaded), and the load() method is called to reload it.
-const EVENT_TYPE_EMPTIED = EventType("emptied")
+// EventTypeEmptied means that The media has become empty; for example, this event is sent if the media has already been loaded (or partially loaded), and the load() method is called to reload it.
+const EventTypeEmptied = EventType("emptied")
 
-// EVENT_TYPE_ENDED means that Playback has stopped because the end of the media was reached.
-const EVENT_TYPE_ENDED = EventType("ended")
+// EventTypeEnded means that Playback has stopped because the end of the media was reached.
+const EventTypeEnded = EventType("ended")
 
-// EVENT_TYPE_LOADEDDATA means that The first frame of the media has finished loading.
-const EVENT_TYPE_LOADEDDATA = EventType("loadeddata")
+// EventTypeLoadedData means that The first frame of the media has finished loading.
+const EventTypeLoadedData = EventType("loadeddata")
 
-// EVENT_TYPE_LOADEDMETADATA means that The metadata has been loaded.
-const EVENT_TYPE_LOADEDMETADATA = EventType("loadedmetadata")
+// EventTypeLoadedMetadata means that The metadata has been loaded.
+const EventTypeLoadedMetadata = EventType("loadedmetadata")
 
-// EVENT_TYPE_PAUSE means that Playback has been paused.
-const EVENT_TYPE_PAUSE = EventType("pause")
+// EventTypePause means that Playback has been paused.
+const EventTypePause = EventType("pause")
 
-// EVENT_TYPE_PLAY means that Playback has begun.
-const EVENT_TYPE_PLAY = EventType("play")
+// EventTypePlay means that Playback has begun.
+const EventTypePlay = EventType("play")
 
-// EVENT_TYPE_PLAYING means that Playback is ready to start after having been paused or delayed due to lack of data.
-const EVENT_TYPE_PLAYING = EventType("playing")
+// EventTypePlaying means that Playback is ready to start after having been paused or delayed due to lack of data.
+const EventTypePlaying = EventType("playing")
 
-// EVENT_TYPE_RATECHANGE means that The playback rate has changed.
-const EVENT_TYPE_RATECHANGE = EventType("ratechange")
+// EventTypeRateChange means that The playback rate has changed.
+const EventTypeRateChange = EventType("ratechange")
 
-// EVENT_TYPE_SEEKED means that A seek operation completed.
-const EVENT_TYPE_SEEKED = EventType("seeked")
+// EventTypeSeeked means that A seek operation completed.
+const EventTypeSeeked = EventType("seeked")
 
-// EVENT_TYPE_SEEKING means that A seek operation began.
-const EVENT_TYPE_SEEKING = EventType("seeking")
+// EventTypeSeeking means that A seek operation began.
+const EventTypeSeeking = EventType("seeking")
 
-// EVENT_TYPE_STALLED means that The user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
-const EVENT_TYPE_STALLED = EventType("stalled")
+// EventTypeStalled means that The user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
+const EventTypeStalled = EventType("stalled")
 
-// EVENT_TYPE_SUSPEND means that Media data loading has been suspended.
-const EVENT_TYPE_SUSPEND = EventType("suspend")
+// EventTypeSuspend means that Media data loading has been suspended.
+const EventTypeSuspend = EventType("suspend")
 
-// EVENT_TYPE_TIMEUPDATE means that The time indicated by the currentTime attribute has been updated.
-const EVENT_TYPE_TIMEUPDATE = EventType("timeupdate")
+// EventTypeTimeUpdate means that The time indicated by the currentTime attribute has been updated.
+const EventTypeTimeUpdate = EventType("timeupdate")
 
-// EVENT_TYPE_VOLUMECHANGE means that The volume has changed.
-const EVENT_TYPE_VOLUMECHANGE = EventType("volumechange")
+// EventTypeVolumeChange means that The volume has changed.
+const EventTypeVolumeChange = EventType("volumechange")
 
-// EVENT_TYPE_WAITING means that Playback has stopped because of a temporary lack of data.
-const EVENT_TYPE_WAITING = EventType("waiting")
+// EventTypeWaiting means that Playback has stopped because of a temporary lack of data.
+const EventTypeWaiting = EventType("waiting")
 
-// EVENT_TYPE_LOADEND means that Progress has stopped (after "error", "abort" or "load" have been dispatched).
-const EVENT_TYPE_LOADEND = EventType("loadend")
+// EventTypeLoadEnd means that Progress has stopped (after "error", "abort" or "load" have been dispatched).
+const EventTypeLoadEnd = EventType("loadend")
 
-// EVENT_TYPE_LOADSTART means that Progress has begun.
-const EVENT_TYPE_LOADSTART = EventType("loadstart")
+// EventTypeLoadStart means that Progress has begun.
+const EventTypeLoadStart = EventType("loadstart")
 
-// EVENT_TYPE_PROGRESS means that In progress.
-const EVENT_TYPE_PROGRESS = EventType("progress")
+// EventTypeProgress means that In progress.
+const EventTypeProgress = EventType("progress")
 
-// EVENT_TYPE_TIMEOUT means that Progression is terminated due to preset time expiring.
-const EVENT_TYPE_TIMEOUT = EventType("timeout")
+// EventTypeTimeout means that Progression is terminated due to preset time expiring.
+const EventTypeTimeout = EventType("timeout")
