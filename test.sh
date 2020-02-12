@@ -1,1 +1,1 @@
-GOOS=js GOARCH=wasm go test -exec=wasmbrowsertest
+GOOS=js GOARCH=wasm go test -exec=wasmbrowsertest ./web/
