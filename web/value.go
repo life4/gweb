@@ -21,6 +21,11 @@ func (v Value) Get(property string) Value {
 	return Value{Value: result}
 }
 
+func (v Value) New(args ...interface{}) Value {
+	result := v.Value.New(args...)
+	return Value{Value: result}
+}
+
 // new methods
 
 func (v Value) Canvas() Canvas {

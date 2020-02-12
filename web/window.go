@@ -13,6 +13,11 @@ func GetWindow() Window {
 	return Window{Value: value}
 }
 
+func (window Window) AudioContext() AudioContext {
+	constructor := window.Get("AudioContext")
+	return AudioContext{Value: constructor.New()}
+}
+
 func (window Window) Console() Console {
 	return Console{Value: window.Get("console")}
 }
