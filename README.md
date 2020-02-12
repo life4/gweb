@@ -36,7 +36,7 @@ If you're using VSCode, it's recommend to create in your project `.vscode/settin
 ## Example
 
 ```go
-doc := GetWindow().Document()
+doc := web.GetWindow().Document()
 body := doc.Body()
 
 // create <template>
@@ -64,7 +64,7 @@ shadow.Node().AppendChild(template.Content())
 In the beautiful JS world anything at any time can be `null` or `undefined`. Check it when you're not sure:
 
 ```go
-doc := gweb.GetWindow().Document()
+doc := web.GetWindow().Document()
 el := doc.Element("some-element-id")
 if el.Type() == js.TypeNull {
     // handle error
@@ -76,7 +76,7 @@ if el.Type() == js.TypeNull {
 If something is missed, use `syscall/js`-like methods (`Get`, `Set`, `Call` etc):
 
 ```go
-doc := gweb.GetWindow().Document()
+doc := web.GetWindow().Document()
 el := doc.Element("some-element-id")
 name = el.Get("name").String()
 ```
