@@ -20,3 +20,7 @@ func (window Window) Console() Console {
 func (window Window) Document() Document {
 	return Document{Value: window.Get("document")}
 }
+
+func (window Window) Navigator() Navigator {
+	return Navigator{Value: window.Get("navigator")}
+}

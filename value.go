@@ -56,7 +56,7 @@ func (v *Value) Values() (items []Value) {
 	return items
 }
 
-func (v *Value) Strings() (items []string) {
+func (v Value) Strings() (items []string) {
 	len := v.Get("length").Int()
 	for i := 0; i < len; i++ {
 		item := v.Call("item", i)
