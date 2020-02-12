@@ -1,4 +1,4 @@
-package gweb
+package web
 
 import (
 	"github.com/life4/gweb/css"

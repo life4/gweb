@@ -1,4 +1,4 @@
-package gweb
+package web
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Event
 type Event struct {

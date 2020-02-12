@@ -1,4 +1,4 @@
-package gweb
+package web
 
 // Embed represents HTMLEmbedElement and HTMLObjectElement.
 type Embed struct {

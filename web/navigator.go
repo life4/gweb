@@ -1,4 +1,4 @@
-package gweb
+package web
 
 type Navigator struct {
 	Value

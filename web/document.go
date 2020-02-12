@@ -1,4 +1,4 @@
-package gweb
+package web
 
 import (
 	"syscall/js"
