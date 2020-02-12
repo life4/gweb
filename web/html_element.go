@@ -7,17 +7,17 @@ import (
 type Editable string
 
 const (
-	EDITABLE_TRUE    = Editable("true")
-	EDITABLE_FALSE   = Editable("false")
-	EDITABLE_INHERIT = Editable("inherit")
+	EditableTrue    = Editable("true")
+	EditableFalse   = Editable("false")
+	EditableInherit = Editable("inherit")
 )
 
 type Direction string
 
 const (
-	DIRECTION_LTR  = Direction("ltr")
-	DIRECTION_RTL  = Direction("rtl")
-	DIRECTION_AUTO = Direction("auto")
+	DirectionLTR  = Direction("ltr")
+	DirectionRTL  = Direction("rtl")
+	DirectionAuto = Direction("auto")
 )
 
 type HTMLElement struct {
