@@ -24,3 +24,7 @@ func (window Window) Document() Document {
 func (window Window) Navigator() Navigator {
 	return Navigator{Value: window.Get("navigator")}
 }
+
+func (window Window) Screen() Screen {
+	return Screen{Value: window.Get("screen")}
+}
