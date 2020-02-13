@@ -1,4 +1,4 @@
-package web
+package audio
 
 import (
 	"syscall/js"
@@ -28,32 +28,12 @@ func (v Value) New(args ...interface{}) Value {
 
 // new methods
 
-func (v Value) Canvas() Canvas {
-	return Canvas{HTMLElement: v.HTMLElement()}
+func (v Value) AudioContext() AudioContext {
+	return AudioContext{Value: v}
 }
 
-func (v Value) Element() Element {
-	return Element{Value: v}
-}
-
-func (v Value) Embed() Embed {
-	return Embed{HTMLElement: v.HTMLElement()}
-}
-
-func (v Value) Event() Event {
-	return Event{Value: v}
-}
-
-func (v Value) EventTarget() EventTarget {
-	return EventTarget{Value: v}
-}
-
-func (v Value) HTMLElement() HTMLElement {
-	return HTMLElement{Element: v.Element()}
-}
-
-func (v Value) Node() Node {
-	return Node{value: v}
+func (v Value) AudioNode() AudioNode {
+	return AudioNode{Value: v}
 }
 
 func (v *Value) Values() (items []Value) {

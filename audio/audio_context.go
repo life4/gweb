@@ -1,4 +1,4 @@
-package web
+package audio
 
 // https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext

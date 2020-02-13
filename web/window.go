@@ -2,6 +2,8 @@ package web
 
 import (
 	"syscall/js"
+
+	"github.com/life4/gweb/audio"
 )
 
 type Window struct {
@@ -13,9 +15,11 @@ func GetWindow() Window {
 	return Window{Value: value}
 }
 
-func (window Window) AudioContext() AudioContext {
+func (window Window) AudioContext() audio.AudioContext {
 	constructor := window.Get("AudioContext")
-	return AudioContext{Value: constructor.New()}
+	jsV := constructor.New().Value
+	audioV := audio.Value{Value: jsV}
+	return audio.AudioContext{Value: audioV}
 }
 
 func (window Window) Console() Console {
