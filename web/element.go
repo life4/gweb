@@ -98,16 +98,6 @@ func (el *Element) SetPointerCapture(pointerID string) {
 
 // OTHER METHODS
 
-// https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
-func (el Element) Listen(event EventType, handler func(event Event)) {
-	wrapped := func(this js.Value, args []js.Value) interface{} {
-		v := Value{Value: args[0]}
-		handler(v.Event())
-		return nil
-	}
-	el.Call("addEventListener", event, js.FuncOf(wrapped))
-}
-
 func (el *Element) Matches(selector string) bool {
 	return el.Call("matches", selector).Bool()
 }

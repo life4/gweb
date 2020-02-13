@@ -44,6 +44,10 @@ func (v Value) Event() Event {
 	return Event{Value: v}
 }
 
+func (v Value) EventTarget() EventTarget {
+	return EventTarget{Value: v}
+}
+
 func (v Value) HTMLElement() HTMLElement {
 	return HTMLElement{Element: v.Element()}
 }
