@@ -70,20 +70,24 @@ func (el *HTMLElement) Title() string {
 
 // SETTERS
 
-func (el *HTMLElement) SetDirection(value Editable) {
+func (el HTMLElement) SetDirection(value Editable) {
 	el.Set("dir", string(value))
 }
 
-func (el *HTMLElement) SetEditable(value Editable) {
+func (el HTMLElement) SetEditable(value Editable) {
 	el.Set("contentEditable", string(value))
 }
 
-func (el *HTMLElement) SetHidden(value bool) {
+func (el HTMLElement) SetHidden(value bool) {
 	el.Set("hidden", value)
 }
 
-func (el *HTMLElement) SetLang(value string) {
+func (el HTMLElement) SetLang(value string) {
 	el.Set("lang", value)
+}
+
+func (el HTMLElement) SetText(text string) {
+	el.Set("innerText", text)
 }
 
 // HTMLElement SUBTYPES

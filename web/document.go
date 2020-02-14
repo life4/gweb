@@ -118,6 +118,12 @@ func (doc *Document) LastModified() time.Time {
 	return time.Unix(int64(timestamp/1000), 0)
 }
 
+// SETTERS
+
+func (doc Document) SetTitle(title string) {
+	doc.Set("title", title)
+}
+
 // METHODS
 
 func (doc Document) CreateElement(name string) HTMLElement {
