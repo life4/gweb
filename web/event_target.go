@@ -15,5 +15,5 @@ func (target EventTarget) Listen(event EventType, handler func(event Event)) {
 		handler(v.Event())
 		return nil
 	}
-	target.Call("addEventListener", event, js.FuncOf(wrapped))
+	target.Call("addEventListener", string(event), js.FuncOf(wrapped))
 }

@@ -5,7 +5,7 @@ import "github.com/life4/gweb/web"
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
-	doc.SetTitle("Welcome page")
+	doc.SetTitle("Styling example")
 
 	// create <p>
 	paragraph := doc.CreateElement("p")
