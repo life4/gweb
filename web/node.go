@@ -25,7 +25,7 @@ type Node struct {
 
 // PROPERTIES
 
-func (node *Node) BaseURI() string {
+func (node Node) BaseURI() string {
 	return node.value.Get("baseURI").String()
 }
 
@@ -33,11 +33,11 @@ func (node Node) ChildrenCount() int {
 	return node.value.Get("childElementCount").Int()
 }
 
-func (node *Node) Connected() bool {
+func (node Node) Connected() bool {
 	return node.value.Get("isConnected").Bool()
 }
 
-func (node *Node) Content() string {
+func (node Node) Content() string {
 	return node.value.Get("textContent").String()
 }
 
@@ -51,22 +51,26 @@ func (node Node) Document() Document {
 	}
 }
 
-func (node *Node) Name() string {
+func (node Node) Name() string {
 	return node.value.Get("nodeName").String()
 }
 
-func (node *Node) Type() NodeType {
+func (node Node) Type() NodeType {
 	return NodeType(node.value.Get("nodeType").Int())
 }
 
-func (node *Node) Value() string {
+func (node Node) Value() string {
 	return node.value.Get("nodeValue").OptionalString()
 }
 
 // METHODS
 
-func (node *Node) Normalize() {
+func (node Node) Normalize() {
 	node.value.Call("normalize")
+}
+
+func (node Node) Clone(deep bool) Node {
+	return node.value.Call("cloneNode", deep).Node()
 }
 
 // TREE
