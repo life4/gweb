@@ -10,7 +10,7 @@ import (
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
-	doc.SetTitle("Canvas triangle example")
+	doc.SetTitle("Canvas pacman example")
 	body := doc.Body()
 
 	// create canvas
