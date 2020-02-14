@@ -18,4 +18,5 @@ It will serve example [hello](./hello/) on [localhost:1337](http://localhost:133
 ## Canvas
 
 + [triangle](./triangle/) -- "hello world" for `<canvas>`: make black background and draw a red triangle.
-+ [pacman](./triangle/) -- ported [MDN example](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes#Making_combinations) of drawing a scene from Pacman.
++ [pacman](./pacman/) -- ported [MDN example](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes#Making_combinations) of drawing a scene from Pacman.
++ [draw](./draw/) -- an example of handling events on canvas and calculating FPS.
