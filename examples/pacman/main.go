@@ -6,20 +6,6 @@ import (
 	"github.com/life4/gweb/web"
 )
 
-func roundedRect(ctx web.Context2D, x, y, width, height, radius int) {
-	ctx.BeginPath()
-	ctx.MoveTo(x, y+radius)
-	ctx.LineTo(x, y+height-radius)
-	ctx.ArcTo(x, y+height, x+radius, y+height, radius)
-	ctx.LineTo(x+width-radius, y+height)
-	ctx.ArcTo(x+width, y+height, x+width, y+height-radius, radius)
-	ctx.LineTo(x+width, y+radius)
-	ctx.ArcTo(x+width, y, x+width-radius, y, radius)
-	ctx.LineTo(x+radius, y)
-	ctx.ArcTo(x, y, x, y+radius, radius)
-	ctx.Stroke()
-}
-
 // https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes#Making_combinations
 func main() {
 	window := web.GetWindow()
@@ -41,12 +27,12 @@ func main() {
 
 	// draw walls
 	ctx.SetFillStyle("#2c3e50")
-	roundedRect(ctx, 12, 12, 150, 150, 15)
-	roundedRect(ctx, 19, 19, 150, 150, 9)
-	roundedRect(ctx, 53, 53, 49, 33, 10)
-	roundedRect(ctx, 53, 119, 49, 16, 6)
-	roundedRect(ctx, 135, 53, 49, 33, 10)
-	roundedRect(ctx, 135, 119, 25, 49, 10)
+	ctx.RoundedRect(12, 12, 150, 150, 15)
+	ctx.RoundedRect(19, 19, 150, 150, 9)
+	ctx.RoundedRect(53, 53, 49, 33, 10)
+	ctx.RoundedRect(53, 119, 49, 16, 6)
+	ctx.RoundedRect(135, 53, 49, 33, 10)
+	ctx.RoundedRect(135, 119, 25, 49, 10)
 
 	// draw pacman body
 	ctx.SetFillStyle("#f39c12")

@@ -154,6 +154,22 @@ func (context *Context2D) Translate(x float64, y float64) {
 	context.value.Call("translate", x, y)
 }
 
+// HELPERS
+
+func (context Context2D) RoundedRect(x, y, width, height, radius int) {
+	context.BeginPath()
+	context.MoveTo(x, y+radius)
+	context.LineTo(x, y+height-radius)
+	context.ArcTo(x, y+height, x+radius, y+height, radius)
+	context.LineTo(x+width-radius, y+height)
+	context.ArcTo(x+width, y+height, x+width, y+height-radius, radius)
+	context.LineTo(x+width, y+radius)
+	context.ArcTo(x+width, y, x+width-radius, y, radius)
+	context.LineTo(x+radius, y)
+	context.ArcTo(x, y, x, y+radius, radius)
+	context.Stroke()
+}
+
 // CONTEXT SUBTYPES
 
 type Shadow struct {
