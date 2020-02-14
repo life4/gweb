@@ -31,7 +31,8 @@ func (el *HTMLElement) Offset() Offset {
 }
 
 func (el *HTMLElement) Style() css.CSSStyleDeclaration {
-	return css.CSSStyleDeclaration{Value: el.Value.Value}
+	value := el.Get("style").JSValue()
+	return css.CSSStyleDeclaration{Value: value}
 }
 
 // GETTERS
