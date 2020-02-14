@@ -63,7 +63,7 @@ func (h *Handler) handleFrame() {
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
-	doc.SetTitle("Canvas triangle example")
+	doc.SetTitle("Canvas drawing example")
 	body := doc.Body()
 
 	// create canvas
