@@ -22,12 +22,6 @@ func (el *Element) Client() Client {
 	return Client{value: el.Value}
 }
 
-// Content returns Node that contains the DOM subtree
-// representing the <template> element's template contents.
-func (el Element) Content() Node {
-	return Node{value: el.Value}
-}
-
 func (el Element) Shadow() ShadowDOM {
 	return ShadowDOM{value: el.Value}
 }

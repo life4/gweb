@@ -81,7 +81,7 @@ func TestElementSlots(t *testing.T) {
 	// render template
 	shadow := body.Shadow().Attach()
 	assert.Equal(t, span.AssignedSlot().Type(), js.TypeNull)
-	shadow.Node().AppendChild(template.Content())
+	shadow.Node().AppendChild(template.Node())
 	assert.NotEqual(t, span.AssignedSlot().Type(), js.TypeNull)
 	assert.Equal(t, span.AssignedSlot().InnerHTML(), "default text")
 

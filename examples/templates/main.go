@@ -22,7 +22,7 @@ func main() {
 	// This is the most important thing to make the template renderable
 	shadow := body.Shadow().Attach()
 	// since we clone the template, we should add all <slot>'s before it.
-	shadow.Node().AppendChild(template.Content().Clone(true))
+	shadow.Node().AppendChild(template.Node().Clone(true))
 
 	// make <span> element that will replace the <slot>
 	span := doc.CreateElement("span")
