@@ -10,46 +10,46 @@ type AudioNode struct {
 // Context returns the associated AudioContext,
 // that is the object representing the processing graph the node is participating in.
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioNode/context
-func (context *AudioContext) Context() AudioContext {
-	return context.Get("context").AudioContext()
+func (node AudioNode) Context() AudioContext {
+	return AudioContext{Value: node.Get("context")}
 }
 
 // Inputs returns the number of inputs feeding the node.
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioNode/numberOfInputs
-func (context *AudioContext) Inputs() int {
-	return context.Get("numberOfInputs").Int()
+func (node AudioNode) Inputs() int {
+	return node.Get("numberOfInputs").Int()
 }
 
 // Outputs returns the number of outputs coming out of the node.
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioNode/numberOfOutputs
-func (context *AudioContext) Outputs() int {
-	return context.Get("numberOfOutputs").Int()
+func (node AudioNode) Outputs() int {
+	return node.Get("numberOfOutputs").Int()
 }
 
-func (context *AudioContext) Channels() int {
-	return context.Get("channelCount").Int()
+func (node AudioNode) Channels() int {
+	return node.Get("channelCount").Int()
 }
 
-func (context *AudioContext) ChannelsMode() ChannelsMode {
-	return ChannelsMode(context.Get("channelCountMode").String())
+func (node AudioNode) ChannelsMode() ChannelsMode {
+	return ChannelsMode(node.Get("channelCountMode").String())
 }
 
-func (context *AudioContext) ChannelsInterpretation() ChannelsMode {
-	return ChannelsMode(context.Get("channelCountMode").String())
+func (node AudioNode) ChannelsInterpretation() ChannelsMode {
+	return ChannelsMode(node.Get("channelCountMode").String())
 }
 
 // METHODS
 
-func (context *AudioContext) Connect(destination AudioNode, inputIndex int, outputIndex int) {
-	context.Call("connect", destination.Value.Value, outputIndex, inputIndex)
+func (node AudioNode) Connect(destination AudioNode, inputIndex int, outputIndex int) {
+	node.Call("connect", destination.Value.Value, outputIndex, inputIndex)
 }
 
-func (context *AudioContext) DisconnectAll() {
-	context.Call("disconnect")
+func (node AudioNode) DisconnectAll() {
+	node.Call("disconnect")
 }
 
-func (context *AudioContext) Disconnect(destination AudioNode) {
-	context.Call("disconnect", destination.Value.Value)
+func (node AudioNode) Disconnect(destination AudioNode) {
+	node.Call("disconnect", destination.Value.Value)
 }
 
 // SUBTYPES

@@ -28,18 +28,6 @@ func (v Value) New(args ...interface{}) Value {
 
 // new methods
 
-func (v Value) AnalyserNode() AnalyserNode {
-	return AnalyserNode{AudioNode: v.AudioNode()}
-}
-
-func (v Value) AudioContext() AudioContext {
-	return AudioContext{Value: v}
-}
-
-func (v Value) AudioNode() AudioNode {
-	return AudioNode{Value: v}
-}
-
 func (v *Value) Values() (items []Value) {
 	len := v.Get("length").Int()
 	for i := 0; i < len; i++ {

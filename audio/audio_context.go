@@ -27,7 +27,9 @@ func (context AudioContext) State() AudioContextState {
 // METHODS
 
 func (context AudioContext) Analyser() AnalyserNode {
-	return context.Call("createAnalyser").AnalyserNode()
+	value := context.Call("createAnalyser")
+	node := AudioNode{Value: value}
+	return AnalyserNode{AudioNode: node}
 }
 
 // SUBTYPES
