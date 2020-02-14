@@ -75,26 +75,26 @@ func (node Node) AppendChild(child Node) {
 	node.value.Call("appendChild", child.value)
 }
 
-func (node Node) ChildNodes() []Element {
+func (node Node) ChildNodes() []HTMLElement {
 	nodes := node.value.Get("childNodes")
 	values := nodes.Values()
-	elements := make([]Element, len(values))
+	elements := make([]HTMLElement, len(values))
 	for i, value := range values {
-		elements[i] = value.Element()
+		elements[i] = value.HTMLElement()
 	}
 	return elements
 }
 
-func (node Node) FirstChild() Element {
-	return node.value.Get("firstChild").Element()
+func (node Node) FirstChild() HTMLElement {
+	return node.value.Get("firstChild").HTMLElement()
 }
 
 func (node Node) HasChildNodes() bool {
 	return node.value.Call("hasChildNodes").Bool()
 }
 
-func (node Node) Parent() Element {
-	return node.value.Get("parentElement").Element()
+func (node Node) Parent() HTMLElement {
+	return node.value.Get("parentElement").HTMLElement()
 }
 
 func (node Node) RemoveChild(child Node) {

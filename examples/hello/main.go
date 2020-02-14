@@ -9,7 +9,7 @@ func main() {
 
 	// create <h1>
 	header := doc.CreateElement("h1")
-	header.HTMLElement().SetText("Hello!")
+	header.SetText("Hello!")
 
 	// add the element into <body>
 	body := doc.Body()
