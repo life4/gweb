@@ -25,8 +25,8 @@ func main() {
 	div.SetText("no movement")
 
 	// fill all the page by the element
-	h := window.Get("innerHeight").Int()
-	w := window.Get("innerWidth").Int()
+	h := window.InnerHeight()
+	w := window.InnerWidth()
 	div.Style().SetHeight(fmt.Sprintf("%dpx", h), false)
 	div.Style().SetWidth(fmt.Sprintf("%dpx", w), false)
 
