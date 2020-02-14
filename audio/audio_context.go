@@ -32,6 +32,12 @@ func (context AudioContext) Analyser() AnalyserNode {
 	return AnalyserNode{AudioNode: node}
 }
 
+func (context AudioContext) Gain() GainNode {
+	value := context.Call("createGain")
+	node := AudioNode{Value: value}
+	return GainNode{AudioNode: node}
+}
+
 // SUBTYPES
 
 type AudioContextState string
