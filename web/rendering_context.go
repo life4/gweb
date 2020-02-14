@@ -64,7 +64,7 @@ func (context *Context2D) ClosePath() {
 }
 
 func (context *Context2D) Arc(x, y, r int, sAngle, eAngle float64) {
-	context.value.Call("arc", x, y, r, sAngle, eAngle)
+	context.value.Call("arc", x, y, r, sAngle, eAngle, false)
 }
 
 func (context *Context2D) ArcTo(x1, y1, x2, y2, r int) {
