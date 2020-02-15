@@ -44,6 +44,13 @@ const (
 	TextRight  = TextLeft + TextWidth
 )
 
+func sign(n float64) float64 {
+	if n >= 0 {
+		return 1
+	}
+	return -1
+}
+
 type Platform struct {
 	context canvas.Context2D
 	element web.Canvas
@@ -122,35 +129,56 @@ type Ball struct {
 	// position
 	x, y int
 	// movement
-	vectorX int
-	vectorY int
+	vectorX float64
+	vectorY float64
 	// borders
 	windowWidth  int
 	windowHeight int
 	platform     *Platform
 }
 
+func (ball Ball) Contains(x, y int) bool {
+	hypotenuse := math.Pow(float64(BallSize), 2)
+	cathetus1 := math.Pow(float64(x-ball.x), 2)
+	cathetus2 := math.Pow(float64(y-ball.y), 2)
+	return cathetus1+cathetus2 < hypotenuse
+}
+
+func (ball *Ball) BounceFromPoint(x, y int) {
+	katX := float64(x - ball.x)
+	katY := float64(y - ball.y)
+	hypo := math.Sqrt(math.Pow(katX, 2) + math.Pow(katY, 2))
+	sin := katX / hypo
+	cos := katY / hypo
+	ball.vectorX = -ball.vectorX
+	newX := ball.vectorX*cos - ball.vectorY*sin
+	newY := ball.vectorX*sin + ball.vectorY*cos
+	ball.vectorX = newX
+	ball.vectorY = newY
+}
+
 func (ctx *Ball) changeDirection() {
-	ballX := ctx.x + ctx.vectorX
-	ballY := ctx.y + ctx.vectorY
+	ballX := ctx.x + int(math.Ceil(ctx.vectorX))
+	ballY := ctx.y + int(math.Ceil(ctx.vectorY))
+
 	// bounce from text box (where we draw FPS and score)
-	// bounce from right border
+	// bounce from right border of the text box
 	if ballX-BallSize <= TextRight && ballY < TextBottom {
 		ctx.vectorX = -ctx.vectorX
 	}
-	// bounce from bottom
+	// bounce from bottom of the text box
 	if ballX <= TextRight && ballY-BallSize < TextBottom {
 		ctx.vectorY = -ctx.vectorY
 	}
 
-	// right and left
+	// right and left of the playground
 	if ballX > ctx.windowWidth-BallSize {
 		ctx.vectorX = -ctx.vectorX
 	} else if ballX < BallSize {
 		ctx.vectorX = -ctx.vectorX
 	}
 
-	// bottom and top
+	// bottom and top of the playground
 	if ballY > ctx.windowHeight-BallSize {
 		ctx.vectorY = -ctx.vectorY
 	} else if ballY < BallSize {
@@ -173,6 +201,27 @@ func (ctx *Ball) changeDirection() {
 	if ctx.vectorX < 0 && ctx.platform.Contains(ballX-BallSize, ballY) {
 		ctx.vectorX = -ctx.vectorX
 	}
+
+	// bounce from left-top corner of the platform
+	if ctx.Contains(ctx.platform.x, ctx.platform.y) {
+		ctx.BounceFromPoint(ctx.platform.x, ctx.platform.y)
+		return
+	}
+	// bounce from right-top corner of the platform
+	if ctx.Contains(ctx.platform.x+ctx.platform.width, ctx.platform.y) {
+		ctx.BounceFromPoint(ctx.platform.x+ctx.platform.width, ctx.platform.y)
+		return
+	}
+	// bounce from left-bottom corner of the platform
+	if ctx.Contains(ctx.platform.x, ctx.platform.y+PlatformHeight) {
+		ctx.BounceFromPoint(ctx.platform.x, ctx.platform.y+PlatformHeight)
+		return
+	}
+	// bounce from right-bottom corner of the platform
+	if ctx.Contains(ctx.platform.x+ctx.platform.width, ctx.platform.y+PlatformHeight) {
+		ctx.BounceFromPoint(ctx.platform.x+ctx.platform.width, ctx.platform.y+PlatformHeight)
+		return
+	}
 }
 
 func (ctx *Ball) handle() {
@@ -186,8 +235,8 @@ func (ctx *Ball) handle() {
 	ctx.changeDirection()
 
 	// move the ball
-	ctx.x += ctx.vectorX
-	ctx.y += ctx.vectorY
+	ctx.x += int(math.Round(ctx.vectorX))
+	ctx.y += int(math.Round(ctx.vectorY))
 
 	// draw the ball
 	ctx.context.SetFillStyle(BallColor)
@@ -373,20 +422,14 @@ func (bricks *Bricks) Handle(ball *Ball) {
 		changed = true
 	}
 	if changed {
+		// re-draw stat
 		go bricks.drawScore()
 		go bricks.drawHits()
 
+		// speed up ball after some hits
 		if bricks.hits == 4 || bricks.hits == 12 || bricks.hits == 60 || bricks.hits == 90 {
-			if ball.vectorX > 0 {
-				ball.vectorX += 2
-			} else {
-				ball.vectorX -= 2
-			}
-			if ball.vectorY > 0 {
-				ball.vectorY += 2
-			} else {
-				ball.vectorY -= 2
-			}
+			ball.vectorX += sign(ball.vectorX) * 2
+			ball.vectorY += sign(ball.vectorY) * 2
 		}
 	}
 }
