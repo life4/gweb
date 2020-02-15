@@ -57,7 +57,7 @@ type Platform struct {
 	windowHeight int
 }
 
-func (platform Platform) contains(x, y int) bool {
+func (platform Platform) Contains(x, y int) bool {
 	if y < platform.y { // ball upper
 		return false
 	}
@@ -158,19 +158,19 @@ func (ctx *Ball) changeDirection() {
 	}
 
 	// bounce from platform top
-	if ctx.vectorY > 0 && ctx.platform.contains(ballX, ballY+BallSize) {
+	if ctx.vectorY > 0 && ctx.platform.Contains(ballX, ballY+BallSize) {
 		ctx.vectorY = -ctx.vectorY
 	}
 	// bounce from platform bottom
-	if ctx.vectorY < 0 && ctx.platform.contains(ballX, ballY-BallSize) {
+	if ctx.vectorY < 0 && ctx.platform.Contains(ballX, ballY-BallSize) {
 		ctx.vectorY = -ctx.vectorY
 	}
 	// bounce from platform left
-	if ctx.vectorX > 0 && ctx.platform.contains(ballX+BallSize, ballY) {
+	if ctx.vectorX > 0 && ctx.platform.Contains(ballX+BallSize, ballY) {
 		ctx.vectorX = -ctx.vectorX
 	}
 	// bounce from platform right
-	if ctx.vectorX < 0 && ctx.platform.contains(ballX-BallSize, ballY) {
+	if ctx.vectorX < 0 && ctx.platform.Contains(ballX-BallSize, ballY) {
 		ctx.vectorX = -ctx.vectorX
 	}
 }
@@ -206,7 +206,7 @@ type Brick struct {
 	removed bool
 }
 
-func (brick Brick) contains(x, y int) bool {
+func (brick Brick) Contains(x, y int) bool {
 	if y < brick.y { // ball upper
 		return false
 	}
@@ -242,22 +242,22 @@ func (brick *Brick) Collide(ball *Ball) bool {
 	}
 
 	// bottom of brick collision
-	if ball.vectorY < 0 && brick.contains(ball.x, ball.y-BallSize) {
+	if ball.vectorY < 0 && brick.Contains(ball.x, ball.y-BallSize) {
 		ball.vectorY = -ball.vectorY
 		return true
 	}
 	// top of brick collision
-	if ball.vectorY > 0 && brick.contains(ball.x, ball.y+BallSize) {
+	if ball.vectorY > 0 && brick.Contains(ball.x, ball.y+BallSize) {
 		ball.vectorY = -ball.vectorY
 		return true
 	}
 	// left of brick collision
-	if ball.vectorX > 0 && brick.contains(ball.x+BallSize, ball.y) {
+	if ball.vectorX > 0 && brick.Contains(ball.x+BallSize, ball.y) {
 		ball.vectorX = -ball.vectorX
 		return true
 	}
 	// right of brick collision
-	if ball.vectorX < 0 && brick.contains(ball.x-BallSize, ball.y) {
+	if ball.vectorX < 0 && brick.Contains(ball.x-BallSize, ball.y) {
 		ball.vectorX = -ball.vectorX
 		return true
 	}
