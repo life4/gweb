@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"time"
 
 	"github.com/life4/gweb/canvas"
@@ -9,14 +10,16 @@ import (
 )
 
 const BGColor = "#ecf0f1"
+const BallColor = "#d35400"
 const PlatformColor = "#2c3e50"
 const TextColor = "#2c3e50"
 
 const PlatformWidth = 100
 const PlatformHeight = 30
 const PlatformMaxSpeed = 40
+const BallSize = 30
 
-type Platfrom struct {
+type Platform struct {
 	context canvas.Context2D
 	element web.Canvas
 	// geometry
@@ -29,7 +32,7 @@ type Platfrom struct {
 	windowHeight int
 }
 
-func (ctx *Platfrom) changePosition() {
+func (ctx *Platform) changePosition() {
 	path := ctx.mouseX - (ctx.x + ctx.width/2)
 	if path == 0 {
 		return
@@ -42,11 +45,11 @@ func (ctx *Platfrom) changePosition() {
 	ctx.x += path
 }
 
-func (ctx *Platfrom) handleMouse(event web.Event) {
+func (ctx *Platform) handleMouse(event web.Event) {
 	ctx.mouseX = event.Get("clientX").Int()
 }
 
-func (ctx *Platfrom) handleFrame() {
+func (ctx *Platform) handleFrame() {
 	y := ctx.windowHeight - 100
 
 	// clear out previous render
@@ -59,6 +62,80 @@ func (ctx *Platfrom) handleFrame() {
 	// draw the platform
 	ctx.context.SetFillStyle(PlatformColor)
 	ctx.context.Rectangle(ctx.x, y, ctx.width, PlatformHeight).Filled().Draw()
+}
+
+type Ball struct {
+	context canvas.Context2D
+	// position
+	x, y int
+	// movement
+	vectorX int
+	vectorY int
+	// borders
+	windowWidth  int
+	windowHeight int
+	platform     *Platform
+}
+
+func (ctx *Ball) changeDirection() {
+	ballX := ctx.x + ctx.vectorX
+	ballY := ctx.y + ctx.vectorY
+	// bounce from text box (where we draw FPS and score)
+	if ballX < 110+BallSize && ballY < 60 {
+		ctx.vectorX = -ctx.vectorX
+	}
+	if ballX < 110 && ballY < 60+BallSize {
+		ctx.vectorY = -ctx.vectorY
+	}
+
+	// right and left
+	if ballX > ctx.windowWidth-BallSize {
+		ctx.vectorX = -ctx.vectorX
+	} else if ballX < BallSize {
+		ctx.vectorX = -ctx.vectorX
+	}
+
+	// bottom and top
+	if ballY > ctx.windowHeight-BallSize {
+		ctx.vectorY = -ctx.vectorY
+	} else if ballY < BallSize {
+		ctx.vectorY = -ctx.vectorY
+	}
+
+	// bounce from platform top
+	if ctx.vectorY > 0 {
+		platformTop := ctx.windowHeight - 100
+		if ballY+BallSize > platformTop && ballY+BallSize <= platformTop+PlatformHeight {
+			platformLeft := ctx.platform.x
+			platformRight := ctx.platform.x + ctx.platform.width
+			// ball touched the platform by the bottom
+			if ballX >= platformLeft && ballX <= platformRight {
+				ctx.vectorY = -ctx.vectorY
+			}
+		}
+	}
+}
+
+func (ctx *Ball) handle() {
+	// clear out previous render
+	ctx.context.SetFillStyle(BGColor)
+	ctx.context.BeginPath()
+	ctx.context.Arc(ctx.x, ctx.y, BallSize+1, 0, math.Pi*2)
+	ctx.context.Fill()
+	ctx.context.ClosePath()
+
+	ctx.changeDirection()
+
+	// move the ball
+	ctx.x += ctx.vectorX
+	ctx.y += ctx.vectorY
+
+	// draw the ball
+	ctx.context.SetFillStyle(BallColor)
+	ctx.context.BeginPath()
+	ctx.context.Arc(ctx.x, ctx.y, BallSize, 0, math.Pi*2)
+	ctx.context.Fill()
+	ctx.context.ClosePath()
 }
 
 type FPS struct {
@@ -113,8 +190,8 @@ func main() {
 	context.Fill()
 	context.ClosePath()
 
-	// register mouse movement handler
-	platform := Platfrom{
+	// make handlers
+	platform := Platform{
 		context:      context,
 		element:      canvas,
 		x:            w / 2,
@@ -123,12 +200,22 @@ func main() {
 		windowWidth:  w,
 		windowHeight: h,
 	}
+	fps := FPS{context: context, updated: time.Now()}
+	ball := Ball{
+		context: context,
+		vectorX: 4, vectorY: -4,
+		x: 120, y: 120,
+		windowWidth: w, windowHeight: h,
+		platform: &platform,
+	}
+
+	// register mouse movement handler
 	canvas.EventTarget().Listen(web.EventTypeMouseMove, platform.handleMouse)
 
 	// register frame updaters
-	fps := FPS{context: context, updated: time.Now()}
 	handler := func() {
-		fps.handle()
+		go fps.handle()
+		ball.handle()
 		platform.handleFrame()
 	}
 	window.RequestAnimationFrame(handler, true)
