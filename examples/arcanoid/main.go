@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"sync"
 	"time"
 
 	"github.com/life4/gweb/canvas"
@@ -168,9 +169,31 @@ type Brick struct {
 	x, y    int
 	width   int
 	height  int
+	removed bool
+}
+
+func (brick Brick) contains(x, y int) bool {
+	if y < brick.y { // ball upper
+		return false
+	}
+	if y > brick.y+brick.height { // ball downer
+		return false
+	}
+	if x > brick.x+brick.width { // ball righter
+		return false
+	}
+	if x < brick.x { // ball lefter
+		return false
+	}
+	return true
+
 }
 
 func (brick *Brick) Collide(ball *Ball) bool {
+	if brick.removed {
+		return false
+	}
+
 	// quick checks of ball position
 	if ball.x-BallSize > brick.x+brick.width { // ball righter
 		return false
@@ -186,36 +209,36 @@ func (brick *Brick) Collide(ball *Ball) bool {
 	}
 
 	// bottom of brick collision
-	if ball.vectorY < 0 {
-		if ball.y-BallSize <= brick.y+brick.height {
-			ball.vectorY = -ball.vectorY
-			return true
-		}
+	if ball.vectorY < 0 && brick.contains(ball.x, ball.y-BallSize) {
+		ball.vectorY = -ball.vectorY
+		return true
 	}
 
-	return true
+	return false
 }
 
 func (brick *Brick) Draw() {
 	brick.context.SetFillStyle(BrickColor)
 	brick.context.Rectangle(brick.x, brick.y, brick.width, brick.height).Filled().Draw()
+	brick.removed = false
 }
 
 func (brick *Brick) Remove() {
 	brick.context.SetFillStyle(BGColor)
 	brick.context.Rectangle(brick.x, brick.y, brick.width, brick.height).Filled().Draw()
+	brick.removed = true
 }
 
 type Bricks struct {
 	context      canvas.Context2D
-	registry     []Brick
+	registry     []*Brick
 	ready        bool
 	windowWidth  int
 	windowHeight int
 }
 
 func (bricks *Bricks) Draw() {
-	bricks.registry = make([]Brick, BrickCols*BrickRows)
+	bricks.registry = make([]*Brick, BrickCols*BrickRows)
 	width := (bricks.windowWidth-BrickMarginLeft)/BrickCols - BrickMarginX
 	for i := 0; i < BrickCols; i++ {
 		for j := 0; j < BrickRows; j++ {
@@ -229,10 +252,19 @@ func (bricks *Bricks) Draw() {
 				height:  BrickHeight,
 			}
 			brick.Draw()
-			bricks.registry[BrickRows*i+j] = brick
+			bricks.registry[BrickRows*i+j] = &brick
 		}
 	}
 	bricks.ready = true
+}
+
+func (bricks *Bricks) Handle(ball *Ball) {
+	for _, brick := range bricks.registry {
+		if !brick.Collide(ball) {
+			continue
+		}
+		brick.Remove()
+	}
 }
 
 type FPS struct {
@@ -318,9 +350,25 @@ func main() {
 
 	// register frame updaters
 	handler := func() {
-		go fps.handle()
-		go platform.handleFrame()
-		ball.handle()
+		wg := sync.WaitGroup{}
+		wg.Add(4)
+		go func() {
+			fps.handle()
+			wg.Done()
+		}()
+		go func() {
+			platform.handleFrame()
+			wg.Done()
+		}()
+		go func() {
+			bricks.Handle(&ball)
+			wg.Done()
+		}()
+		go func() {
+			ball.handle()
+			wg.Done()
+		}()
+		wg.Wait()
 	}
 	window.RequestAnimationFrame(handler, true)
 
