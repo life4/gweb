@@ -37,12 +37,29 @@ type Platform struct {
 	element web.Canvas
 	// geometry
 	width int
-	x     int
+	x, y  int
 	// movement
 	mouseX int
 	// borders
 	windowWidth  int
 	windowHeight int
+}
+
+func (platform Platform) contains(x, y int) bool {
+	if y < platform.y { // ball upper
+		return false
+	}
+	if y > platform.y+PlatformHeight { // ball downer
+		return false
+	}
+	if x > platform.x+platform.width { // ball righter
+		return false
+	}
+	if x < platform.x { // ball lefter
+		return false
+	}
+	return true
+
 }
 
 func (ctx *Platform) changePosition() {
@@ -76,18 +93,16 @@ func (ctx *Platform) handleMouse(event web.Event) {
 }
 
 func (ctx *Platform) handleFrame() {
-	y := ctx.windowHeight - 100
-
 	// clear out previous render
 	ctx.context.SetFillStyle(BGColor)
-	ctx.context.Rectangle(ctx.x, y, ctx.width, PlatformHeight).Filled().Draw()
+	ctx.context.Rectangle(ctx.x, ctx.y, ctx.width, PlatformHeight).Filled().Draw()
 
 	// change platform coordinates
 	ctx.changePosition()
 
 	// draw the platform
 	ctx.context.SetFillStyle(PlatformColor)
-	ctx.context.Rectangle(ctx.x, y, ctx.width, PlatformHeight).Filled().Draw()
+	ctx.context.Rectangle(ctx.x, ctx.y, ctx.width, PlatformHeight).Filled().Draw()
 }
 
 type Ball struct {
@@ -129,16 +144,20 @@ func (ctx *Ball) changeDirection() {
 	}
 
 	// bounce from platform top
-	if ctx.vectorY > 0 {
-		platformTop := ctx.windowHeight - 100
-		if ballY+BallSize > platformTop && ballY+BallSize <= platformTop+PlatformHeight {
-			platformLeft := ctx.platform.x
-			platformRight := ctx.platform.x + ctx.platform.width
-			// ball touched the platform by the bottom
-			if ballX >= platformLeft && ballX <= platformRight {
-				ctx.vectorY = -ctx.vectorY
-			}
-		}
+	if ctx.vectorY > 0 && ctx.platform.contains(ballX, ballY+BallSize) {
+		ctx.vectorY = -ctx.vectorY
+	}
+	// bounce from platform bottom
+	if ctx.vectorY < 0 && ctx.platform.contains(ballX, ballY-BallSize) {
+		ctx.vectorY = -ctx.vectorY
+	}
+	// bounce from platform left
+	if ctx.vectorX > 0 && ctx.platform.contains(ballX+BallSize, ballY) {
+		ctx.vectorX = -ctx.vectorX
+	}
+	// bounce from platform right
+	if ctx.vectorX < 0 && ctx.platform.contains(ballX-BallSize, ballY) {
+		ctx.vectorX = -ctx.vectorX
 	}
 }
 
@@ -186,7 +205,6 @@ func (brick Brick) contains(x, y int) bool {
 		return false
 	}
 	return true
-
 }
 
 func (brick *Brick) Collide(ball *Ball) bool {
@@ -339,6 +357,7 @@ func main() {
 		context:      context,
 		element:      canvas,
 		x:            w / 2,
+		y:            h - 60,
 		mouseX:       w / 2,
 		width:        PlatformWidth,
 		windowWidth:  w,
@@ -348,8 +367,8 @@ func main() {
 	ball := Ball{
 		context: context,
 		vectorX: 5, vectorY: -5,
-		x:           w / 2,
-		y:           h - 100 - BallSize,
+		x:           platform.x,
+		y:           platform.y - BallSize,
 		windowWidth: w, windowHeight: h,
 		platform: &platform,
 	}
