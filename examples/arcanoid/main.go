@@ -12,7 +12,7 @@ import (
 
 const (
 	BGColor       = "#ecf0f1"
-	BallColor     = "#d35400"
+	BallColor     = "#27ae60"
 	PlatformColor = "#2c3e50"
 	TextColor     = "#2c3e50"
 	BrickColor    = "#c0392b"
@@ -204,13 +204,28 @@ func (brick *Brick) Collide(ball *Ball) bool {
 	if ball.y+BallSize < brick.y { // ball upper
 		return false
 	}
-	if ball.y-BallSize < brick.y+brick.height { // ball downer
+	if ball.y-BallSize > brick.y+brick.height { // ball downer
 		return false
 	}
 
 	// bottom of brick collision
 	if ball.vectorY < 0 && brick.contains(ball.x, ball.y-BallSize) {
 		ball.vectorY = -ball.vectorY
+		return true
+	}
+	// top of brick collision
+	if ball.vectorY > 0 && brick.contains(ball.x, ball.y+BallSize) {
+		ball.vectorY = -ball.vectorY
+		return true
+	}
+	// left of brick collision
+	if ball.vectorX > 0 && brick.contains(ball.x+BallSize, ball.y) {
+		ball.vectorX = -ball.vectorX
+		return true
+	}
+	// right of brick collision
+	if ball.vectorX < 0 && brick.contains(ball.x-BallSize, ball.y) {
+		ball.vectorX = -ball.vectorX
 		return true
 	}
 
@@ -332,8 +347,9 @@ func main() {
 	fps := FPS{context: context, updated: time.Now()}
 	ball := Ball{
 		context: context,
-		vectorX: 5, vectorY: 5,
-		x: 120, y: 120,
+		vectorX: 5, vectorY: -5,
+		x:           w / 2,
+		y:           h - 100 - BallSize,
 		windowWidth: w, windowHeight: h,
 		platform: &platform,
 	}
