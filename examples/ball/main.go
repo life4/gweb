@@ -175,7 +175,7 @@ func (ctx *Click) handle(event web.Event) {
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
-	doc.SetTitle("Canvas drawing example")
+	doc.SetTitle("Bouncing ball")
 	body := doc.Body()
 
 	// create canvas

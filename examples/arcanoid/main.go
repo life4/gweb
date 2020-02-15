@@ -9,15 +9,26 @@ import (
 	"github.com/life4/gweb/web"
 )
 
-const BGColor = "#ecf0f1"
-const BallColor = "#d35400"
-const PlatformColor = "#2c3e50"
-const TextColor = "#2c3e50"
+const (
+	BGColor       = "#ecf0f1"
+	BallColor     = "#d35400"
+	PlatformColor = "#2c3e50"
+	TextColor     = "#2c3e50"
+	BrickColor    = "#c0392b"
+)
 
-const PlatformWidth = 100
-const PlatformHeight = 30
+const PlatformWidth = 120
+const PlatformHeight = 20
 const PlatformMaxSpeed = 40
-const BallSize = 30
+
+const BallSize = 20
+
+const BrickHeight = 30
+const BrickRows = 8
+const BrickCols = 14
+const BrickMarginX = 5      // pixels
+const BrickMarginLeft = 120 // pixels
+const BrickMarginY = 5      // pixels
 
 type Platform struct {
 	context canvas.Context2D
@@ -151,6 +162,75 @@ func (ctx *Ball) handle() {
 	ctx.context.ClosePath()
 }
 
+type Brick struct {
+	context canvas.Context2D
+	x, y    int
+	width   int
+	height  int
+}
+
+func (brick *Brick) Collide(ball *Ball) bool {
+	// quick checks of ball position
+	if ball.x-BallSize > brick.x+brick.width { // ball righter
+		return false
+	}
+	if ball.x+BallSize < brick.x { // ball lefter
+		return false
+	}
+	if ball.y+BallSize < brick.y { // ball upper
+		return false
+	}
+	if ball.y-BallSize < brick.y+brick.height { // ball downer
+		return false
+	}
+
+	// bottom of brick collision
+	if ball.vectorY < 0 {
+		if ball.y-BallSize <= brick.y+brick.height {
+			ball.vectorY = -ball.vectorY
+			return true
+		}
+	}
+
+	return true
+}
+
+func (brick *Brick) Draw() {
+	brick.context.SetFillStyle(BrickColor)
+	brick.context.Rectangle(brick.x, brick.y, brick.width, brick.height).Filled().Draw()
+}
+
+func (brick *Brick) Remove() {
+	brick.context.SetFillStyle(BGColor)
+	brick.context.Rectangle(brick.x, brick.y, brick.width, brick.height).Filled().Draw()
+}
+
+type Bricks struct {
+	context      canvas.Context2D
+	registry     []Brick
+	ready        bool
+	windowWidth  int
+	windowHeight int
+}
+
+func (bricks *Bricks) Draw() {
+	bricks.registry = make([]Brick, BrickCols)
+	width := (bricks.windowWidth-BrickMarginLeft)/BrickCols - BrickMarginX
+	for i := 0; i < BrickCols; i++ {
+		x := BrickMarginLeft + (width+BrickMarginX)*i
+		brick := Brick{
+			context: bricks.context,
+			x:       x,
+			y:       10,
+			width:   width,
+			height:  BrickHeight,
+		}
+		brick.Draw()
+		bricks.registry[i] = brick
+	}
+	bricks.ready = true
+}
+
 type FPS struct {
 	context canvas.Context2D
 	updated time.Time
@@ -183,7 +263,7 @@ func (h *FPS) handle() {
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
-	doc.SetTitle("Canvas drawing example")
+	doc.SetTitle("Arkanoid")
 	body := doc.Body()
 
 	// create canvas
@@ -216,11 +296,18 @@ func main() {
 	fps := FPS{context: context, updated: time.Now()}
 	ball := Ball{
 		context: context,
-		vectorX: 4, vectorY: -4,
+		vectorX: 5, vectorY: 5,
 		x: 120, y: 120,
 		windowWidth: w, windowHeight: h,
 		platform: &platform,
 	}
+	bricks := Bricks{
+		context:      context,
+		windowWidth:  w,
+		windowHeight: h,
+		ready:        false,
+	}
+	go bricks.Draw()
 
 	// register mouse movement handler
 	body.EventTarget().Listen(web.EventTypeMouseMove, platform.handleMouse)
