@@ -20,10 +20,7 @@ func main() {
 
 	// draw black background
 	context.SetFillStyle("black")
-	context.BeginPath()
-	context.Rect(0, 0, w, h)
-	context.Fill()
-	context.ClosePath()
+	context.Rectangle(0, 0, w, h).Filled().Draw()
 
 	// draw red triangle
 	centerX := w / 2

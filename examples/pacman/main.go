@@ -23,16 +23,16 @@ func main() {
 
 	// make background
 	ctx.SetFillStyle("#ecf0f1")
-	ctx.FillRect(0, 0, 150, 150)
+	ctx.Rectangle(0, 0, 150, 150).Filled().Draw()
 
 	// draw walls
 	ctx.SetFillStyle("#2c3e50")
-	ctx.RoundedRect(12, 12, 150, 150, 15)
-	ctx.RoundedRect(19, 19, 150, 150, 9)
-	ctx.RoundedRect(53, 53, 49, 33, 10)
-	ctx.RoundedRect(53, 119, 49, 16, 6)
-	ctx.RoundedRect(135, 53, 49, 33, 10)
-	ctx.RoundedRect(135, 119, 25, 49, 10)
+	ctx.Rectangle(12, 12, 150, 150).Rounded(15).Draw()
+	ctx.Rectangle(19, 19, 150, 150).Rounded(9).Draw()
+	ctx.Rectangle(53, 53, 49, 33).Rounded(10).Draw()
+	ctx.Rectangle(53, 119, 49, 16).Rounded(6).Draw()
+	ctx.Rectangle(135, 53, 49, 33).Rounded(10).Draw()
+	ctx.Rectangle(135, 119, 25, 49).Rounded(10).Draw()
 
 	// draw pacman body
 	ctx.SetFillStyle("#f39c12")
@@ -44,14 +44,14 @@ func main() {
 	// draw bread crumbs
 	ctx.SetFillStyle("#2c3e50")
 	for i := 0; i < 8; i++ {
-		ctx.FillRect(51+i*16, 35, 4, 4)
+		ctx.Rectangle(51+i*16, 35, 4, 4).Filled().Draw()
 	}
 	for i := 0; i < 6; i++ {
-		ctx.FillRect(115, 51+i*16, 4, 4)
+		ctx.Rectangle(115, 51+i*16, 4, 4).Filled().Draw()
 	}
 
 	for i := 0; i < 8; i++ {
-		ctx.FillRect(51+i*16, 99, 4, 4)
+		ctx.Rectangle(51+i*16, 99, 4, 4).Filled().Draw()
 	}
 
 	// draw ghost's body

@@ -16,6 +16,10 @@ func (context Context2D) Line() Line {
 	return Line(context)
 }
 
+func (context Context2D) Rectangle(x, y, width, height int) Rectangle {
+	return Rectangle{value: context.value, x: x, y: y, width: width, height: height}
+}
+
 func (context Context2D) Text() Text {
 	return Text(context)
 }
@@ -112,24 +116,6 @@ func (context Context2D) QuadraticCurveTo(cpx, cpy, x, y int) {
 	context.value.Call("quadraticCurveTo", cpx, cpy, x, y)
 }
 
-// RECTANGLES
-
-func (context Context2D) Rect(x, y, width, height int) {
-	context.value.Call("rect", x, y, width, height)
-}
-
-func (context Context2D) FillRect(x, y, width, height int) {
-	context.value.Call("fillRect", x, y, width, height)
-}
-
-func (context Context2D) StrokeRect(x, y, width, height int) {
-	context.value.Call("strokeRect", x, y, width, height)
-}
-
-func (context Context2D) ClearRect(x, y, width, height int) {
-	context.value.Call("clearRect", x, y, width, height)
-}
-
 // TRANSFORMATION API
 
 // Rotate rotates the current drawing
@@ -156,20 +142,4 @@ func (context Context2D) Transform(a, b, c, d, e, f float64) {
 // Translate remaps the (0,0) position on the canvas
 func (context Context2D) Translate(x float64, y float64) {
 	context.value.Call("translate", x, y)
-}
-
-// HELPERS
-
-func (context Context2D) RoundedRect(x, y, width, height, radius int) {
-	context.BeginPath()
-	context.MoveTo(x, y+radius)
-	context.LineTo(x, y+height-radius)
-	context.ArcTo(x, y+height, x+radius, y+height, radius)
-	context.LineTo(x+width-radius, y+height)
-	context.ArcTo(x+width, y+height, x+width, y+height-radius, radius)
-	context.LineTo(x+width, y+radius)
-	context.ArcTo(x+width, y, x+width-radius, y, radius)
-	context.LineTo(x+radius, y)
-	context.ArcTo(x, y, x, y+radius, radius)
-	context.Stroke()
 }

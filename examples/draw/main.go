@@ -51,7 +51,7 @@ func (h *Handler) handleFrame() {
 
 		// clear
 		h.context.SetFillStyle(BGColor)
-		h.context.FillRect(10, 10, 100, 20)
+		h.context.Rectangle(10, 10, 100, 20).Filled().Draw()
 
 		// write
 		h.context.Text().SetFont("bold 20px Roboto")
@@ -80,7 +80,7 @@ func main() {
 	// draw background
 	context.SetFillStyle(BGColor)
 	context.BeginPath()
-	context.Rect(0, 0, w, h)
+	context.Rectangle(0, 0, w, h).Filled().Draw()
 	context.Fill()
 	context.ClosePath()
 
