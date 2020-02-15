@@ -402,16 +402,8 @@ func (bricks *Bricks) Draw() {
 	bricks.ready = true
 }
 
-func (bricks Bricks) drawScore() {
-	// make text
-	var text string
-	if bricks.score == 1 {
-		text = fmt.Sprintf("%d point", bricks.score)
-	} else {
-		text = fmt.Sprintf("%d points", bricks.score)
-	}
-
-	y := TextTop + (TextMargin + TextHeight)
+func (bricks Bricks) drawText(text string, row int) {
+	y := TextTop + row*(TextMargin+TextHeight)
 
 	// clear place where previous score was
 	bricks.context.SetFillStyle(BGColor)
@@ -423,6 +415,17 @@ func (bricks Bricks) drawScore() {
 	bricks.context.Text().Fill(text, TextLeft, y+TextHeight, TextWidth)
 }
 
+func (bricks Bricks) drawScore() {
+	// make text
+	var text string
+	if bricks.score == 1 {
+		text = fmt.Sprintf("%d point", bricks.score)
+	} else {
+		text = fmt.Sprintf("%d points", bricks.score)
+	}
+	bricks.drawText(text, 1)
+}
+
 func (bricks Bricks) drawHits() {
 	// make text
 	var text string
@@ -431,17 +434,7 @@ func (bricks Bricks) drawHits() {
 	} else {
 		text = fmt.Sprintf("%d hits", bricks.hits)
 	}
-
-	y := TextTop + 2*(TextMargin+TextHeight)
-
-	// clear place where previous hits was
-	bricks.context.SetFillStyle(BGColor)
-	bricks.context.Rectangle(TextLeft, y, TextRight, TextHeight+TextWidth).Filled().Draw()
-
-	// draw the hits
-	bricks.context.SetFillStyle(TextColor)
-	bricks.context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", TextHeight))
-	bricks.context.Text().Fill(text, TextLeft, y+TextHeight, TextWidth)
+	bricks.drawText(text, 2)
 }
 
 func (bricks *Bricks) Handle(ball *Ball) {
