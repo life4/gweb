@@ -1,35 +1,37 @@
 package web
 
+import "github.com/life4/gweb/canvas"
+
 type Canvas struct {
 	HTMLElement
 }
 
 // getters
 
-func (canvas *Canvas) Context(name string) RenderingContext {
-	value := canvas.Call("getContext", name)
-	return RenderingContext{Value: value}
+func (element Canvas) Context(name string) canvas.Context {
+	value := element.Call("getContext", name)
+	return canvas.Context{Value: value.JSValue()}
 }
 
-func (canvas *Canvas) Context2D() Context2D {
-	context := canvas.Context("2d")
+func (element Canvas) Context2D() canvas.Context2D {
+	context := element.Context("2d")
 	return context.Context2D()
 }
 
-func (canvas *Canvas) Width() int {
-	return canvas.Get("width").Int()
+func (element Canvas) Width() int {
+	return element.Get("width").Int()
 }
 
-func (canvas *Canvas) Height() int {
-	return canvas.Get("height").Int()
+func (element Canvas) Height() int {
+	return element.Get("height").Int()
 }
 
 // setters
 
-func (canvas *Canvas) SetWidth(value int) {
-	canvas.Set("width", value)
+func (element Canvas) SetWidth(value int) {
+	element.Set("width", value)
 }
 
-func (canvas *Canvas) SetHeight(value int) {
-	canvas.Set("height", value)
+func (element Canvas) SetHeight(value int) {
+	element.Set("height", value)
 }

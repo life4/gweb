@@ -5,6 +5,7 @@ import (
 	"math"
 	"time"
 
+	"github.com/life4/gweb/canvas"
 	"github.com/life4/gweb/web"
 )
 
@@ -13,7 +14,7 @@ const PointColor = "#2c3e50"
 const TextColor = "#2c3e50"
 
 type Handler struct {
-	context web.Context2D
+	context canvas.Context2D
 	drawing bool
 	updated time.Time
 }
