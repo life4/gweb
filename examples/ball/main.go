@@ -24,6 +24,7 @@ type Ball struct {
 	// borders
 	windowWidth  int
 	windowHeight int
+	color        string
 }
 
 func (ctx *Ball) changeDirection() {
@@ -62,7 +63,7 @@ func (ctx *Ball) handle() {
 	ctx.y += ctx.vectorY
 
 	// draw the ball
-	ctx.context.SetFillStyle(BallColor)
+	ctx.context.SetFillStyle(ctx.color)
 	ctx.context.BeginPath()
 	ctx.context.Arc(ctx.x, ctx.y, ctx.size, 0, math.Pi*2)
 	ctx.context.Fill()
@@ -139,6 +140,24 @@ func (ctx *Click) touched() {
 	ctx.context.SetFillStyle(TextColor)
 	ctx.context.Text().SetFont("bold 20px Roboto")
 	ctx.context.Text().Fill(text, 10, 60, 100)
+
+	// change ball color
+	var color string
+	switch ctx.score % 6 {
+	case 0:
+		color = "#16a085"
+	case 1:
+		color = "#c0392b"
+	case 2:
+		color = "#8e44ad"
+	case 3:
+		color = "#27ae60"
+	case 4:
+		color = "#34495e"
+	case 5:
+		color = "#d35400"
+	}
+	ctx.ball.color = color
 }
 
 func (ctx *Click) handle(event web.Event) {
@@ -182,6 +201,7 @@ func main() {
 		vectorX: 4, vectorY: -4,
 		size: 35, x: 120, y: 120,
 		windowWidth: w, windowHeight: h,
+		color: BallColor,
 	}
 	fps := FPS{context: context, updated: time.Now()}
 	handler := func() {
