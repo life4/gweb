@@ -15,7 +15,6 @@ const (
 	BallColor     = "#27ae60"
 	PlatformColor = "#2c3e50"
 	TextColor     = "#2c3e50"
-	BrickColor    = "#c0392b"
 )
 
 const PlatformWidth = 120
@@ -250,8 +249,8 @@ func (brick *Brick) Collide(ball *Ball) bool {
 	return false
 }
 
-func (brick *Brick) Draw() {
-	brick.context.SetFillStyle(BrickColor)
+func (brick *Brick) Draw(color string) {
+	brick.context.SetFillStyle(color)
 	brick.context.Rectangle(brick.x, brick.y, brick.width, brick.height).Filled().Draw()
 	brick.removed = false
 }
@@ -273,6 +272,7 @@ type Bricks struct {
 func (bricks *Bricks) Draw() {
 	bricks.registry = make([]*Brick, BrickCols*BrickRows)
 	width := (bricks.windowWidth-BrickMarginLeft)/BrickCols - BrickMarginX
+	colors := []string{"#c0392b", "#d35400", "#f39c12", "#f1c40f"}
 	for i := 0; i < BrickCols; i++ {
 		for j := 0; j < BrickRows; j++ {
 			x := BrickMarginLeft + (width+BrickMarginX)*i
@@ -284,7 +284,8 @@ func (bricks *Bricks) Draw() {
 				width:   width,
 				height:  BrickHeight,
 			}
-			brick.Draw()
+			color := colors[(j/2)%len(colors)]
+			brick.Draw(color)
 			bricks.registry[BrickRows*i+j] = &brick
 		}
 	}
