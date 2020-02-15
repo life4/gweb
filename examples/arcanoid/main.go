@@ -337,10 +337,32 @@ func (bricks Bricks) drawScore() {
 	bricks.context.Text().Fill(text, TextLeft, y+TextHeight, TextWidth)
 }
 
+func (bricks Bricks) drawHits() {
+	// make text
+	var text string
+	if bricks.hits == 1 {
+		text = fmt.Sprintf("%d hit", bricks.hits)
+	} else {
+		text = fmt.Sprintf("%d hits", bricks.hits)
+	}
+
+	y := TextTop + 2*(TextMargin+TextHeight)
+
+	// clear place where previous hits was
+	bricks.context.SetFillStyle(BGColor)
+	bricks.context.Rectangle(TextLeft, y, TextRight, TextHeight+TextWidth).Filled().Draw()
+
+	// draw the hits
+	bricks.context.SetFillStyle(TextColor)
+	bricks.context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", TextHeight))
+	bricks.context.Text().Fill(text, TextLeft, y+TextHeight, TextWidth)
+}
+
 func (bricks *Bricks) Handle(ball *Ball) {
 	if !bricks.ready {
 		return
 	}
+	changed := false
 	for _, brick := range bricks.registry {
 		if !brick.Collide(ball) {
 			continue
@@ -348,7 +370,24 @@ func (bricks *Bricks) Handle(ball *Ball) {
 		brick.Remove()
 		bricks.score += brick.cost
 		bricks.hits += 1
-		bricks.drawScore()
+		changed = true
+	}
+	if changed {
+		go bricks.drawScore()
+		go bricks.drawHits()
+
+		if bricks.hits == 4 || bricks.hits == 12 || bricks.hits == 60 || bricks.hits == 90 {
+			if ball.vectorX > 0 {
+				ball.vectorX += 2
+			} else {
+				ball.vectorX -= 2
+			}
+			if ball.vectorY > 0 {
+				ball.vectorY += 2
+			} else {
+				ball.vectorY -= 2
+			}
+		}
 	}
 }
 
