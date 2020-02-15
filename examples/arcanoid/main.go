@@ -23,13 +23,26 @@ const PlatformMaxSpeed = 40
 
 const BallSize = 20
 
-const BrickHeight = 20
-const BrickRows = 8
-const BrickCols = 14
-const BrickMarginLeft = 120 // pixels
-const BrickMarginTop = 10   // pixels
-const BrickMarginX = 5      // pixels
-const BrickMarginY = 5      // pixels
+const (
+	BrickHeight     = 20
+	BrickRows       = 8
+	BrickCols       = 14
+	BrickMarginLeft = 120 // pixels
+	BrickMarginTop  = 10  // pixels
+	BrickMarginX    = 5   // pixels
+	BrickMarginY    = 5   // pixels
+)
+
+const (
+	TextWidth  = 90
+	TextHeight = 20
+	TextLeft   = 10
+	TextTop    = 10
+	TextMargin = 5
+
+	TextBottom = TextTop + (TextHeight+TextMargin)*3
+	TextRight  = TextLeft + TextWidth
+)
 
 type Platform struct {
 	context canvas.Context2D
@@ -121,10 +134,12 @@ func (ctx *Ball) changeDirection() {
 	ballX := ctx.x + ctx.vectorX
 	ballY := ctx.y + ctx.vectorY
 	// bounce from text box (where we draw FPS and score)
-	if ballX < 110+BallSize && ballY < 60 {
+	// bounce from right border
+	if ballX-BallSize <= TextRight && ballY < TextBottom {
 		ctx.vectorX = -ctx.vectorX
 	}
-	if ballX < 110 && ballY < 60+BallSize {
+	// bounce from bottom
+	if ballX <= TextRight && ballY-BallSize < TextBottom {
 		ctx.vectorY = -ctx.vectorY
 	}
 
@@ -185,6 +200,7 @@ func (ctx *Ball) handle() {
 type Brick struct {
 	context canvas.Context2D
 	x, y    int
+	cost    int
 	width   int
 	height  int
 	removed bool
@@ -267,24 +283,32 @@ type Bricks struct {
 	ready        bool
 	windowWidth  int
 	windowHeight int
+
+	// stat
+	score int
+	hits  int
 }
 
 func (bricks *Bricks) Draw() {
 	bricks.registry = make([]*Brick, BrickCols*BrickRows)
 	width := (bricks.windowWidth-BrickMarginLeft)/BrickCols - BrickMarginX
-	colors := []string{"#c0392b", "#d35400", "#f39c12", "#f1c40f"}
+	colors := [...]string{"#c0392b", "#d35400", "#f39c12", "#f1c40f"}
+	costs := [...]int{7, 5, 3, 1}
 	for i := 0; i < BrickCols; i++ {
 		for j := 0; j < BrickRows; j++ {
 			x := BrickMarginLeft + (width+BrickMarginX)*i
 			y := BrickMarginTop + (BrickHeight+BrickMarginY)*j
+			color := colors[(j/2)%len(colors)]
+			cost := costs[(j/2)%len(colors)]
+
 			brick := Brick{
 				context: bricks.context,
 				x:       x,
 				y:       y,
+				cost:    cost,
 				width:   width,
 				height:  BrickHeight,
 			}
-			color := colors[(j/2)%len(colors)]
 			brick.Draw(color)
 			bricks.registry[BrickRows*i+j] = &brick
 		}
@@ -292,12 +316,39 @@ func (bricks *Bricks) Draw() {
 	bricks.ready = true
 }
 
+func (bricks Bricks) drawScore() {
+	// make text
+	var text string
+	if bricks.score == 1 {
+		text = fmt.Sprintf("%d point", bricks.score)
+	} else {
+		text = fmt.Sprintf("%d points", bricks.score)
+	}
+
+	y := TextTop + (TextMargin + TextHeight)
+
+	// clear place where previous score was
+	bricks.context.SetFillStyle(BGColor)
+	bricks.context.Rectangle(TextLeft, y, TextRight, TextHeight+TextWidth).Filled().Draw()
+
+	// draw the score
+	bricks.context.SetFillStyle(TextColor)
+	bricks.context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", TextHeight))
+	bricks.context.Text().Fill(text, TextLeft, y+TextHeight, TextWidth)
+}
+
 func (bricks *Bricks) Handle(ball *Ball) {
+	if !bricks.ready {
+		return
+	}
 	for _, brick := range bricks.registry {
 		if !brick.Collide(ball) {
 			continue
 		}
 		brick.Remove()
+		bricks.score += brick.cost
+		bricks.hits += 1
+		bricks.drawScore()
 	}
 }
 
@@ -313,12 +364,12 @@ func (h *FPS) drawFPS(now time.Time) {
 
 	// clear
 	h.context.SetFillStyle(BGColor)
-	h.context.Rectangle(10, 10, 100, 20).Filled().Draw()
+	h.context.Rectangle(TextLeft, TextTop, TextWidth, TextHeight+TextMargin).Filled().Draw()
 
 	// write
-	h.context.Text().SetFont("bold 20px Roboto")
+	h.context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", TextHeight))
 	h.context.SetFillStyle(TextColor)
-	h.context.Text().Fill(text, 10, 30, 100)
+	h.context.Text().Fill(text, TextLeft, TextTop+TextHeight, TextWidth)
 }
 
 func (h *FPS) handle() {
