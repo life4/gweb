@@ -271,7 +271,7 @@ func (brick Brick) Contains(x, y int) bool {
 	return true
 }
 
-func (brick *Brick) Collide(ball *Ball) bool {
+func (brick *Brick) Collide(ball *Ball, bounce bool) bool {
 	if brick.removed {
 		return false
 	}
@@ -292,43 +292,59 @@ func (brick *Brick) Collide(ball *Ball) bool {
 
 	// bottom of brick collision
 	if ball.vectorY < 0 && brick.Contains(ball.x, ball.y-BallSize) {
-		ball.vectorY = -ball.vectorY
+		if bounce {
+			ball.vectorY = -ball.vectorY
+		}
 		return true
 	}
 	// top of brick collision
 	if ball.vectorY > 0 && brick.Contains(ball.x, ball.y+BallSize) {
-		ball.vectorY = -ball.vectorY
+		if bounce {
+			ball.vectorY = -ball.vectorY
+		}
 		return true
 	}
 	// left of brick collision
 	if ball.vectorX > 0 && brick.Contains(ball.x+BallSize, ball.y) {
-		ball.vectorX = -ball.vectorX
+		if bounce {
+			ball.vectorX = -ball.vectorX
+		}
 		return true
 	}
 	// right of brick collision
 	if ball.vectorX < 0 && brick.Contains(ball.x-BallSize, ball.y) {
-		ball.vectorX = -ball.vectorX
+		if bounce {
+			ball.vectorX = -ball.vectorX
+		}
 		return true
 	}
 
 	// left-bottom corner of the brick collision
 	if ball.Contains(brick.x, brick.y+brick.height) {
-		ball.BounceFromPoint(brick.x, brick.y+brick.height)
+		if bounce {
+			ball.BounceFromPoint(brick.x, brick.y+brick.height)
+		}
 		return true
 	}
 	// right-bottom corner of the brick collision
 	if ball.Contains(brick.x+brick.width, brick.y+brick.height) {
-		ball.BounceFromPoint(brick.x+brick.width, brick.y+brick.height)
+		if bounce {
+			ball.BounceFromPoint(brick.x+brick.width, brick.y+brick.height)
+		}
 		return true
 	}
 	// left-top corner of the brick collision
 	if ball.Contains(brick.x, brick.y) {
-		ball.BounceFromPoint(brick.x, brick.y)
+		if bounce {
+			ball.BounceFromPoint(brick.x, brick.y)
+		}
 		return true
 	}
 	// right-top corner of the brick collision
 	if ball.Contains(brick.x+brick.width, brick.y) {
-		ball.BounceFromPoint(brick.x+brick.width, brick.y)
+		if bounce {
+			ball.BounceFromPoint(brick.x+brick.width, brick.y)
+		}
 		return true
 	}
 
@@ -434,9 +450,11 @@ func (bricks *Bricks) Handle(ball *Ball) {
 	}
 	changed := false
 	for _, brick := range bricks.registry {
-		if !brick.Collide(ball) {
+		// we bounce the ball only on first collision with a brick in a frame
+		if !brick.Collide(ball, !changed) {
 			continue
 		}
+		// if the ball touched the brick, remove the brick and count score
 		brick.Remove()
 		bricks.score += brick.cost
 		bricks.hits += 1
