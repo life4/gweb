@@ -21,3 +21,4 @@ It will serve example [hello](./hello/) on [localhost:1337](http://localhost:133
 + [pacman](./pacman/) -- ported [MDN example](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes#Making_combinations) of drawing a scene from Pacman.
 + [draw](./draw/) -- an example of handling events on canvas and calculating FPS.
 + [ball](./ball/) -- a simple game on canvas with moving and bouncing ball and reaction on clicks.
++ [breakout](./breakout/) -- port of [Breakout](http://tiny.cc/5t11jz) classic video game (famous because of clone [Arkanoid](https://en.wikipedia.org/wiki/Arkanoid)) with a bit more natural (hence annoying) physic.
