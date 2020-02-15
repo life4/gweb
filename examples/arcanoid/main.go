@@ -311,6 +311,27 @@ func (brick *Brick) Collide(ball *Ball) bool {
 		return true
 	}
 
+	// left-bottom corner of the brick collision
+	if ball.Contains(brick.x, brick.y+brick.height) {
+		ball.BounceFromPoint(brick.x, brick.y+brick.height)
+		return true
+	}
+	// right-bottom corner of the brick collision
+	if ball.Contains(brick.x+brick.width, brick.y+brick.height) {
+		ball.BounceFromPoint(brick.x+brick.width, brick.y+brick.height)
+		return true
+	}
+	// left-top corner of the brick collision
+	if ball.Contains(brick.x, brick.y) {
+		ball.BounceFromPoint(brick.x, brick.y)
+		return true
+	}
+	// right-top corner of the brick collision
+	if ball.Contains(brick.x+brick.width, brick.y) {
+		ball.BounceFromPoint(brick.x+brick.width, brick.y)
+		return true
+	}
+
 	return false
 }
 
