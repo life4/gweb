@@ -459,9 +459,13 @@ func (bricks *Bricks) Handle(ball *Ball) {
 		go bricks.drawHits()
 
 		// speed up ball after some hits
-		if bricks.hits == 4 || bricks.hits == 12 || bricks.hits == 60 || bricks.hits == 90 {
-			ball.vectorX += sign(ball.vectorX) * 2
-			ball.vectorY += sign(ball.vectorY) * 2
+		speedUpHits := [...]int{4, 8, 16, 24, 32, 64}
+		for _, hits := range speedUpHits {
+			if bricks.hits == hits {
+				ball.vectorX += sign(ball.vectorX) * 1
+				ball.vectorY += sign(ball.vectorY) * 1
+				break
+			}
 		}
 	}
 }
@@ -498,7 +502,7 @@ func (h *FPS) handle() {
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
-	doc.SetTitle("Arkanoid")
+	doc.SetTitle("Breakout")
 	body := doc.Body()
 
 	// create canvas
