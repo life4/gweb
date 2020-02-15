@@ -37,11 +37,24 @@ func (ctx *Platform) changePosition() {
 	if path == 0 {
 		return
 	}
+
+	// don't move too fast
 	if path > 0 && path > PlatformMaxSpeed {
 		path = PlatformMaxSpeed
 	} else if path < 0 && path < -PlatformMaxSpeed {
 		path = -PlatformMaxSpeed
 	}
+
+	// don't move out of playground
+	if ctx.x+path <= 0 {
+		ctx.x = 0
+		return
+	}
+	if ctx.x+path >= ctx.windowWidth-ctx.width {
+		ctx.x = ctx.windowWidth - ctx.width
+		return
+	}
+
 	ctx.x += path
 }
 
@@ -210,13 +223,13 @@ func main() {
 	}
 
 	// register mouse movement handler
-	canvas.EventTarget().Listen(web.EventTypeMouseMove, platform.handleMouse)
+	body.EventTarget().Listen(web.EventTypeMouseMove, platform.handleMouse)
 
 	// register frame updaters
 	handler := func() {
 		go fps.handle()
+		go platform.handleFrame()
 		ball.handle()
-		platform.handleFrame()
 	}
 	window.RequestAnimationFrame(handler, true)
 
