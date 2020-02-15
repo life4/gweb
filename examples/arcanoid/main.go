@@ -23,11 +23,12 @@ const PlatformMaxSpeed = 40
 
 const BallSize = 20
 
-const BrickHeight = 30
+const BrickHeight = 20
 const BrickRows = 8
 const BrickCols = 14
-const BrickMarginX = 5      // pixels
 const BrickMarginLeft = 120 // pixels
+const BrickMarginTop = 10   // pixels
+const BrickMarginX = 5      // pixels
 const BrickMarginY = 5      // pixels
 
 type Platform struct {
@@ -214,19 +215,22 @@ type Bricks struct {
 }
 
 func (bricks *Bricks) Draw() {
-	bricks.registry = make([]Brick, BrickCols)
+	bricks.registry = make([]Brick, BrickCols*BrickRows)
 	width := (bricks.windowWidth-BrickMarginLeft)/BrickCols - BrickMarginX
 	for i := 0; i < BrickCols; i++ {
-		x := BrickMarginLeft + (width+BrickMarginX)*i
-		brick := Brick{
-			context: bricks.context,
-			x:       x,
-			y:       10,
-			width:   width,
-			height:  BrickHeight,
+		for j := 0; j < BrickRows; j++ {
+			x := BrickMarginLeft + (width+BrickMarginX)*i
+			y := BrickMarginTop + (BrickHeight+BrickMarginY)*j
+			brick := Brick{
+				context: bricks.context,
+				x:       x,
+				y:       y,
+				width:   width,
+				height:  BrickHeight,
+			}
+			brick.Draw()
+			bricks.registry[BrickRows*i+j] = brick
 		}
-		brick.Draw()
-		bricks.registry[i] = brick
 	}
 	bricks.ready = true
 }
