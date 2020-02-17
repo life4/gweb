@@ -14,6 +14,7 @@ It will serve example [hello](./hello/) on [localhost:1337](http://localhost:133
 + [styling](./styling/) -- how to set CSS attributes for an object.
 + [events](./events/) -- how to handle events like mouse movement.
 + [templates](./templates/) -- how to work with `<slot>` and [Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM).
++ [bootstrap](./bootstrap/) -- how to dynamically load CSS (on example of [Bootstrap](https://getbootstrap.com/)) and do somethin when it is ready.
 
 ## Canvas
 
