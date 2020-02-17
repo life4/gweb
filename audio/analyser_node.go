@@ -57,7 +57,7 @@ func (analyser AnalyserNode) SmoothingTimeConstant() float64 {
 // SUBTYPES
 
 type TimeDomainBytes struct {
-	node      Value    // AnalyserNode value to do method call
+	node      js.Value // AnalyserNode value to do method call
 	container js.Value // where to read data in JS
 	Size      int      // Size of the data array
 	Data      []byte   // where to copy data from JS into Go
@@ -70,7 +70,7 @@ func (domain *TimeDomainBytes) Update() {
 }
 
 type FrequencyDataBytes struct {
-	node      Value    // AnalyserNode value to do method call
+	node      js.Value // AnalyserNode value to do method call
 	container js.Value // where to read data in JS
 	Size      int      // Size of the data array
 	Data      []byte   // where to copy data from JS into Go

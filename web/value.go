@@ -2,6 +2,8 @@ package web
 
 import (
 	"syscall/js"
+
+	"github.com/life4/gweb/audio"
 )
 
 // Value is an extended js.Value with more types support
@@ -52,8 +54,8 @@ func (v Value) HTMLElement() HTMLElement {
 	return HTMLElement{Element: v.Element()}
 }
 
-func (v Value) MediaStream() MediaStream {
-	return MediaStream{Value: v}
+func (v Value) MediaStream() audio.MediaStream {
+	return audio.MediaStream{Value: v.Value}
 }
 
 func (v Value) Node() Node {

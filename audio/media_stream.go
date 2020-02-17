@@ -1,7 +1,9 @@
-package web
+package audio
+
+import "syscall/js"
 
 type MediaStream struct {
-	Value
+	js.Value
 }
 
 // PROPERTIES
@@ -20,5 +22,5 @@ func (stream MediaStream) ID() string {
 
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaStream/clone
 func (stream MediaStream) Clone() MediaStream {
-	return stream.Call("clone").MediaStream()
+	return MediaStream{Value: stream.Call("clone")}
 }

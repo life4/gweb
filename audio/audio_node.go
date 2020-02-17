@@ -1,8 +1,10 @@
 package audio
 
+import "syscall/js"
+
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioNode
 type AudioNode struct {
-	Value
+	js.Value
 }
 
 // GETTERS
@@ -41,7 +43,7 @@ func (node AudioNode) ChannelsInterpretation() ChannelsMode {
 // METHODS
 
 func (node AudioNode) Connect(destination AudioNode, inputIndex int, outputIndex int) {
-	node.Call("connect", destination.Value.Value, outputIndex, inputIndex)
+	node.Call("connect", destination.Value, outputIndex, inputIndex)
 }
 
 func (node AudioNode) DisconnectAll() {
@@ -49,13 +51,13 @@ func (node AudioNode) DisconnectAll() {
 }
 
 func (node AudioNode) Disconnect(destination AudioNode) {
-	node.Call("disconnect", destination.Value.Value)
+	node.Call("disconnect", destination.Value)
 }
 
 // SUBTYPES
 
 type Channels struct {
-	value Value
+	value js.Value
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioNode/channelCount

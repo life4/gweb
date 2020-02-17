@@ -1,9 +1,11 @@
 package audio
 
+import "syscall/js"
+
 // https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
 type AudioContext struct {
-	Value
+	js.Value
 }
 
 // GETTERS

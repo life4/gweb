@@ -1,8 +1,10 @@
 package audio
 
+import "syscall/js"
+
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioParam
 type AudioParam struct {
-	value Value
+	value js.Value
 }
 
 func (param AudioParam) Default() float64 {
@@ -36,7 +38,7 @@ func (param AudioParam) AtTime(time float64) AtTime {
 // that are scheduled at specified time.
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioParam#Methods
 type AtTime struct {
-	value Value
+	value js.Value
 	time  float64
 }
 
