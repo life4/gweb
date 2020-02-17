@@ -35,6 +35,7 @@ func (scope *Scope) handle() {
 	// draw the line
 	chunkWidth := float64(scope.width) / float64(scope.domain.Size)
 	scope.context.SetFillStyle(LineColor)
+	scope.context.Line().SetWidth(2)
 	scope.domain.Update()
 	x := 0.0
 	for _, freq := range scope.domain.Data {
