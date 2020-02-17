@@ -55,6 +55,11 @@ func (context AudioContext) MediaStreamSource(stream MediaStream) MediaStreamSou
 	return MediaStreamSourceNode{AudioNode: node}
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/resume
+func (context AudioContext) Resume() {
+	context.Call("resume")
+}
+
 // SUBTYPES
 
 type AudioContextState string

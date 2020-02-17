@@ -54,6 +54,30 @@ func (analyser AnalyserNode) SmoothingTimeConstant() float64 {
 	return analyser.Get("smoothingTimeConstant").Float()
 }
 
+// SETTERS
+
+// FFTSize represents the window size in samples that is used
+// when performing a Fast Fourier Transform (FFT) to get frequency domain data..
+// https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/fftSize
+func (analyser AnalyserNode) SetFFTSize(value int) {
+	analyser.Set("fftSize", value)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/minDecibels
+func (analyser AnalyserNode) SetMinDecibels(value int) {
+	analyser.Set("minDecibels", value)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/maxDecibels
+func (analyser AnalyserNode) SetMaxDecibels(value int) {
+	analyser.Set("maxDecibels", value)
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/smoothingTimeConstant
+func (analyser AnalyserNode) SetSmoothingTimeConstant(value float64) {
+	analyser.Set("smoothingTimeConstant", value)
+}
+
 // SUBTYPES
 
 type TimeDomainBytes struct {

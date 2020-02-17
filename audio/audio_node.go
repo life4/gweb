@@ -42,7 +42,7 @@ func (node AudioNode) ChannelsInterpretation() ChannelsMode {
 
 // METHODS
 
-func (node AudioNode) Connect(destination DestinationNode, inputIndex int, outputIndex int) {
+func (node AudioNode) Connect(destination AudioNode, inputIndex int, outputIndex int) {
 	node.Call("connect", destination.Value, outputIndex, inputIndex)
 }
 
