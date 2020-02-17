@@ -1,8 +1,30 @@
 package audio
 
+import "syscall/js"
+
 // https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode
 type AnalyserNode struct {
 	AudioNode
+}
+
+func (analyser AnalyserNode) FrequencyData() FrequencyDataBytes {
+	size := analyser.FFTSize()
+	return FrequencyDataBytes{
+		node:      analyser.Value,
+		container: js.Global().Get("Uint8Array").New(size),
+		Size:      size,
+		Data:      make([]byte, size),
+	}
+}
+
+func (analyser AnalyserNode) TimeDomain() TimeDomainBytes {
+	size := analyser.FFTSize()
+	return TimeDomainBytes{
+		node:      analyser.Value,
+		container: js.Global().Get("Uint8Array").New(size),
+		Size:      size,
+		Data:      make([]byte, size),
+	}
 }
 
 // FFTSize represents the window size in samples that is used
@@ -30,4 +52,33 @@ func (analyser AnalyserNode) MaxDecibels() int {
 // https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/smoothingTimeConstant
 func (analyser AnalyserNode) SmoothingTimeConstant() float64 {
 	return analyser.Get("smoothingTimeConstant").Float()
+}
+
+// SUBTYPES
+
+type TimeDomainBytes struct {
+	node      Value    // AnalyserNode value to do method call
+	container js.Value // where to read data in JS
+	Size      int      // Size of the data array
+	Data      []byte   // where to copy data from JS into Go
+}
+
+// Update reads the current waveform or time-domain into `Data` attribute.
+func (domain *TimeDomainBytes) Update() {
+	domain.node.Call("getByteTimeDomainData", domain.container)
+	js.CopyBytesToGo(domain.Data, domain.container)
+}
+
+type FrequencyDataBytes struct {
+	node      Value    // AnalyserNode value to do method call
+	container js.Value // where to read data in JS
+	Size      int      // Size of the data array
+	Data      []byte   // where to copy data from JS into Go
+}
+
+// Update reads the current frequency data into `Data` attribute.
+// The frequency data is composed of integers on a scale from 0 to 255.
+func (freq *FrequencyDataBytes) Update() {
+	freq.node.Call("getByteFrequencyData", freq.container)
+	js.CopyBytesToGo(freq.Data, freq.container)
 }
