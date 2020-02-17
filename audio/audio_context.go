@@ -40,6 +40,13 @@ func (context AudioContext) Gain() GainNode {
 	return GainNode{AudioNode: node}
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource
+func (context AudioContext) MediaStreamSource(stream MediaStream) MediaStreamSourceNode {
+	value := context.Call("createMediaStreamSource", stream.JSValue())
+	node := AudioNode{Value: value}
+	return MediaStreamSourceNode{AudioNode: node}
+}
+
 // SUBTYPES
 
 type AudioContextState string

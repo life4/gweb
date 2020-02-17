@@ -39,7 +39,7 @@ func (scope *Scope) handle() {
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
-	doc.SetTitle("Canvas drawing example")
+	doc.SetTitle("Audio visualization example")
 	body := doc.Body()
 
 	// create canvas
@@ -56,9 +56,21 @@ func main() {
 	context.SetFillStyle(BGColor)
 	context.Rectangle(0, 0, w, h).Filled().Draw()
 
+	// get audio objects
 	audio := window.AudioContext()
 	analyser := audio.Analyser()
 	domain := analyser.TimeDomain()
+
+	go func() {
+		promise := window.Navigator().MediaDevices().Audio()
+		msg, err := promise.Get()
+		if err.Truthy() {
+			panic(err)
+		}
+		stream := msg.MediaStream()
+		audio.MediaStreamSource(stream)
+		// analyser.Connect(audio.Destination())
+	}()
 
 	// register handlers
 	scope := Scope{
