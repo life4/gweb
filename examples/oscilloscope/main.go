@@ -2,6 +2,7 @@ package main
 
 import (
 	"math"
+	"sync"
 
 	"github.com/life4/gweb/audio"
 
@@ -159,9 +160,19 @@ func main() {
 		height:  h,
 	}
 
+	// register handlers
 	handle := func() {
-		painterD.handle(&scopeD)
-		painterF.handle(&scopeF)
+		wg := sync.WaitGroup{}
+		wg.Add(2)
+		go func() {
+			painterD.handle(&scopeD)
+			wg.Done()
+		}()
+		go func() {
+			painterF.handle(&scopeF)
+			wg.Done()
+		}()
+		wg.Wait()
 	}
 	window.RequestAnimationFrame(handle, true)
 	// prevent ending of the program
