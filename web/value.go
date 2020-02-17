@@ -52,6 +52,10 @@ func (v Value) HTMLElement() HTMLElement {
 	return HTMLElement{Element: v.Element()}
 }
 
+func (v Value) MediaStream() MediaStream {
+	return MediaStream{Value: v}
+}
+
 func (v Value) Node() Node {
 	return Node{value: v}
 }
