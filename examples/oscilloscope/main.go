@@ -12,39 +12,60 @@ import (
 const BGColor = "#2c3e50"
 const LineColor = "#2ecc71"
 
-type Scope struct {
-	domain  *audio.TimeDomainBytes
+type Scope interface {
+	Size() int
+	Data() []byte
+	GetY(value byte, height int) int
+}
+
+type Painter struct {
 	context canvas.Context2D
 	width   int
 	height  int
 }
 
-func (scope *Scope) handle() {
+func (painter *Painter) handle(scope Scope) {
 	// make background (and remove prev results)
-	scope.context.SetFillStyle(BGColor)
-	scope.context.BeginPath()
-	scope.context.Rectangle(0, 0, scope.width, scope.height).Filled().Draw()
-	scope.context.ClosePath()
-	scope.context.MoveTo(0, scope.height/2)
+	painter.context.SetFillStyle(BGColor)
+	painter.context.BeginPath()
+	painter.context.Rectangle(0, 0, painter.width, painter.height).Filled().Draw()
+	painter.context.ClosePath()
+	painter.context.MoveTo(0, painter.height/2)
 
 	// don't draw the line if TimeDomain hasn't been initialized yet
-	if scope.domain.Size == 0 {
+	if scope.Size() == 0 {
 		return
 	}
 
 	// draw the line
-	chunkWidth := float64(scope.width) / float64(scope.domain.Size)
-	scope.context.SetFillStyle(LineColor)
-	scope.context.Line().SetWidth(2)
-	scope.domain.Update()
+	chunkWidth := float64(painter.width) / float64(scope.Size())
+	painter.context.SetFillStyle(LineColor)
+	painter.context.Line().SetWidth(2)
 	x := 0.0
-	for _, freq := range scope.domain.Data {
-		y := int(freq) * scope.height / 256
-		scope.context.LineTo(int(math.Round(x)), y)
+	for _, freq := range scope.Data() {
+		y := int(freq) * painter.height / 256
+		painter.context.LineTo(int(math.Round(x)), y)
 		x += chunkWidth
 	}
-	scope.context.LineTo(scope.width, scope.height/2)
-	scope.context.Stroke()
+	painter.context.LineTo(painter.width, painter.height/2)
+	painter.context.Stroke()
+}
+
+type ScopeDomain struct {
+	domain *audio.TimeDomainBytes
+}
+
+func (scope *ScopeDomain) Data() []byte {
+	scope.domain.Update()
+	return scope.domain.Data
+}
+
+func (scope *ScopeDomain) Size() int {
+	return scope.domain.Size
+}
+
+func (scope *ScopeDomain) GetY(value byte, height int) int {
+	return int(value) * height / 256
 }
 
 func main() {
@@ -93,13 +114,18 @@ func main() {
 	}()
 
 	// register handlers
-	scope := Scope{
-		domain:  &domain,
+	scopeD := ScopeDomain{
+		domain: &domain,
+	}
+	painter := Painter{
 		context: context,
 		width:   w,
 		height:  h,
 	}
-	window.RequestAnimationFrame(scope.handle, true)
+	handle := func() {
+		painter.handle(&scopeD)
+	}
+	window.RequestAnimationFrame(handle, true)
 	// prevent ending of the program
 	select {}
 }
