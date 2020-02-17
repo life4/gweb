@@ -60,6 +60,10 @@ func (v Value) Node() Node {
 	return Node{value: v}
 }
 
+func (v Value) Promise() Promise {
+	return Promise{Value: v}
+}
+
 func (v *Value) Values() (items []Value) {
 	len := v.Get("length").Int()
 	for i := 0; i < len; i++ {
