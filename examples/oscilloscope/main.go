@@ -43,7 +43,7 @@ func (painter *Painter) handle(scope Scope) {
 	painter.context.Line().SetWidth(2)
 	x := 0.0
 	for _, freq := range scope.Data() {
-		y := int(freq) * painter.height / 256
+		y := scope.GetY(freq, painter.height)
 		painter.context.LineTo(int(math.Round(x)), y)
 		x += chunkWidth
 	}
@@ -52,31 +52,44 @@ func (painter *Painter) handle(scope Scope) {
 }
 
 type ScopeDomain struct {
-	domain *audio.TimeDomainBytes
+	data *audio.TimeDomainBytes
 }
 
 func (scope *ScopeDomain) Data() []byte {
-	scope.domain.Update()
-	return scope.domain.Data
+	scope.data.Update()
+	return scope.data.Data
 }
 
 func (scope *ScopeDomain) Size() int {
-	return scope.domain.Size
+	return scope.data.Size
 }
 
 func (scope *ScopeDomain) GetY(value byte, height int) int {
-	return int(value) * height / 256
+	return height - int(value)*height/256
 }
 
-func main() {
+type ScopeFreq struct {
+	data *audio.FrequencyDataBytes
+}
+
+func (scope *ScopeFreq) Data() []byte {
+	scope.data.Update()
+	return scope.data.Data
+}
+
+func (scope *ScopeFreq) Size() int {
+	return scope.data.Size
+}
+
+func (scope *ScopeFreq) GetY(value byte, height int) int {
+	return height - 10 - int(value)*(height-10)/256
+}
+
+func makeCanvas(w, h int) canvas.Context2D {
 	window := web.GetWindow()
 	doc := window.Document()
-	doc.SetTitle("Audio visualization example")
 	body := doc.Body()
 
-	// create canvas
-	h := window.InnerHeight() - 40
-	w := window.InnerWidth() - 40
 	canvas := doc.CreateCanvas()
 	canvas.SetHeight(h)
 	canvas.SetWidth(w)
@@ -88,7 +101,19 @@ func main() {
 	context.SetFillStyle(BGColor)
 	context.Rectangle(0, 0, w, h).Filled().Draw()
 
+	return context
+}
+
+func main() {
+	window := web.GetWindow()
+	doc := window.Document()
+	doc.SetTitle("Audio visualization example")
+
+	h := window.InnerHeight()/2 - 40
+	w := window.InnerWidth() - 40
+
 	var domain audio.TimeDomainBytes
+	var freq audio.FrequencyDataBytes
 
 	go func() {
 		// get audio stream from mic
@@ -99,7 +124,7 @@ func main() {
 		}
 		stream := msg.MediaStream()
 
-		// make analyzer and update time domain manager
+		// make analyzer and update time domain and frequency managers
 		audioContext := window.AudioContext()
 		analyser := audioContext.Analyser()
 		analyser.SetMinDecibels(-90)
@@ -107,23 +132,36 @@ func main() {
 		analyser.SetSmoothingTimeConstant(0.85)
 		analyser.SetFFTSize(1024)
 		domain = analyser.TimeDomain()
+		freq = analyser.FrequencyData()
 
 		// connect audio context to the stream
 		source := audioContext.MediaStreamSource(stream)
 		source.Connect(analyser.AudioNode, 0, 0)
 	}()
 
-	// register handlers
+	// make domain data painting handler
 	scopeD := ScopeDomain{
-		domain: &domain,
+		data: &domain,
 	}
-	painter := Painter{
-		context: context,
+	painterD := Painter{
+		context: makeCanvas(w, h),
 		width:   w,
 		height:  h,
 	}
+
+	// make frequency data painting handler
+	scopeF := ScopeFreq{
+		data: &freq,
+	}
+	painterF := Painter{
+		context: makeCanvas(w, h),
+		width:   w,
+		height:  h,
+	}
+
 	handle := func() {
-		painter.handle(&scopeD)
+		painterD.handle(&scopeD)
+		painterF.handle(&scopeF)
 	}
 	window.RequestAnimationFrame(handle, true)
 	// prevent ending of the program
