@@ -69,7 +69,7 @@ func main() {
 		}
 		stream := msg.MediaStream()
 		audio.MediaStreamSource(stream)
-		// analyser.Connect(audio.Destination())
+		analyser.Connect(audio.Destination(), 0, 0)
 	}()
 
 	// register handlers

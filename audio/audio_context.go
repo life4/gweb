@@ -16,6 +16,14 @@ func (context AudioContext) CurrentTime() float64 {
 	return context.Get("currentTime").Float()
 }
 
+// Destination is the final destination of all audio in the context.
+// It often represents an actual audio-rendering device such as your device's speakers.
+// https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/destination
+func (context AudioContext) Destination() DestinationNode {
+	node := AudioNode{Value: context.Get("destination")}
+	return DestinationNode{AudioNode: node}
+}
+
 // SampleRate returns the sample rate (in samples per second) used by all nodes in this context.
 // https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/sampleRate
 func (context AudioContext) SampleRate() int {
