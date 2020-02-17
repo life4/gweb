@@ -65,7 +65,7 @@ func main() {
 		promise := window.Navigator().MediaDevices().Audio()
 		msg, err := promise.Get()
 		if err.Truthy() {
-			panic(err)
+			window.Console().Error("", err)
 		}
 		stream := msg.MediaStream()
 		audio.MediaStreamSource(stream)

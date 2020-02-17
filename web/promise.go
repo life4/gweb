@@ -32,14 +32,14 @@ func (promise Promise) Get() (msg Value, err Value) {
 
 	// register error handler
 	catch := func(value js.Value) {
-		msg = Value{Value: value}
+		err = Value{Value: value}
 		wg.Done()
 	}
 	promise.Catch(catch)
 
 	// register succsess handler
 	then := func(reason js.Value) {
-		err = Value{Value: reason}
+		msg = Value{Value: reason}
 		wg.Done()
 	}
 	promise.Then(then)

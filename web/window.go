@@ -19,9 +19,8 @@ func GetWindow() Window {
 
 func (window Window) AudioContext() audio.AudioContext {
 	constructor := window.Get("AudioContext")
-	jsV := constructor.New().Value
-	audioV := audio.Value{Value: jsV}
-	return audio.AudioContext{Value: audioV}
+	value := constructor.New().Value
+	return audio.AudioContext{Value: value}
 }
 
 // SUBTYPE GETTERS
