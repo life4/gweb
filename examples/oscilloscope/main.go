@@ -13,6 +13,8 @@ import (
 const BGColor = "#2c3e50"
 const LineColor = "#2ecc71"
 
+// Scope is an interface that provides information about domain and frequency sequences
+// to the Painter.
 type Scope interface {
 	Size() int
 	Data() []byte
@@ -52,6 +54,7 @@ func (painter *Painter) handle(scope Scope) {
 	painter.context.Stroke()
 }
 
+// ScopeDomain implements Scope interface for TimeDomainBytes
 type ScopeDomain struct {
 	data *audio.TimeDomainBytes
 }
@@ -69,6 +72,7 @@ func (scope *ScopeDomain) GetY(value byte, height int) int {
 	return height - int(value)*height/256
 }
 
+// ScopeFreq implements Scope interface for FrequencyDataBytes
 type ScopeFreq struct {
 	data *audio.FrequencyDataBytes
 }
@@ -91,6 +95,7 @@ func makeCanvas(w, h int) canvas.Context2D {
 	doc := window.Document()
 	body := doc.Body()
 
+	// create canvas
 	canvas := doc.CreateCanvas()
 	canvas.SetHeight(h)
 	canvas.SetWidth(w)
@@ -110,6 +115,7 @@ func main() {
 	doc := window.Document()
 	doc.SetTitle("Audio visualization example")
 
+	// size of canvases, both are a bit smaller than half of the screen (by height)
 	h := window.InnerHeight()/2 - 40
 	w := window.InnerWidth() - 40
 
