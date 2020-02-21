@@ -73,33 +73,24 @@ func (brick *Brick) Collide(ball *Ball, bounce bool) bool {
 		return true
 	}
 
-	// left-bottom corner of the brick collision
-	if ball.Contains(brick.x, brick.y+brick.height) {
-		if bounce {
-			ball.BounceFromPoint(brick.x, brick.y+brick.height)
-		}
-		return true
+	points := [...]Point{
+		// left-top corner of the brick
+		{x: brick.x, y: brick.y},
+		// right-top corner of the brick
+		{x: brick.x + brick.width, y: brick.y},
+		// left-bottom corner of the brick
+		{x: brick.x, y: brick.y + brick.height},
+		// right-bottom corner of the brick
+		{x: brick.x + brick.width, y: brick.y + brick.height},
 	}
-	// right-bottom corner of the brick collision
-	if ball.Contains(brick.x+brick.width, brick.y+brick.height) {
-		if bounce {
-			ball.BounceFromPoint(brick.x+brick.width, brick.y+brick.height)
+
+	for _, point := range points {
+		if ball.Contains(point) {
+			if bounce {
+				ball.BounceFromPoint(point)
+			}
+			return true
 		}
-		return true
-	}
-	// left-top corner of the brick collision
-	if ball.Contains(brick.x, brick.y) {
-		if bounce {
-			ball.BounceFromPoint(brick.x, brick.y)
-		}
-		return true
-	}
-	// right-top corner of the brick collision
-	if ball.Contains(brick.x+brick.width, brick.y) {
-		if bounce {
-			ball.BounceFromPoint(brick.x+brick.width, brick.y)
-		}
-		return true
 	}
 
 	return false

@@ -17,16 +17,16 @@ type Ball struct {
 	platform *Platform
 }
 
-func (ball Ball) Contains(x, y int) bool {
+func (ball Ball) Contains(point Point) bool {
 	hypotenuse := math.Pow(float64(BallSize), 2)
-	cathetus1 := math.Pow(float64(x-ball.x), 2)
-	cathetus2 := math.Pow(float64(y-ball.y), 2)
+	cathetus1 := math.Pow(float64(point.x-ball.x), 2)
+	cathetus2 := math.Pow(float64(point.y-ball.y), 2)
 	return cathetus1+cathetus2 < hypotenuse
 }
 
-func (ball *Ball) BounceFromPoint(x, y int) {
-	katX := float64(x - ball.x)
-	katY := float64(y - ball.y)
+func (ball *Ball) BounceFromPoint(point Point) {
+	katX := float64(point.x - ball.x)
+	katY := float64(point.y - ball.y)
 	hypo := math.Sqrt(math.Pow(katX, 2) + math.Pow(katY, 2))
 	sin := katX / hypo
 	cos := katY / hypo
@@ -82,25 +82,22 @@ func (ctx *Ball) changeDirection() {
 		ctx.vector.x = -ctx.vector.x
 	}
 
-	// bounce from left-top corner of the platform
-	if ctx.Contains(ctx.platform.x, ctx.platform.y) {
-		ctx.BounceFromPoint(ctx.platform.x, ctx.platform.y)
-		return
+	points := [...]Point{
+		// left-top corner of the platform
+		{x: ctx.platform.x, y: ctx.platform.y},
+		// right-top corner of the platform
+		{x: ctx.platform.x + ctx.platform.width, y: ctx.platform.y},
+		// left-bottom corner of the platform
+		{x: ctx.platform.x, y: ctx.platform.y + ctx.platform.height},
+		// right-bottom corner of the platform
+		{x: ctx.platform.x + ctx.platform.width, y: ctx.platform.y + ctx.platform.height},
 	}
-	// bounce from right-top corner of the platform
-	if ctx.Contains(ctx.platform.x+ctx.platform.width, ctx.platform.y) {
-		ctx.BounceFromPoint(ctx.platform.x+ctx.platform.width, ctx.platform.y)
-		return
-	}
-	// bounce from left-bottom corner of the platform
-	if ctx.Contains(ctx.platform.x, ctx.platform.y+PlatformHeight) {
-		ctx.BounceFromPoint(ctx.platform.x, ctx.platform.y+PlatformHeight)
-		return
-	}
-	// bounce from right-bottom corner of the platform
-	if ctx.Contains(ctx.platform.x+ctx.platform.width, ctx.platform.y+PlatformHeight) {
-		ctx.BounceFromPoint(ctx.platform.x+ctx.platform.width, ctx.platform.y+PlatformHeight)
-		return
+
+	for _, point := range points {
+		if ctx.Contains(point) {
+			ctx.BounceFromPoint(point)
+			return
+		}
 	}
 }
 
