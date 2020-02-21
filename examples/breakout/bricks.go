@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/life4/gweb/canvas"
 )
 
@@ -16,6 +14,7 @@ type Bricks struct {
 	// stat
 	score int
 	hits  int
+	text  *TextBlock
 }
 
 func (bricks *Bricks) Draw() {
@@ -42,41 +41,6 @@ func (bricks *Bricks) Draw() {
 	bricks.ready = true
 }
 
-func (bricks Bricks) drawText(text string, row int) {
-	y := TextTop + row*(TextMargin+TextHeight)
-
-	// clear place where previous score was
-	bricks.context.SetFillStyle(BGColor)
-	bricks.context.Rectangle(TextLeft, y, TextRight, TextHeight+TextWidth).Filled().Draw()
-
-	// draw the score
-	bricks.context.SetFillStyle(TextColor)
-	bricks.context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", TextHeight))
-	bricks.context.Text().Fill(text, TextLeft, y+TextHeight, TextWidth)
-}
-
-func (bricks Bricks) drawScore() {
-	// make text
-	var text string
-	if bricks.score == 1 {
-		text = fmt.Sprintf("%d point", bricks.score)
-	} else {
-		text = fmt.Sprintf("%d points", bricks.score)
-	}
-	bricks.drawText(text, 1)
-}
-
-func (bricks Bricks) drawHits() {
-	// make text
-	var text string
-	if bricks.hits == 1 {
-		text = fmt.Sprintf("%d hit", bricks.hits)
-	} else {
-		text = fmt.Sprintf("%d hits", bricks.hits)
-	}
-	bricks.drawText(text, 2)
-}
-
 func (bricks *Bricks) Handle(ball *Ball) {
 	if !bricks.ready {
 		return
@@ -95,8 +59,8 @@ func (bricks *Bricks) Handle(ball *Ball) {
 	}
 	if changed {
 		// re-draw stat
-		go bricks.drawScore()
-		go bricks.drawHits()
+		go bricks.text.DrawScore(bricks.score)
+		go bricks.text.DrawHits(bricks.hits)
 
 		// speed up ball after some hits
 		speedUpHits := [...]int{4, 8, 16, 24, 32, 64}

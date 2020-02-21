@@ -1,11 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"sync"
 	"time"
 
-	"github.com/life4/gweb/canvas"
 	"github.com/life4/gweb/web"
 )
 
@@ -71,35 +69,6 @@ func (rectangle Rectangle) Contains(point Point) bool {
 
 }
 
-type FPS struct {
-	context canvas.Context2D
-	updated time.Time
-}
-
-func (h *FPS) drawFPS(now time.Time) {
-	// calculate FPS
-	fps := time.Second / now.Sub(h.updated)
-	text := fmt.Sprintf("%d FPS", int64(fps))
-
-	// clear
-	h.context.SetFillStyle(BGColor)
-	h.context.Rectangle(TextLeft, TextTop, TextWidth, TextHeight+TextMargin).Filled().Draw()
-
-	// write
-	h.context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", TextHeight))
-	h.context.SetFillStyle(TextColor)
-	h.context.Text().Fill(text, TextLeft, TextTop+TextHeight, TextWidth)
-}
-
-func (h *FPS) handle() {
-	now := time.Now()
-	// update FPS counter every second
-	if h.updated.Second() != now.Second() {
-		h.drawFPS(now)
-	}
-	h.updated = now
-}
-
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
@@ -137,7 +106,7 @@ func main() {
 		windowWidth:  w,
 		windowHeight: h,
 	}
-	fps := FPS{context: context, updated: time.Now()}
+	block := TextBlock{context: context, updated: time.Now()}
 	ball := Ball{
 		context:     context,
 		vector:      Vector{x: 5, y: -5},
@@ -150,6 +119,7 @@ func main() {
 		windowWidth:  w,
 		windowHeight: h,
 		ready:        false,
+		text:         &block,
 	}
 	go bricks.Draw()
 
@@ -161,18 +131,22 @@ func main() {
 		wg := sync.WaitGroup{}
 		wg.Add(4)
 		go func() {
-			fps.handle()
+			// update FPS
+			block.handle()
 			wg.Done()
 		}()
 		go func() {
+			// update platform position
 			platform.handleFrame()
 			wg.Done()
 		}()
 		go func() {
+			// check if the ball should bounce from a brick
 			bricks.Handle(&ball)
 			wg.Done()
 		}()
 		go func() {
+			// check if the ball should bounce from border or platform
 			ball.handle()
 			wg.Done()
 		}()
