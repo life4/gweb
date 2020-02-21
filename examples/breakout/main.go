@@ -51,12 +51,14 @@ func sign(n float64) float64 {
 	return -1
 }
 
+// type Point struct{ x, y int }
+// type Vector Point
+type Rectangle struct{ x, y, width, height int }
+
 type Platform struct {
+	Rectangle
 	context canvas.Context2D
 	element web.Canvas
-	// geometry
-	width int
-	x, y  int
 	// movement
 	mouseX int
 	// borders
@@ -68,7 +70,7 @@ func (platform Platform) Contains(x, y int) bool {
 	if y < platform.y { // ball upper
 		return false
 	}
-	if y > platform.y+PlatformHeight { // ball downer
+	if y > platform.y+platform.height { // ball downer
 		return false
 	}
 	if x > platform.x+platform.width { // ball righter
@@ -107,21 +109,21 @@ func (ctx *Platform) changePosition() {
 	ctx.x += path
 }
 
-func (ctx *Platform) handleMouse(event web.Event) {
-	ctx.mouseX = event.Get("clientX").Int()
+func (platform *Platform) handleMouse(event web.Event) {
+	platform.mouseX = event.Get("clientX").Int()
 }
 
 func (ctx *Platform) handleFrame() {
 	// clear out previous render
 	ctx.context.SetFillStyle(BGColor)
-	ctx.context.Rectangle(ctx.x, ctx.y, ctx.width, PlatformHeight).Filled().Draw()
+	ctx.context.Rectangle(ctx.x, ctx.y, ctx.width, ctx.height).Filled().Draw()
 
 	// change platform coordinates
 	ctx.changePosition()
 
 	// draw the platform
 	ctx.context.SetFillStyle(PlatformColor)
-	ctx.context.Rectangle(ctx.x, ctx.y, ctx.width, PlatformHeight).Filled().Draw()
+	ctx.context.Rectangle(ctx.x, ctx.y, ctx.width, ctx.height).Filled().Draw()
 }
 
 type Ball struct {
@@ -524,12 +526,15 @@ func main() {
 
 	// make handlers
 	platform := Platform{
+		Rectangle: Rectangle{
+			x:      w / 2,
+			y:      h - 60,
+			width:  PlatformWidth,
+			height: PlatformHeight,
+		},
 		context:      context,
 		element:      canvas,
-		x:            w / 2,
-		y:            h - 60,
 		mouseX:       w / 2,
-		width:        PlatformWidth,
 		windowWidth:  w,
 		windowHeight: h,
 	}
