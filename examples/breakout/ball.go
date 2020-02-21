@@ -34,44 +34,41 @@ func (ball *Ball) BounceFromPoint(point Point) {
 	ball.vector = ball.vector.Sub(normal.Mul(2 * dot))
 }
 
-func (ctx *Ball) changeDirection() {
-	ballX := ctx.x + int(math.Ceil(ctx.vector.x))
-	ballY := ctx.y + int(math.Ceil(ctx.vector.y))
-
+func (ball *Ball) changeDirection() {
 	// bounce from text box (where we draw FPS and score)
 	// bounce from right border of the text box
-	if ballX-BallSize <= TextRight && ballY < TextBottom {
-		ctx.vector.x = -ctx.vector.x
+	if ball.x-BallSize <= TextRight && ball.y < TextBottom {
+		ball.vector.x = -ball.vector.x
 	}
 	// bounce from bottom of the text box
-	if ballX <= TextRight && ballY-BallSize < TextBottom {
-		ctx.vector.y = -ctx.vector.y
+	if ball.x <= TextRight && ball.y-BallSize < TextBottom {
+		ball.vector.y = -ball.vector.y
 	}
 
 	// right and left of the playground
-	if ballX > ctx.windowWidth-BallSize {
-		ctx.vector.x = -ctx.vector.x
-	} else if ballX < BallSize {
-		ctx.vector.x = -ctx.vector.x
+	if ball.x > ball.windowWidth-BallSize {
+		ball.vector.x = -ball.vector.x
+	} else if ball.x < BallSize {
+		ball.vector.x = -ball.vector.x
 	}
 
 	// bottom and top of the playground
-	if ballY > ctx.windowHeight-BallSize {
-		ctx.vector.y = -ctx.vector.y
-	} else if ballY < BallSize {
-		ctx.vector.y = -ctx.vector.y
+	if ball.y > ball.windowHeight-BallSize {
+		ball.vector.y = -ball.vector.y
+	} else if ball.y < BallSize {
+		ball.vector.y = -ball.vector.y
 	}
 
-	platform := ctx.platform
+	platform := ball.platform
 	points := [...]Point{
 		// bounce from platform top
-		{x: ballX, y: platform.y},
+		{x: ball.x, y: platform.y},
 		// bounce from platform bottom
-		{x: ballX, y: platform.y + platform.height},
+		{x: ball.x, y: platform.y + platform.height},
 		// bounce from platform left
-		{x: platform.x, y: ballY},
+		{x: platform.x, y: ball.y},
 		// bounce from platform right
-		{x: platform.x + platform.width, y: ballY},
+		{x: platform.x + platform.width, y: ball.y},
 
 		// left-top corner of the platform
 		{x: platform.x, y: platform.y},
@@ -84,8 +81,8 @@ func (ctx *Ball) changeDirection() {
 	}
 
 	for _, point := range points {
-		if ctx.Contains(point) && ctx.platform.Contains(point) {
-			ctx.BounceFromPoint(point)
+		if ball.Contains(point) && ball.platform.Contains(point) {
+			ball.BounceFromPoint(point)
 			return
 		}
 	}
