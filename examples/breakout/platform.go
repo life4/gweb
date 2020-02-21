@@ -16,23 +16,6 @@ type Platform struct {
 	windowHeight int
 }
 
-func (platform Platform) Contains(point Point) bool {
-	if point.y < platform.y { // ball upper
-		return false
-	}
-	if point.y > platform.y+platform.height { // ball downer
-		return false
-	}
-	if point.x > platform.x+platform.width { // ball righter
-		return false
-	}
-	if point.x < platform.x { // ball lefter
-		return false
-	}
-	return true
-
-}
-
 func (ctx *Platform) changePosition() {
 	path := ctx.mouseX - (ctx.x + ctx.width/2)
 	if path == 0 {

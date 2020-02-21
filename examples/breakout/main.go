@@ -54,6 +54,23 @@ type Point struct{ x, y int }
 type Vector struct{ x, y float64 }
 type Rectangle struct{ x, y, width, height int }
 
+func (rectangle Rectangle) Contains(point Point) bool {
+	if point.y < rectangle.y { // point upper
+		return false
+	}
+	if point.y > rectangle.y+rectangle.height { // point downer
+		return false
+	}
+	if point.x > rectangle.x+rectangle.width { // point righter
+		return false
+	}
+	if point.x < rectangle.x { // point lefter
+		return false
+	}
+	return true
+
+}
+
 type FPS struct {
 	context canvas.Context2D
 	updated time.Time

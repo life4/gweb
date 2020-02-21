@@ -9,22 +9,6 @@ type Brick struct {
 	removed bool
 }
 
-func (brick Brick) Contains(point Point) bool {
-	if point.y < brick.y { // ball upper
-		return false
-	}
-	if point.y > brick.y+brick.height { // ball downer
-		return false
-	}
-	if point.x > brick.x+brick.width { // ball righter
-		return false
-	}
-	if point.x < brick.x { // ball lefter
-		return false
-	}
-	return true
-}
-
 func (brick *Brick) Collide(ball *Ball, bounce bool) bool {
 	if brick.removed {
 		return false
