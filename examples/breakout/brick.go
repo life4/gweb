@@ -15,28 +15,28 @@ func (brick *Brick) Collide(ball *Ball, bounce bool) bool {
 	}
 
 	// quick checks of ball position
-	if ball.x-BallSize > brick.x+brick.width { // ball righter
+	if ball.x-ball.radius > brick.x+brick.width { // ball righter
 		return false
 	}
-	if ball.x+BallSize < brick.x { // ball lefter
+	if ball.x+ball.radius < brick.x { // ball lefter
 		return false
 	}
-	if ball.y+BallSize < brick.y { // ball upper
+	if ball.y+ball.radius < brick.y { // ball upper
 		return false
 	}
-	if ball.y-BallSize > brick.y+brick.height { // ball downer
+	if ball.y-ball.radius > brick.y+brick.height { // ball downer
 		return false
 	}
 
 	points := [...]Point{
 		// bottom of brick collision
-		{x: ball.x, y: ball.y - BallSize},
+		{x: ball.x, y: ball.y - ball.radius},
 		// top of brick collision
-		{x: ball.x + brick.width, y: ball.y + BallSize},
+		{x: ball.x + brick.width, y: ball.y + ball.radius},
 		// left of brick collision
-		{x: ball.x, y: ball.y + BallSize},
+		{x: ball.x, y: ball.y + ball.radius},
 		// right of brick collision
-		{x: ball.x + brick.width, y: ball.y - BallSize},
+		{x: ball.x + brick.width, y: ball.y - ball.radius},
 	}
 
 	for _, point := range points {

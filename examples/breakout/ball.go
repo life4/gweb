@@ -8,6 +8,7 @@ import (
 
 type Ball struct {
 	Point
+	radius int
 	vector Vector
 
 	windowWidth  int
@@ -18,7 +19,7 @@ type Ball struct {
 }
 
 func (ball Ball) Contains(point Point) bool {
-	hypotenuse := math.Pow(float64(BallSize), 2)
+	hypotenuse := math.Pow(float64(ball.radius), 2)
 	cathetus1 := math.Pow(float64(point.x-ball.x), 2)
 	cathetus2 := math.Pow(float64(point.y-ball.y), 2)
 	return cathetus1+cathetus2 < hypotenuse
@@ -37,25 +38,25 @@ func (ball *Ball) BounceFromPoint(point Point) {
 func (ball *Ball) changeDirection() {
 	// bounce from text box (where we draw FPS and score)
 	// bounce from right border of the text box
-	if ball.x-BallSize <= TextRight && ball.y < TextBottom {
+	if ball.x-ball.radius <= TextRight && ball.y < TextBottom {
 		ball.vector.x = -ball.vector.x
 	}
 	// bounce from bottom of the text box
-	if ball.x <= TextRight && ball.y-BallSize < TextBottom {
+	if ball.x <= TextRight && ball.y-ball.radius < TextBottom {
 		ball.vector.y = -ball.vector.y
 	}
 
 	// right and left of the playground
-	if ball.x > ball.windowWidth-BallSize {
+	if ball.x > ball.windowWidth-ball.radius {
 		ball.vector.x = -ball.vector.x
-	} else if ball.x < BallSize {
+	} else if ball.x < ball.radius {
 		ball.vector.x = -ball.vector.x
 	}
 
 	// bottom and top of the playground
-	if ball.y > ball.windowHeight-BallSize {
+	if ball.y > ball.windowHeight-ball.radius {
 		ball.vector.y = -ball.vector.y
-	} else if ball.y < BallSize {
+	} else if ball.y < ball.radius {
 		ball.vector.y = -ball.vector.y
 	}
 
@@ -92,7 +93,7 @@ func (ball *Ball) handle() {
 	// clear out previous render
 	ball.context.SetFillStyle(BGColor)
 	ball.context.BeginPath()
-	ball.context.Arc(ball.x, ball.y, BallSize+1, 0, math.Pi*2)
+	ball.context.Arc(ball.x, ball.y, ball.radius+1, 0, math.Pi*2)
 	ball.context.Fill()
 	ball.context.ClosePath()
 
@@ -105,7 +106,7 @@ func (ball *Ball) handle() {
 	// draw the ball
 	ball.context.SetFillStyle(BallColor)
 	ball.context.BeginPath()
-	ball.context.Arc(ball.x, ball.y, BallSize, 0, math.Pi*2)
+	ball.context.Arc(ball.x, ball.y, ball.radius, 0, math.Pi*2)
 	ball.context.Fill()
 	ball.context.ClosePath()
 }

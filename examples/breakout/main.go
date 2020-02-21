@@ -111,6 +111,7 @@ func main() {
 		context:     context,
 		vector:      Vector{x: 5, y: -5},
 		Point:       Point{x: platform.x, y: platform.y - BallSize},
+		radius:      BallSize,
 		windowWidth: w, windowHeight: h,
 		platform: &platform,
 	}

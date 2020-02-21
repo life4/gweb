@@ -7,10 +7,10 @@ import (
 )
 
 func TestBounceFromPoint(t *testing.T) {
-	// radius := BallSize // 20
 	ball := Ball{
 		Point:  Point{x: 10, y: 10},
 		vector: Vector{x: 5, y: 0},
+		radius: 20,
 	}
 
 	// bounce from the right
