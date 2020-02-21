@@ -55,11 +55,9 @@ type Vector struct{ x, y float64 }
 type Rectangle struct{ x, y, width, height int }
 
 type Brick struct {
+	Rectangle
 	context canvas.Context2D
-	x, y    int
 	cost    int
-	width   int
-	height  int
 	removed bool
 }
 
@@ -196,12 +194,9 @@ func (bricks *Bricks) Draw() {
 			cost := costs[(j/2)%len(colors)]
 
 			brick := Brick{
-				context: bricks.context,
-				x:       x,
-				y:       y,
-				cost:    cost,
-				width:   width,
-				height:  BrickHeight,
+				context:   bricks.context,
+				Rectangle: Rectangle{x: x, y: y, width: width, height: BrickHeight},
+				cost:      cost,
 			}
 			brick.Draw(color)
 			bricks.registry[BrickRows*i+j] = &brick
