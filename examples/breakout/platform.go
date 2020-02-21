@@ -16,17 +16,17 @@ type Platform struct {
 	windowHeight int
 }
 
-func (platform Platform) Contains(x, y int) bool {
-	if y < platform.y { // ball upper
+func (platform Platform) Contains(point Point) bool {
+	if point.y < platform.y { // ball upper
 		return false
 	}
-	if y > platform.y+platform.height { // ball downer
+	if point.y > platform.y+platform.height { // ball downer
 		return false
 	}
-	if x > platform.x+platform.width { // ball righter
+	if point.x > platform.x+platform.width { // ball righter
 		return false
 	}
-	if x < platform.x { // ball lefter
+	if point.x < platform.x { // ball lefter
 		return false
 	}
 	return true

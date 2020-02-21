@@ -65,24 +65,25 @@ func (ctx *Ball) changeDirection() {
 		ctx.vector.y = -ctx.vector.y
 	}
 
-	// bounce from platform top
-	if ctx.vector.y > 0 && ctx.platform.Contains(ballX, ballY+BallSize) {
-		ctx.vector.y = -ctx.vector.y
-	}
-	// bounce from platform bottom
-	if ctx.vector.y < 0 && ctx.platform.Contains(ballX, ballY-BallSize) {
-		ctx.vector.y = -ctx.vector.y
-	}
-	// bounce from platform left
-	if ctx.vector.x > 0 && ctx.platform.Contains(ballX+BallSize, ballY) {
-		ctx.vector.x = -ctx.vector.x
-	}
-	// bounce from platform right
-	if ctx.vector.x < 0 && ctx.platform.Contains(ballX-BallSize, ballY) {
-		ctx.vector.x = -ctx.vector.x
+	points := [...]Point{
+		// bounce from platform top
+		{x: ballX, y: ballY + BallSize},
+		// bounce from platform bottom
+		{x: ballX, y: ballY - BallSize},
+		// bounce from platform left
+		{x: ballX + BallSize, y: ballY},
+		// bounce from platform right
+		{x: ballX - BallSize, y: ballY},
 	}
 
-	points := [...]Point{
+	for _, point := range points {
+		if ctx.platform.Contains(point) {
+			ctx.BounceFromPoint(point)
+			return
+		}
+	}
+
+	points = [...]Point{
 		// left-top corner of the platform
 		{x: ctx.platform.x, y: ctx.platform.y},
 		// right-top corner of the platform
