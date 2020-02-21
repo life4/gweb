@@ -25,16 +25,13 @@ func (ball Ball) Contains(point Point) bool {
 }
 
 func (ball *Ball) BounceFromPoint(point Point) {
-	katX := float64(point.x - ball.x)
-	katY := float64(point.y - ball.y)
-	hypo := math.Sqrt(math.Pow(katX, 2) + math.Pow(katY, 2))
-	sin := katX / hypo
-	cos := katY / hypo
-	ball.vector.x = -ball.vector.x
-	newX := ball.vector.x*cos - ball.vector.y*sin
-	newY := ball.vector.x*sin + ball.vector.y*cos
-	ball.vector.x = newX
-	ball.vector.y = newY
+	normal := Vector{
+		x: float64(point.x - ball.x),
+		y: float64(point.y - ball.y),
+	}
+	normal = normal.Normalized()
+	dot := ball.vector.Dot(normal)
+	ball.vector = ball.vector.Sub(normal.Mul(2 * dot))
 }
 
 func (ctx *Ball) changeDirection() {
@@ -65,37 +62,29 @@ func (ctx *Ball) changeDirection() {
 		ctx.vector.y = -ctx.vector.y
 	}
 
+	platform := ctx.platform
 	points := [...]Point{
 		// bounce from platform top
-		{x: ballX, y: ballY + BallSize},
+		{x: ballX, y: platform.y},
 		// bounce from platform bottom
-		{x: ballX, y: ballY - BallSize},
+		{x: ballX, y: platform.y + platform.height},
 		// bounce from platform left
-		{x: ballX + BallSize, y: ballY},
+		{x: platform.x, y: ballY},
 		// bounce from platform right
-		{x: ballX - BallSize, y: ballY},
-	}
+		{x: platform.x + platform.width, y: ballY},
 
-	for _, point := range points {
-		if ctx.platform.Contains(point) {
-			ctx.BounceFromPoint(point)
-			return
-		}
-	}
-
-	points = [...]Point{
 		// left-top corner of the platform
-		{x: ctx.platform.x, y: ctx.platform.y},
+		{x: platform.x, y: platform.y},
 		// right-top corner of the platform
-		{x: ctx.platform.x + ctx.platform.width, y: ctx.platform.y},
+		{x: platform.x + platform.width, y: platform.y},
 		// left-bottom corner of the platform
-		{x: ctx.platform.x, y: ctx.platform.y + ctx.platform.height},
+		{x: platform.x, y: platform.y + platform.height},
 		// right-bottom corner of the platform
-		{x: ctx.platform.x + ctx.platform.width, y: ctx.platform.y + ctx.platform.height},
+		{x: platform.x + platform.width, y: platform.y + platform.height},
 	}
 
 	for _, point := range points {
-		if ctx.Contains(point) {
+		if ctx.Contains(point) && ctx.platform.Contains(point) {
 			ctx.BounceFromPoint(point)
 			return
 		}

@@ -49,7 +49,7 @@ func sign(n float64) float64 {
 }
 
 type Point struct{ x, y int }
-type Vector struct{ x, y float64 }
+
 type Rectangle struct{ x, y, width, height int }
 
 func (rectangle Rectangle) Contains(point Point) bool {
