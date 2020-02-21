@@ -9,17 +9,17 @@ type Brick struct {
 	removed bool
 }
 
-func (brick Brick) Contains(x, y int) bool {
-	if y < brick.y { // ball upper
+func (brick Brick) Contains(point Point) bool {
+	if point.y < brick.y { // ball upper
 		return false
 	}
-	if y > brick.y+brick.height { // ball downer
+	if point.y > brick.y+brick.height { // ball downer
 		return false
 	}
-	if x > brick.x+brick.width { // ball righter
+	if point.x > brick.x+brick.width { // ball righter
 		return false
 	}
-	if x < brick.x { // ball lefter
+	if point.x < brick.x { // ball lefter
 		return false
 	}
 	return true
@@ -44,36 +44,27 @@ func (brick *Brick) Collide(ball *Ball, bounce bool) bool {
 		return false
 	}
 
-	// bottom of brick collision
-	if ball.vector.y < 0 && brick.Contains(ball.x, ball.y-BallSize) {
-		if bounce {
-			ball.vector.y = -ball.vector.y
-		}
-		return true
-	}
-	// top of brick collision
-	if ball.vector.y > 0 && brick.Contains(ball.x, ball.y+BallSize) {
-		if bounce {
-			ball.vector.y = -ball.vector.y
-		}
-		return true
-	}
-	// left of brick collision
-	if ball.vector.x > 0 && brick.Contains(ball.x+BallSize, ball.y) {
-		if bounce {
-			ball.vector.x = -ball.vector.x
-		}
-		return true
-	}
-	// right of brick collision
-	if ball.vector.x < 0 && brick.Contains(ball.x-BallSize, ball.y) {
-		if bounce {
-			ball.vector.x = -ball.vector.x
-		}
-		return true
+	points := [...]Point{
+		// bottom of brick collision
+		{x: ball.x, y: ball.y - BallSize},
+		// top of brick collision
+		{x: ball.x + brick.width, y: ball.y + BallSize},
+		// left of brick collision
+		{x: ball.x, y: ball.y + BallSize},
+		// right of brick collision
+		{x: ball.x + brick.width, y: ball.y - BallSize},
 	}
 
-	points := [...]Point{
+	for _, point := range points {
+		if brick.Contains(point) {
+			if bounce {
+				ball.BounceFromPoint(point)
+			}
+			return true
+		}
+	}
+
+	points = [...]Point{
 		// left-top corner of the brick
 		{x: brick.x, y: brick.y},
 		// right-top corner of the brick
