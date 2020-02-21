@@ -104,24 +104,24 @@ func (ctx *Ball) changeDirection() {
 	}
 }
 
-func (ctx *Ball) handle() {
+func (ball *Ball) handle() {
 	// clear out previous render
-	ctx.context.SetFillStyle(BGColor)
-	ctx.context.BeginPath()
-	ctx.context.Arc(ctx.x, ctx.y, BallSize+1, 0, math.Pi*2)
-	ctx.context.Fill()
-	ctx.context.ClosePath()
+	ball.context.SetFillStyle(BGColor)
+	ball.context.BeginPath()
+	ball.context.Arc(ball.x, ball.y, BallSize+1, 0, math.Pi*2)
+	ball.context.Fill()
+	ball.context.ClosePath()
 
-	ctx.changeDirection()
+	ball.changeDirection()
 
 	// move the ball
-	ctx.x += int(math.Round(ctx.vector.x))
-	ctx.y += int(math.Round(ctx.vector.y))
+	ball.x += int(math.Round(ball.vector.x))
+	ball.y += int(math.Round(ball.vector.y))
 
 	// draw the ball
-	ctx.context.SetFillStyle(BallColor)
-	ctx.context.BeginPath()
-	ctx.context.Arc(ctx.x, ctx.y, BallSize, 0, math.Pi*2)
-	ctx.context.Fill()
-	ctx.context.ClosePath()
+	ball.context.SetFillStyle(BallColor)
+	ball.context.BeginPath()
+	ball.context.Arc(ball.x, ball.y, BallSize, 0, math.Pi*2)
+	ball.context.Fill()
+	ball.context.ClosePath()
 }
