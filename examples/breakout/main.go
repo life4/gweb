@@ -51,21 +51,19 @@ func sign(n float64) float64 {
 	return -1
 }
 
-// type Point struct{ x, y int }
-// type Vector Point
+type Point struct{ x, y int }
+type Vector struct{ x, y float64 }
 type Rectangle struct{ x, y, width, height int }
 
 type Ball struct {
-	context canvas.Context2D
-	// position
-	x, y int
-	// movement
-	vectorX float64
-	vectorY float64
-	// borders
+	Point
+	vector Vector
+
 	windowWidth  int
 	windowHeight int
-	platform     *Platform
+
+	context  canvas.Context2D
+	platform *Platform
 }
 
 func (ball Ball) Contains(x, y int) bool {
@@ -81,56 +79,56 @@ func (ball *Ball) BounceFromPoint(x, y int) {
 	hypo := math.Sqrt(math.Pow(katX, 2) + math.Pow(katY, 2))
 	sin := katX / hypo
 	cos := katY / hypo
-	ball.vectorX = -ball.vectorX
-	newX := ball.vectorX*cos - ball.vectorY*sin
-	newY := ball.vectorX*sin + ball.vectorY*cos
-	ball.vectorX = newX
-	ball.vectorY = newY
+	ball.vector.x = -ball.vector.x
+	newX := ball.vector.x*cos - ball.vector.y*sin
+	newY := ball.vector.x*sin + ball.vector.y*cos
+	ball.vector.x = newX
+	ball.vector.y = newY
 }
 
 func (ctx *Ball) changeDirection() {
-	ballX := ctx.x + int(math.Ceil(ctx.vectorX))
-	ballY := ctx.y + int(math.Ceil(ctx.vectorY))
+	ballX := ctx.x + int(math.Ceil(ctx.vector.x))
+	ballY := ctx.y + int(math.Ceil(ctx.vector.y))
 
 	// bounce from text box (where we draw FPS and score)
 	// bounce from right border of the text box
 	if ballX-BallSize <= TextRight && ballY < TextBottom {
-		ctx.vectorX = -ctx.vectorX
+		ctx.vector.x = -ctx.vector.x
 	}
 	// bounce from bottom of the text box
 	if ballX <= TextRight && ballY-BallSize < TextBottom {
-		ctx.vectorY = -ctx.vectorY
+		ctx.vector.y = -ctx.vector.y
 	}
 
 	// right and left of the playground
 	if ballX > ctx.windowWidth-BallSize {
-		ctx.vectorX = -ctx.vectorX
+		ctx.vector.x = -ctx.vector.x
 	} else if ballX < BallSize {
-		ctx.vectorX = -ctx.vectorX
+		ctx.vector.x = -ctx.vector.x
 	}
 
 	// bottom and top of the playground
 	if ballY > ctx.windowHeight-BallSize {
-		ctx.vectorY = -ctx.vectorY
+		ctx.vector.y = -ctx.vector.y
 	} else if ballY < BallSize {
-		ctx.vectorY = -ctx.vectorY
+		ctx.vector.y = -ctx.vector.y
 	}
 
 	// bounce from platform top
-	if ctx.vectorY > 0 && ctx.platform.Contains(ballX, ballY+BallSize) {
-		ctx.vectorY = -ctx.vectorY
+	if ctx.vector.y > 0 && ctx.platform.Contains(ballX, ballY+BallSize) {
+		ctx.vector.y = -ctx.vector.y
 	}
 	// bounce from platform bottom
-	if ctx.vectorY < 0 && ctx.platform.Contains(ballX, ballY-BallSize) {
-		ctx.vectorY = -ctx.vectorY
+	if ctx.vector.y < 0 && ctx.platform.Contains(ballX, ballY-BallSize) {
+		ctx.vector.y = -ctx.vector.y
 	}
 	// bounce from platform left
-	if ctx.vectorX > 0 && ctx.platform.Contains(ballX+BallSize, ballY) {
-		ctx.vectorX = -ctx.vectorX
+	if ctx.vector.x > 0 && ctx.platform.Contains(ballX+BallSize, ballY) {
+		ctx.vector.x = -ctx.vector.x
 	}
 	// bounce from platform right
-	if ctx.vectorX < 0 && ctx.platform.Contains(ballX-BallSize, ballY) {
-		ctx.vectorX = -ctx.vectorX
+	if ctx.vector.x < 0 && ctx.platform.Contains(ballX-BallSize, ballY) {
+		ctx.vector.x = -ctx.vector.x
 	}
 
 	// bounce from left-top corner of the platform
@@ -166,8 +164,8 @@ func (ctx *Ball) handle() {
 	ctx.changeDirection()
 
 	// move the ball
-	ctx.x += int(math.Round(ctx.vectorX))
-	ctx.y += int(math.Round(ctx.vectorY))
+	ctx.x += int(math.Round(ctx.vector.x))
+	ctx.y += int(math.Round(ctx.vector.y))
 
 	// draw the ball
 	ctx.context.SetFillStyle(BallColor)
@@ -222,30 +220,30 @@ func (brick *Brick) Collide(ball *Ball, bounce bool) bool {
 	}
 
 	// bottom of brick collision
-	if ball.vectorY < 0 && brick.Contains(ball.x, ball.y-BallSize) {
+	if ball.vector.y < 0 && brick.Contains(ball.x, ball.y-BallSize) {
 		if bounce {
-			ball.vectorY = -ball.vectorY
+			ball.vector.y = -ball.vector.y
 		}
 		return true
 	}
 	// top of brick collision
-	if ball.vectorY > 0 && brick.Contains(ball.x, ball.y+BallSize) {
+	if ball.vector.y > 0 && brick.Contains(ball.x, ball.y+BallSize) {
 		if bounce {
-			ball.vectorY = -ball.vectorY
+			ball.vector.y = -ball.vector.y
 		}
 		return true
 	}
 	// left of brick collision
-	if ball.vectorX > 0 && brick.Contains(ball.x+BallSize, ball.y) {
+	if ball.vector.x > 0 && brick.Contains(ball.x+BallSize, ball.y) {
 		if bounce {
-			ball.vectorX = -ball.vectorX
+			ball.vector.x = -ball.vector.x
 		}
 		return true
 	}
 	// right of brick collision
-	if ball.vectorX < 0 && brick.Contains(ball.x-BallSize, ball.y) {
+	if ball.vector.x < 0 && brick.Contains(ball.x-BallSize, ball.y) {
 		if bounce {
-			ball.vectorX = -ball.vectorX
+			ball.vector.x = -ball.vector.x
 		}
 		return true
 	}
@@ -393,8 +391,8 @@ func (bricks *Bricks) Handle(ball *Ball) {
 		speedUpHits := [...]int{4, 8, 16, 24, 32, 64}
 		for _, hits := range speedUpHits {
 			if bricks.hits == hits {
-				ball.vectorX += sign(ball.vectorX) * 1
-				ball.vectorY += sign(ball.vectorY) * 1
+				ball.vector.x += sign(ball.vector.x) * 1
+				ball.vector.y += sign(ball.vector.y) * 1
 				break
 			}
 		}
@@ -470,9 +468,8 @@ func main() {
 	fps := FPS{context: context, updated: time.Now()}
 	ball := Ball{
 		context: context,
-		vectorX: 5, vectorY: -5,
-		x:           platform.x,
-		y:           platform.y - BallSize,
+		vector: Vector{x: 5, y: -5},
+		Point: Point{x: platform.x, y:           platform.y - BallSize,},
 		windowWidth: w, windowHeight: h,
 		platform: &platform,
 	}
@@ -514,3 +511,4 @@ func main() {
 	// prevent ending of the program
 	select {}
 }
+
