@@ -25,11 +25,14 @@ func (window Window) AudioContext() audio.AudioContext {
 
 // SUBTYPE GETTERS
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Window/console
 // https://developer.mozilla.org/en-US/docs/Web/API/Console
 func (window Window) Console() Console {
 	return Console{Value: window.Get("console")}
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Window/document
+// https://developer.mozilla.org/en-US/docs/Web/API/Document
 func (window Window) Document() Document {
 	return Document{Value: window.Get("document")}
 }
