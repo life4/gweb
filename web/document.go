@@ -22,6 +22,7 @@ func (doc *Document) Node() Node {
 // DOCUMENT STRING PROPERTIES
 
 // URL returns the URL for the current document.
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/URL
 func (doc *Document) URL() string {
 	return doc.Get("URL").String()
 }
@@ -33,24 +34,29 @@ func (doc *Document) Cookie() string {
 }
 
 // CharacterSet returns document's encoding.
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/characterSet
 func (doc *Document) CharacterSet() string {
 	return doc.Get("characterSet").String()
 }
 
 // ContentType returns document's content type.
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/contentType
 func (doc *Document) ContentType() string {
 	return doc.Get("contentType").String()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/doctype
 func (doc *Document) DocType() string {
 	return doc.Get("doctype").Get("name").String()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/domain
 func (doc *Document) Domain() string {
 	v := doc.Get("domain")
 	return v.OptionalString()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/referrer
 func (doc *Document) Referrer() string {
 	return doc.Get("referrer").String()
 }
@@ -59,10 +65,12 @@ func (doc *Document) InputEncoding() string {
 	return doc.Get("inputEncoding").String()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/readyState
 func (doc *Document) ReadyState() string {
 	return doc.Get("readyState").String()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/title
 func (doc *Document) Title() string {
 	return doc.Get("title").String()
 }
@@ -70,6 +78,7 @@ func (doc *Document) Title() string {
 // GETTING CONCRETE SUBELEMENTS
 
 // Body returns the <body> or <frameset> node of the current document.
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/body
 func (doc Document) Body() HTMLElement {
 	return doc.Get("body").HTMLElement()
 }
@@ -81,11 +90,14 @@ func (doc Document) Head() HTMLElement {
 
 // HTML returns the Element that is a direct child of the document.
 // For HTML documents, this is normally the <html> element.
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/head
 func (doc Document) HTML() HTMLElement {
 	return doc.Get("documentElement").HTMLElement()
 }
 
 // Embeds returns <object> and <embed> elements in the document.
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/embeds
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/plugins
 func (doc *Document) Embeds() []Embed {
 	collection := doc.Get("plugins")
 	values := collection.Values()
@@ -103,15 +115,18 @@ func (doc *Document) Embeds() []Embed {
 // NON-STRING PROPERTIES
 
 // DesignMode indicates whether the document can be edited.
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/designMode
 func (doc *Document) DesignMode() bool {
 	return doc.Get("designMode").String() == "on"
 }
 
 // Hidden is true when the webpage is in the background and not visible to the user
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/hidden
 func (doc *Document) Hidden() bool {
 	return doc.Get("hidden").Bool()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/lastModified
 func (doc *Document) LastModified() time.Time {
 	date := doc.Get("lastModified").String()
 	timestamp := js.Global().Get("Date").Call("parse", date).Float()
