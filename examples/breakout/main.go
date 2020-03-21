@@ -134,7 +134,7 @@ func main() {
 	block := TextBlock{context: context, updated: time.Now()}
 	ballCircle := Circle{
 		x:      platform.circle.x,
-		y:      platform.rect.y - BallSize,
+		y:      platform.rect.y - BallSize - 5,
 		radius: BallSize,
 	}
 	ball := Ball{

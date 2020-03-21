@@ -55,7 +55,17 @@ func (ball *Ball) changeDirection() {
 		ball.vector.y = -ball.vector.y
 	}
 
-	point := ball.platform.Touch(*ball)
+	// if ball gets inside the platform, just bounce it up
+	platform := ball.platform
+	point := &Point{x: ball.x, y: ball.y}
+	if platform.Contains(*point) {
+		point.y += ball.radius
+		ball.BounceFromPoint(*point)
+		return
+	}
+
+	// bounce from platform edges
+	point = platform.Touch(*ball)
 	if point != nil {
 		ball.BounceFromPoint(*point)
 	}
