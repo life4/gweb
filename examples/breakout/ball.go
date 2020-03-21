@@ -18,6 +18,9 @@ type Ball struct {
 }
 
 func (ball *Ball) BounceFromPoint(point Point) {
+	// ball.context.SetFillStyle("red")
+	// ball.context.Rectangle(point.x, point.y, 2, 2).Filled().Draw()
+
 	normal := Vector{
 		x: float64(point.x - ball.x),
 		y: float64(point.y - ball.y),
@@ -52,32 +55,9 @@ func (ball *Ball) changeDirection() {
 		ball.vector.y = -ball.vector.y
 	}
 
-	platform := ball.platform
-	points := [...]Point{
-		// bounce from platform top
-		{x: ball.x, y: platform.rect.y},
-		// bounce from platform bottom
-		{x: ball.x, y: platform.rect.y + platform.rect.height},
-		// bounce from platform left
-		{x: platform.rect.x, y: ball.y},
-		// bounce from platform right
-		{x: platform.rect.x + platform.rect.width, y: ball.y},
-
-		// left-top corner of the platform
-		{x: platform.rect.x, y: platform.rect.y},
-		// right-top corner of the platform
-		{x: platform.rect.x + platform.rect.width, y: platform.rect.y},
-		// left-bottom corner of the platform
-		{x: platform.rect.x, y: platform.rect.y + platform.rect.height},
-		// right-bottom corner of the platform
-		{x: platform.rect.x + platform.rect.width, y: platform.rect.y + platform.rect.height},
-	}
-
-	for _, point := range points {
-		if ball.Contains(point) && ball.platform.Contains(point) {
-			ball.BounceFromPoint(point)
-			return
-		}
+	point := ball.platform.Touch(*ball)
+	if point != nil {
+		ball.BounceFromPoint(*point)
 	}
 }
 

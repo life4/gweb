@@ -24,7 +24,49 @@ func (pl Platform) Contains(point Point) bool {
 	return pl.circle.Contains(point) && pl.rect.Contains(point)
 }
 
-func (pl Platform) Angle() float64 {
+// Touch returns touch point of platform and ball if any
+func (pl Platform) Touch(ball Ball) *Point {
+	catx := float64(ball.x - pl.circle.x)
+	caty := float64(ball.y - pl.circle.y)
+
+	// check if ball is too far from platform circle
+	hypotenuse := math.Sqrt(math.Pow(catx, 2) + math.Pow(caty, 2))
+	distance := math.Abs(float64(ball.radius + pl.circle.radius))
+	if hypotenuse > distance {
+		return nil
+	}
+
+	// touches the upper side of the platform
+	if ball.y <= pl.circle.y {
+		ratio := float64(ball.radius) / float64(pl.circle.radius)
+		point := Point{
+			x: ball.x - int(catx*ratio),
+			y: ball.y - int(caty*ratio),
+		}
+		if point.y < pl.rect.y+pl.rect.height {
+			return &point
+		}
+	}
+
+	// touches corners
+	point := Point{
+		x: pl.rect.x,
+		y: pl.rect.y + pl.rect.height,
+	}
+	if ball.Contains(point) {
+		return &point
+	}
+	point = Point{
+		x: pl.rect.x + pl.rect.width,
+		y: pl.rect.y + pl.rect.height,
+	}
+	if ball.Contains(point) {
+		return &point
+	}
+	return nil
+}
+
+func (pl Platform) angle() float64 {
 	tan := float64(pl.rect.width/2) / float64(pl.circle.radius-pl.rect.height)
 	return math.Atan(tan)
 }
@@ -53,7 +95,7 @@ func (ctx *Platform) changePosition() {
 	}
 
 	ctx.rect.x += path
-	ctx.circle.x += path
+	ctx.circle.x = ctx.rect.x + ctx.rect.width/2
 }
 
 func (platform *Platform) handleMouse(event web.Event) {
@@ -82,8 +124,8 @@ func (pl Platform) draw(color string, delta int) {
 	pl.context.Arc(
 		pl.circle.x, pl.circle.y,
 		pl.circle.radius+delta,
-		1.5*math.Pi-pl.Angle()-(float64(delta)/math.Pi/2),
-		1.5*math.Pi+pl.Angle()+(float64(delta)/math.Pi/2),
+		1.5*math.Pi-pl.angle()-(float64(delta)/math.Pi/2),
+		1.5*math.Pi+pl.angle()+(float64(delta)/math.Pi/2),
 	)
 	pl.context.Fill()
 	pl.context.ClosePath()
