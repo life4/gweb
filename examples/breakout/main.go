@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math"
 	"sync"
 	"time"
 
@@ -69,6 +70,15 @@ func (rectangle Rectangle) Contains(point Point) bool {
 
 }
 
+type Circle struct{ x, y, radius int }
+
+func (circle Circle) Contains(point Point) bool {
+	hypotenuse := math.Pow(float64(circle.radius), 2)
+	cathetus1 := math.Pow(float64(point.x-circle.x), 2)
+	cathetus2 := math.Pow(float64(point.y-circle.y), 2)
+	return cathetus1+cathetus2 < hypotenuse
+}
+
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
@@ -110,8 +120,7 @@ func main() {
 	ball := Ball{
 		context:     context,
 		vector:      Vector{x: 5, y: -5},
-		Point:       Point{x: platform.x, y: platform.y - BallSize},
-		radius:      BallSize,
+		Circle:      Circle{x: platform.x, y: platform.y - BallSize, radius: BallSize},
 		windowWidth: w, windowHeight: h,
 		platform: &platform,
 	}

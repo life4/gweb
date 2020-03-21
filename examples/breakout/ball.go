@@ -7,8 +7,7 @@ import (
 )
 
 type Ball struct {
-	Point
-	radius int
+	Circle
 	vector Vector
 
 	windowWidth  int
@@ -16,13 +15,6 @@ type Ball struct {
 
 	context  canvas.Context2D
 	platform *Platform
-}
-
-func (ball Ball) Contains(point Point) bool {
-	hypotenuse := math.Pow(float64(ball.radius), 2)
-	cathetus1 := math.Pow(float64(point.x-ball.x), 2)
-	cathetus2 := math.Pow(float64(point.y-ball.y), 2)
-	return cathetus1+cathetus2 < hypotenuse
 }
 
 func (ball *Ball) BounceFromPoint(point Point) {

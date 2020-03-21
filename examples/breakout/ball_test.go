@@ -8,9 +8,8 @@ import (
 
 func TestBounceFromPoint(t *testing.T) {
 	ball := Ball{
-		Point:  Point{x: 10, y: 10},
+		Circle: Circle{x: 10, y: 10, radius: 20},
 		vector: Vector{x: 5, y: 0},
-		radius: 20,
 	}
 
 	// bounce from the right
