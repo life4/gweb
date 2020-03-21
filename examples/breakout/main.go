@@ -79,6 +79,18 @@ func (circle Circle) Contains(point Point) bool {
 	return cathetus1+cathetus2 < hypotenuse
 }
 
+func CircleFromRectangle(rect Rectangle) Circle {
+	base := math.Sqrt(math.Pow(float64(rect.width)/2, 2) + math.Pow(float64(rect.height), 2))
+	cos := float64(rect.height) / base
+	radius := int(base / 2 / cos)
+
+	return Circle{
+		x:      rect.x + rect.width/2,
+		y:      rect.y + radius,
+		radius: radius,
+	}
+}
+
 func main() {
 	window := web.GetWindow()
 	doc := window.Document()
@@ -103,13 +115,16 @@ func main() {
 	context.ClosePath()
 
 	// make handlers
+	rect := Rectangle{
+		x:      w / 2,
+		y:      h - 60,
+		width:  PlatformWidth,
+		height: PlatformHeight,
+	}
+	platformCicrle := CircleFromRectangle(rect)
 	platform := Platform{
-		Rectangle: Rectangle{
-			x:      w / 2,
-			y:      h - 60,
-			width:  PlatformWidth,
-			height: PlatformHeight,
-		},
+		rect:         &rect,
+		circle:       &platformCicrle,
 		context:      context,
 		element:      canvas,
 		mouseX:       w / 2,
@@ -117,10 +132,15 @@ func main() {
 		windowHeight: h,
 	}
 	block := TextBlock{context: context, updated: time.Now()}
+	ballCircle := Circle{
+		x:      platform.circle.x,
+		y:      platform.rect.y - BallSize,
+		radius: BallSize,
+	}
 	ball := Ball{
 		context:     context,
 		vector:      Vector{x: 5, y: -5},
-		Circle:      Circle{x: platform.x, y: platform.y - BallSize, radius: BallSize},
+		Circle:      ballCircle,
 		windowWidth: w, windowHeight: h,
 		platform: &platform,
 	}

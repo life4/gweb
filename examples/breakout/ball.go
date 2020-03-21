@@ -55,22 +55,22 @@ func (ball *Ball) changeDirection() {
 	platform := ball.platform
 	points := [...]Point{
 		// bounce from platform top
-		{x: ball.x, y: platform.y},
+		{x: ball.x, y: platform.rect.y},
 		// bounce from platform bottom
-		{x: ball.x, y: platform.y + platform.height},
+		{x: ball.x, y: platform.rect.y + platform.rect.height},
 		// bounce from platform left
-		{x: platform.x, y: ball.y},
+		{x: platform.rect.x, y: ball.y},
 		// bounce from platform right
-		{x: platform.x + platform.width, y: ball.y},
+		{x: platform.rect.x + platform.rect.width, y: ball.y},
 
 		// left-top corner of the platform
-		{x: platform.x, y: platform.y},
+		{x: platform.rect.x, y: platform.rect.y},
 		// right-top corner of the platform
-		{x: platform.x + platform.width, y: platform.y},
+		{x: platform.rect.x + platform.rect.width, y: platform.rect.y},
 		// left-bottom corner of the platform
-		{x: platform.x, y: platform.y + platform.height},
+		{x: platform.rect.x, y: platform.rect.y + platform.rect.height},
 		// right-bottom corner of the platform
-		{x: platform.x + platform.width, y: platform.y + platform.height},
+		{x: platform.rect.x + platform.rect.width, y: platform.rect.y + platform.rect.height},
 	}
 
 	for _, point := range points {
