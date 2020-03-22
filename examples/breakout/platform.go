@@ -38,6 +38,11 @@ func (pl Platform) Touch(ball Ball) *Point {
 }
 
 func (pl Platform) touchInside(ball Ball) *Point {
+	// don't bounce if ball moves up
+	if ball.vector.y < -1.0 {
+		return nil
+	}
+
 	point := &Point{x: ball.x, y: ball.y}
 	if pl.Contains(*point) {
 		point.y = ball.y + ball.radius
@@ -52,7 +57,7 @@ func (pl Platform) touchUp(ball Ball) *Point {
 		return nil
 	}
 	// don't bounce if ball moves up
-	if ball.vector.y < 2.0 {
+	if ball.vector.y < -1.0 {
 		return nil
 	}
 
