@@ -26,6 +26,36 @@ func (pl Platform) Contains(point Point) bool {
 
 // Touch returns touch point of platform and ball if any
 func (pl Platform) Touch(ball Ball) *Point {
+	point := pl.touchInside(ball)
+	if point != nil {
+		return point
+	}
+	point = pl.touchUp(ball)
+	if point != nil {
+		return point
+	}
+	return pl.touchCorner(ball)
+}
+
+func (pl Platform) touchInside(ball Ball) *Point {
+	point := &Point{x: ball.x, y: ball.y}
+	if pl.Contains(*point) {
+		point.y = ball.y + ball.radius
+		return point
+	}
+	return nil
+}
+
+func (pl Platform) touchUp(ball Ball) *Point {
+	// don't bounce if ball is inside of the platform
+	if ball.y > pl.circle.y {
+		return nil
+	}
+	// don't bounce if ball moves up
+	if ball.vector.y < 2.0 {
+		return nil
+	}
+
 	catx := float64(ball.x - pl.circle.x)
 	caty := float64(ball.y - pl.circle.y)
 
@@ -37,18 +67,18 @@ func (pl Platform) Touch(ball Ball) *Point {
 	}
 
 	// touches the upper side of the platform
-	if ball.y <= pl.circle.y {
-		ratio := float64(ball.radius) / float64(pl.circle.radius)
-		point := Point{
-			x: ball.x - int(catx*ratio),
-			y: ball.y - int(caty*ratio),
-		}
-		if point.y < pl.rect.y+pl.rect.height {
-			return &point
-		}
+	ratio := float64(ball.radius) / float64(pl.circle.radius)
+	point := Point{
+		x: ball.x - int(catx*ratio),
+		y: ball.y - int(caty*ratio),
 	}
+	if point.y >= pl.rect.y+pl.rect.height {
+		return nil
+	}
+	return &point
+}
 
-	// touches corners
+func (pl Platform) touchCorner(ball Ball) *Point {
 	point := Point{
 		x: pl.rect.x,
 		y: pl.rect.y + pl.rect.height,
@@ -64,6 +94,7 @@ func (pl Platform) Touch(ball Ball) *Point {
 		return &point
 	}
 	return nil
+
 }
 
 func (pl Platform) angle() float64 {
