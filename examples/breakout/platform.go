@@ -34,7 +34,7 @@ func (pl Platform) Touch(ball Ball) *Point {
 	if point != nil {
 		return point
 	}
-	return pl.touchCorner(ball)
+	return pl.touchCorners(ball)
 }
 
 func (pl Platform) touchInside(ball Ball) *Point {
@@ -83,23 +83,29 @@ func (pl Platform) touchUp(ball Ball) *Point {
 	return &point
 }
 
-func (pl Platform) touchCorner(ball Ball) *Point {
-	point := Point{
-		x: pl.rect.x,
-		y: pl.rect.y + pl.rect.height,
+func (pl Platform) touchCorners(ball Ball) *Point {
+	// left
+	if ball.vector.x > 0 {
+		point := Point{
+			x: pl.rect.x,
+			y: pl.rect.y + pl.rect.height,
+		}
+		if ball.Contains(point) {
+			return &point
+		}
 	}
-	if ball.Contains(point) {
-		return &point
-	}
-	point = Point{
-		x: pl.rect.x + pl.rect.width,
-		y: pl.rect.y + pl.rect.height,
-	}
-	if ball.Contains(point) {
-		return &point
+
+	// right
+	if ball.vector.x < 0 {
+		point := Point{
+			x: pl.rect.x + pl.rect.width,
+			y: pl.rect.y + pl.rect.height,
+		}
+		if ball.Contains(point) {
+			return &point
+		}
 	}
 	return nil
-
 }
 
 func (pl Platform) angle() float64 {
