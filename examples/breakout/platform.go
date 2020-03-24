@@ -67,19 +67,21 @@ func (pl Platform) touchUp(ball Ball) *Point {
 	// check if ball is too far from platform circle
 	hypotenuse := math.Sqrt(math.Pow(catx, 2) + math.Pow(caty, 2))
 	distance := math.Abs(float64(ball.radius + pl.circle.radius))
-	if hypotenuse > distance {
+	if hypotenuse > distance+PlatformAura {
 		return nil
 	}
 
-	// touches the upper side of the platform
 	ratio := float64(ball.radius) / float64(pl.circle.radius)
 	point := Point{
 		x: ball.x - int(catx*ratio),
 		y: ball.y - int(caty*ratio),
 	}
-	if point.y > pl.rect.y+pl.rect.height {
+
+	// check if ball is lower than platform low line
+	if point.y >= pl.rect.y+pl.rect.height {
 		return nil
 	}
+
 	return &point
 }
 

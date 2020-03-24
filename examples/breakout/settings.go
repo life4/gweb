@@ -11,9 +11,12 @@ const (
 )
 
 // platform
-const PlatformWidth = 120
-const PlatformHeight = 20
-const PlatformMaxSpeed = 40
+const (
+	PlatformWidth    = 120
+	PlatformHeight   = 20
+	PlatformMaxSpeed = 40
+	PlatformAura     = 5 // additional invisible bounce space around the platform
+)
 
 // ball
 const BallSize = 20
