@@ -50,12 +50,13 @@ func (ball *Ball) changeDirection() {
 	}
 
 	// bottom and top of the playground
-	if ball.vector.y > 0 && ball.y+ball.radius >= ball.windowHeight {
-		ball.vector.y = -ball.vector.y
-	}
+	// if ball.vector.y > 0 && ball.y+ball.radius >= ball.windowHeight {
+	// 	ball.vector.y = -ball.vector.y
+	// }
 	if ball.vector.y < 0 && ball.y-ball.radius <= 0 {
 		ball.vector.y = -ball.vector.y
 	}
+
 	// bounce from platform edges
 	point := ball.platform.Touch(*ball)
 	if point != nil {

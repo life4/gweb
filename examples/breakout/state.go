@@ -10,19 +10,19 @@ type State struct {
 
 type SubState struct {
 	Requested bool
-	done      bool
+	Completed bool
 	wg        sync.WaitGroup
 }
 
 func (state *SubState) Request() {
 	state.Requested = true
-	state.done = false
+	state.Completed = false
 	state.wg = sync.WaitGroup{}
 	state.wg.Add(1)
 }
 
-func (state *SubState) Done() {
-	state.done = true
+func (state *SubState) Complete() {
+	state.Completed = true
 	state.wg.Done()
 }
 

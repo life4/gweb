@@ -6,6 +6,7 @@ const (
 	BallColor     = "#27ae60"
 	PlatformColor = "#2c3e50"
 	TextColor     = "#2c3e50"
+	FailColor     = "#c0392b"
 )
 
 // platform

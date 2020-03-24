@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -75,12 +76,12 @@ func (game *Game) Init() {
 
 func (game *Game) handler() {
 	if game.state.Stop.Requested {
-		game.state.Stop.Done()
+		game.state.Stop.Complete()
 		return
 	}
 
 	wg := sync.WaitGroup{}
-	wg.Add(4)
+	wg.Add(5)
 	go func() {
 		// update FPS
 		game.block.handle()
@@ -101,6 +102,13 @@ func (game *Game) handler() {
 		game.ball.handle()
 		wg.Done()
 	}()
+	go func() {
+		// check if ball got out of playground
+		if game.ball.y >= game.Height {
+			go game.Fail()
+		}
+		wg.Done()
+	}()
 	wg.Wait()
 
 	game.Window.RequestAnimationFrame(game.handler, false)
@@ -114,6 +122,24 @@ func (game *Game) Register() {
 }
 
 func (game *Game) Stop() {
+	if game.state.Stop.Completed {
+		return
+	}
 	game.state.Stop.Request()
 	game.state.Stop.Wait()
+}
+
+func (game *Game) Fail() {
+	if game.state.Stop.Completed {
+		return
+	}
+	game.state.Stop.Request()
+	game.state.Stop.Wait()
+
+	height := TextHeight * 2
+	width := TextWidth * 2
+	context := game.Canvas.Context2D()
+	context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", height))
+	context.SetFillStyle(FailColor)
+	context.Text().Fill("Game Over", (game.Width-width)/2, (game.Height-height)/2, width)
 }

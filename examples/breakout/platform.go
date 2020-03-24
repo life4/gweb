@@ -77,7 +77,7 @@ func (pl Platform) touchUp(ball Ball) *Point {
 		x: ball.x - int(catx*ratio),
 		y: ball.y - int(caty*ratio),
 	}
-	if point.y >= pl.rect.y+pl.rect.height {
+	if point.y > pl.rect.y+pl.rect.height {
 		return nil
 	}
 	return &point
