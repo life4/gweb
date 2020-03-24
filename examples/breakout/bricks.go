@@ -73,3 +73,20 @@ func (bricks *Bricks) Handle(ball *Ball) {
 		}
 	}
 }
+
+func (bricks *Bricks) Count() int {
+	count := 0
+	for _, brick := range bricks.registry {
+		if !brick.removed {
+			count += 1
+		}
+	}
+	return count
+}
+
+func sign(n float64) float64 {
+	if n >= 0 {
+		return 1
+	}
+	return -1
+}
