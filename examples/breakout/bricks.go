@@ -73,3 +73,10 @@ func (bricks *Bricks) Handle(ball *Ball) {
 		}
 	}
 }
+
+func sign(n float64) float64 {
+	if n >= 0 {
+		return 1
+	}
+	return -1
+}
