@@ -42,16 +42,18 @@ func (ball *Ball) changeDirection() {
 	}
 
 	// right and left of the playground
-	if ball.x > ball.windowWidth-ball.radius {
+	if ball.vector.x > 0 && ball.x > ball.windowWidth-ball.radius {
 		ball.vector.x = -ball.vector.x
-	} else if ball.x < ball.radius {
+	}
+	if ball.vector.x < 0 && ball.x < ball.radius {
 		ball.vector.x = -ball.vector.x
 	}
 
 	// bottom and top of the playground
-	if ball.y > ball.windowHeight-ball.radius {
+	if ball.vector.y > 0 && ball.y+ball.radius >= ball.windowHeight {
 		ball.vector.y = -ball.vector.y
-	} else if ball.y < ball.radius {
+	}
+	if ball.vector.y < 0 && ball.y-ball.radius <= 0 {
 		ball.vector.y = -ball.vector.y
 	}
 	// bounce from platform edges
