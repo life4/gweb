@@ -16,15 +16,7 @@ func (block TextBlock) drawFPS(now time.Time) {
 	// calculate FPS
 	fps := time.Second / now.Sub(block.updated)
 	text := fmt.Sprintf("%d FPS", int64(fps))
-
-	// clear
-	block.context.SetFillStyle(BGColor)
-	block.context.Rectangle(TextLeft, TextTop, TextWidth, TextHeight+TextMargin).Filled().Draw()
-
-	// write
-	block.context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", TextHeight))
-	block.context.SetFillStyle(TextColor)
-	block.context.Text().Fill(text, TextLeft, TextTop+TextHeight, TextWidth)
+	block.drawText(text, 0)
 }
 
 func (block *TextBlock) handle() {
@@ -37,16 +29,17 @@ func (block *TextBlock) handle() {
 }
 
 func (block TextBlock) drawText(text string, row int) {
+	x := TextLeft
 	y := TextTop + row*(TextMargin+TextHeight)
 
 	// clear place where previous score was
 	block.context.SetFillStyle(BGColor)
-	block.context.Rectangle(TextLeft, y, TextRight, TextHeight+TextWidth).Filled().Draw()
+	block.context.Rectangle(x, y, TextWidth, TextHeight+TextMargin).Filled().Draw()
 
-	// draw the score
+	// draw the text
 	block.context.SetFillStyle(TextColor)
 	block.context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", TextHeight))
-	block.context.Text().Fill(text, TextLeft, y+TextHeight, TextWidth)
+	block.context.Text().Fill(text, x, y+TextHeight, TextWidth)
 }
 
 func (block TextBlock) DrawScore(score int) {
