@@ -105,7 +105,10 @@ func (game *Game) handler() {
 	go func() {
 		// check if ball got out of playground
 		if game.ball.y >= game.Height {
-			go game.Fail()
+			go game.fail()
+		}
+		if game.bricks.Count() == 0 {
+			go game.win()
 		}
 		wg.Done()
 	}()
@@ -129,17 +132,21 @@ func (game *Game) Stop() {
 	game.state.Stop.Wait()
 }
 
-func (game *Game) Fail() {
-	if game.state.Stop.Completed {
-		return
-	}
-	game.state.Stop.Request()
-	game.state.Stop.Wait()
+func (game *Game) fail() {
+	game.Stop()
+	game.drawText("Game Over", FailColor)
+}
 
+func (game *Game) win() {
+	game.Stop()
+	game.drawText("You Win", WinColor)
+}
+
+func (game *Game) drawText(text, color string) {
 	height := TextHeight * 2
 	width := TextWidth * 2
 	context := game.Canvas.Context2D()
 	context.Text().SetFont(fmt.Sprintf("bold %dpx Roboto", height))
-	context.SetFillStyle(FailColor)
-	context.Text().Fill("Game Over", (game.Width-width)/2, (game.Height-height)/2, width)
+	context.SetFillStyle(color)
+	context.Text().Fill(text, (game.Width-width)/2, (game.Height-height)/2, width)
 }
