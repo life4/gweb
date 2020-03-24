@@ -28,6 +28,18 @@ func main() {
 	game.Init()
 	game.Register()
 
+	restartHandler := func(event web.Event) {
+		go func() {
+			game.Stop()
+			game.Init()
+			game.Register()
+		}()
+	}
+	restartButton := doc.CreateElement("button")
+	restartButton.SetText("restart")
+	restartButton.EventTarget().Listen(web.EventTypeMouseDown, restartHandler)
+	body.Node().AppendChild(restartButton.Node())
+
 	// prevent ending of the program
 	select {}
 }

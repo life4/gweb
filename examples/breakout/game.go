@@ -14,6 +14,7 @@ type Game struct {
 	Canvas web.Canvas
 	Body   web.HTMLElement
 
+	state    *State
 	platform Platform
 	ball     Ball
 	block    TextBlock
@@ -21,6 +22,7 @@ type Game struct {
 }
 
 func (game *Game) Init() {
+	game.state = &State{Stop: SubState{}}
 	context := game.Canvas.Context2D()
 
 	// draw background
@@ -72,6 +74,11 @@ func (game *Game) Init() {
 }
 
 func (game *Game) handler() {
+	if game.state.Stop.Requested {
+		game.state.Stop.Done()
+		return
+	}
+
 	wg := sync.WaitGroup{}
 	wg.Add(4)
 	go func() {
@@ -95,11 +102,18 @@ func (game *Game) handler() {
 		wg.Done()
 	}()
 	wg.Wait()
+
+	game.Window.RequestAnimationFrame(game.handler, false)
 }
 
 func (game *Game) Register() {
 	// register mouse movement handler
 	game.Body.EventTarget().Listen(web.EventTypeMouseMove, game.platform.handleMouse)
 	// register frame updaters
-	game.Window.RequestAnimationFrame(game.handler, true)
+	game.Window.RequestAnimationFrame(game.handler, false)
+}
+
+func (game *Game) Stop() {
+	game.state.Stop.Request()
+	game.state.Stop.Wait()
 }
