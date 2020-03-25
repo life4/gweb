@@ -11,7 +11,7 @@ func main() {
 	body := doc.Body()
 
 	// create canvas
-	h := window.InnerHeight() - 40
+	h := window.InnerHeight() - 50
 	w := window.InnerWidth() - 40
 	canvas := doc.CreateCanvas()
 	canvas.SetHeight(h)
@@ -53,8 +53,15 @@ func main() {
 			}
 		}()
 	}
+	pauseButton.Style().SetMargin("0px 5px", false)
 	pauseButton.EventTarget().Listen(web.EventTypeMouseDown, pauseHandler)
 	body.Node().AppendChild(pauseButton.Node())
+
+	sourceLink := doc.CreateElement("a")
+	sourceLink.SetText("source")
+	sourceLink.Set("href", "https://github.com/life4/gweb/tree/master/examples/breakout")
+	sourceLink.Set("target", "_blank")
+	body.Node().AppendChild(sourceLink.Node())
 
 	// prevent ending of the program
 	select {}
