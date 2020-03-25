@@ -33,11 +33,11 @@ func (ball *Ball) BounceFromPoint(point Point) {
 func (ball *Ball) changeDirection() {
 	// bounce from text box (where we draw FPS and score)
 	// bounce from right border of the text box
-	if ball.x-ball.radius <= TextRight && ball.y < TextBottom {
+	if ball.x-ball.radius <= TextRight && ball.y < TextBottom+10 {
 		ball.vector.x = -ball.vector.x
 	}
 	// bounce from bottom of the text box
-	if ball.x <= TextRight && ball.y-ball.radius < TextBottom {
+	if ball.x <= TextRight && ball.y-ball.radius < TextBottom+10 {
 		ball.vector.y = -ball.vector.y
 	}
 
