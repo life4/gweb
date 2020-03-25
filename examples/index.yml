@@ -1,0 +1,42 @@
+categories:
+  - name: "DOM"
+    items:
+      - name: "hello"
+        info: "a small \"hello world\": set title, create element, add element onto the page."
+      - name: "styling"
+        info: "how to set CSS attributes for an object."
+      - name: events
+        info: how to handle events like mouse movement.
+      - name: templates
+        info: >
+            how to work with `<slot>` and
+            [Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM).
+      - name: bootstrap
+        info: >
+            how to dynamically load CSS (on example of
+            [Bootstrap](https://getbootstrap.com/))
+            and do something when it is ready.
+  - name: "Canvas"
+    items:
+      - name: triangle
+        info: "\"hello world\" for `<canvas>`: make black background and draw a red triangle."
+      - name: pacman
+        info: >
+            ported
+            [MDN example](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Drawing_shapes#Making_combinations)
+            of drawing a scene from Pacman.
+      - name: draw
+        info: "an example of handling events on canvas and calculating FPS."
+      - name: ball
+        info: "a simple game on canvas with moving and bouncing ball and reaction on clicks."
+      - name: breakout
+        info: >
+            port of
+            [Breakout](http://tiny.cc/5t11jz)
+            classic video game (famous because of clone
+            [Arkanoid](https://en.wikipedia.org/wiki/Arkanoid))
+            with a bit more natural (hence annoying) physic.
+  - name: "Audio"
+    items:
+      - name: "oscilloscope"
+        info: "a small example of visualization of an audio from the user microphone."

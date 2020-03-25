@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="gweb demo">
+  <meta name="keywords" content="gweb, golang, wasm">
+  <meta name="author" content="Gram (@orsinium)">
+
+  <title>GWeb Examples</title>
+
+  <link rel="shortcut icon" href="favicon.ico">
+
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"
+    integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row" style="padding-top: 10px;">
+      {% for category in categories %}
+        <h2>{{ category['name'] }}</h2>
+        <table class="table">
+          <tbody>
+            {% for item in category['items'] %}
+              <tr>
+                <th style="width: 150px;">
+                  {{ item['name'] }}
+                </th>
+                <td style="width: 70px;">
+                  <a href="https://github.com/life4/gweb/tree/master/examples/{{ item['name'] }}">
+                    source
+                  </a>
+                </td>
+                <td style="width: 70px;">
+                  <a href="./{{ item['name'] }}/">
+                    demo
+                  </a>
+                </td>
+                <td>
+                  {% markdown %}
+                    {{ item['info'] }}
+                  {% endmarkdown %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
