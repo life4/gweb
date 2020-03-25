@@ -118,6 +118,7 @@ func (game *Game) handler() {
 }
 
 func (game *Game) Register() {
+	game.state = &State{Stop: SubState{}}
 	// register mouse movement handler
 	game.Body.EventTarget().Listen(web.EventTypeMouseMove, game.platform.handleMouse)
 	// register frame updaters

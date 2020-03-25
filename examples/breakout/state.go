@@ -22,6 +22,9 @@ func (state *SubState) Request() {
 }
 
 func (state *SubState) Complete() {
+	if !state.Requested {
+		return
+	}
 	state.Completed = true
 	state.wg.Done()
 }

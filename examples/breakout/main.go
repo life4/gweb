@@ -28,6 +28,8 @@ func main() {
 	game.Init()
 	game.Register()
 
+	restartButton := doc.CreateElement("button")
+	restartButton.SetText("restart")
 	restartHandler := func(event web.Event) {
 		go func() {
 			game.Stop()
@@ -35,10 +37,24 @@ func main() {
 			game.Register()
 		}()
 	}
-	restartButton := doc.CreateElement("button")
-	restartButton.SetText("restart")
 	restartButton.EventTarget().Listen(web.EventTypeMouseDown, restartHandler)
 	body.Node().AppendChild(restartButton.Node())
+
+	pauseButton := doc.CreateElement("button")
+	pauseButton.SetText("pause")
+	pauseHandler := func(event web.Event) {
+		go func() {
+			if !game.state.Stop.Requested {
+				game.Stop()
+				pauseButton.SetText("play")
+			} else {
+				game.Register()
+				pauseButton.SetText("pause")
+			}
+		}()
+	}
+	pauseButton.EventTarget().Listen(web.EventTypeMouseDown, pauseHandler)
+	body.Node().AppendChild(pauseButton.Node())
 
 	// prevent ending of the program
 	select {}
