@@ -1,14 +1,13 @@
 #!/bin/bash
 set -e
 
-GOOS=js GOARCH=wasm go test -exec=wasmbrowsertest ./web/
+mkdir -p "../build/"
 
 examples=( "ball" "bootstrap" "breakout" "draw" "events" "hello" "oscilloscope" "pacman" "server" "styling" "templates" "triangle" )
 
 for name in "${examples[@]}"
 do
-    echo "compiling $name..."
-    GOOS=js GOARCH=wasm go build -o /tmp/bin "./examples/$name/"
+    echo "building $name..."
+	./build.sh "$name"
+	mv ./build/ "../build/$name"
 done
-
-echo "done"

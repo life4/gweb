@@ -1,3 +1,4 @@
+#!/bin/bash
 set -e
 mkdir -p build
 cp ./frontend/* ./build/
