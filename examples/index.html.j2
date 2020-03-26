@@ -23,35 +23,43 @@
 <body>
   <div class="container">
     <div class="row" style="padding-top: 10px;">
-      {% for category in categories %}
-        <h2>{{ category['name'] }}</h2>
-        <table class="table">
-          <tbody>
-            {% for item in category['items'] %}
-              <tr>
-                <th style="width: 150px;">
-                  {{ item['name'] }}
-                </th>
-                <td style="width: 70px;">
-                  <a href="https://github.com/life4/gweb/tree/master/examples/{{ item['name'] }}">
-                    source
-                  </a>
-                </td>
-                <td style="width: 70px;">
-                  <a href="./{{ item['name'] }}/">
-                    demo
-                  </a>
-                </td>
-                <td>
-                  {% markdown %}
-                    {{ item['info'] }}
-                  {% endmarkdown %}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      {% endfor %}
+      <div class="col">
+        <h1><b>GWeb</b>: golang + js + wasm</h1>
+        <p class="lead">
+          <a href="https://github.com/life4/gweb" target="_blank">
+            github.com/life4/gweb
+          </a>
+        </p>
+        {% for category in categories %}
+          <h2>{{ category['name'] }}</h2>
+          <table class="table">
+            <tbody>
+              {% for item in category['items'] %}
+                <tr>
+                  <th style="width: 150px;">
+                    {{ item['name'] }}
+                  </th>
+                  <td style="width: 70px;">
+                    <a href="https://github.com/life4/gweb/tree/master/examples/{{ item['name'] }}">
+                      source
+                    </a>
+                  </td>
+                  <td style="width: 70px;">
+                    <a href="./{{ item['name'] }}/">
+                      demo
+                    </a>
+                  </td>
+                  <td>
+                    {% markdown %}
+                      {{ item['info'] }}
+                    {% endmarkdown %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </body>
