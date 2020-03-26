@@ -1,4 +1,5 @@
 import subprocess
+from argparse import ArgumentParser
 from pathlib import Path
 from shutil import copytree, rmtree
 
@@ -10,6 +11,10 @@ env = Environment(
     loader=FileSystemLoader('.'),
     extensions=['jinja2_markdown.MarkdownExtension'],
 )
+
+
+parser = ArgumentParser()
+parser.add_argument('-o', '--output', help='path to build output')
 
 
 def make_index():
@@ -30,8 +35,11 @@ def get_examples():
         yield path
 
 
-if __name__ == '__main__':
-    build_path = Path(__file__).absolute().parent.parent / 'build'
+def main(args) -> int:
+    if args.output:
+        build_path = Path(args.output).resolve()
+    else:
+        build_path = Path(__file__).absolute().parent.parent / 'build'
     build_path.mkdir(exist_ok=True)
 
     (build_path / 'index.html').write_text(make_index())
@@ -40,7 +48,7 @@ if __name__ == '__main__':
         cmd = [str(path.parent / 'build.sh'), path.name]
         result = subprocess.run(cmd)
         if result.returncode != 0:
-            exit(1)
+            return 1
         src = path.parent / 'build'
         assert src.exists()
         dst = build_path / path.name
@@ -49,3 +57,9 @@ if __name__ == '__main__':
         copytree(src=str(src), dst=str(dst))
 
     print(build_path)
+    return 0
+
+
+if __name__ == '__main__':
+    args = parser.parse_args()
+    exit(main(args))
