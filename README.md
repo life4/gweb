@@ -2,6 +2,8 @@
 
 **gweb** -- strictly typed [WebAPI](https://en.wikipedia.org/wiki/Web_API) library on top of [syscall/js](https://golang.org/pkg/syscall/js/). Like [flow](https://github.com/facebook/flow) or [TypeScript](https://www.typescriptlang.org/) but for Go.
 
+See examples on [gweb.orsinium.dev](https://gweb.orsinium.dev/).
+
 ## Features
 
 + **Strictly typed**. It's a wrapper around `syscall/js` that helps you to avoid runtime errors (you'll get them a lot with a raw `syscall/js`).
@@ -32,10 +34,6 @@ If you're using VSCode, it's recommend to create in your project `.vscode/settin
     },
 }
 ```
-
-## Examples
-
-See [examples](./examples/README.md) directory for the real code.
 
 ## Error handling
 
