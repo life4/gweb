@@ -2,14 +2,18 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
+	"github.com/life4/gweb/audio"
 	"github.com/life4/gweb/web"
 )
 
 type KeyBoard struct {
-	notes map[int]map[string]float64
-	// context audio.AudioContext
+	notes   map[int]map[string]float64
+	context *audio.AudioContext
+	gain    *audio.GainNode
+	oscs    map[int]map[string]*audio.OscillatorNode
 }
 
 func (keyboard KeyBoard) Octaves() []int {
@@ -50,6 +54,10 @@ func (keyboard KeyBoard) Render(doc web.Document) web.HTMLElement {
 			key.SetText(note)
 			key.SetID(fmt.Sprintf("key-%d-%s", octave, strings.ReplaceAll(note, "#", "s")))
 			key.Style().SetWidth("40px", false)
+			key.EventTarget().Listen(web.EventTypeMouseDown, keyboard.handlePress)
+			// key.EventTarget().Listen(web.EventTypeMouseOver, keyboard.handlePress)
+			key.EventTarget().Listen(web.EventTypeMouseUp, keyboard.handleRelease)
+			key.EventTarget().Listen(web.EventTypeMouseLeave, keyboard.handleRelease)
 			row.Node().AppendChild(key.Node())
 		}
 
@@ -58,9 +66,45 @@ func (keyboard KeyBoard) Render(doc web.Document) web.HTMLElement {
 	return root
 }
 
-// func (keyboard KeyBoard) handlePress(event web.Event) {
-// 	// osc := keyboard.context.
-// }
+func (keyboard KeyBoard) play(octave int, note string) audio.OscillatorNode {
+	osc := keyboard.context.Oscillator()
+	osc.Connect(keyboard.gain.AudioNode, 0, 0)
+	osc.SetShape(audio.ShapeTriangle)
+	freq := keyboard.notes[octave][note]
+	osc.Frequency().Set(freq)
+	osc.Start(0)
+	return osc
+}
+
+func (keyboard *KeyBoard) handlePress(event web.Event) {
+	element := event.CurrentTarget().HTMLElement()
+	parts := strings.Split(element.ID(), "-")
+	octave, _ := strconv.Atoi(parts[1])
+	note := strings.ReplaceAll(parts[2], "s", "#")
+
+	osc := keyboard.play(octave, note)
+
+	oscs := keyboard.oscs[octave]
+	if oscs == nil {
+		keyboard.oscs[octave] = make(map[string]*audio.OscillatorNode)
+	}
+
+	keyboard.oscs[octave][note] = &osc
+}
+
+func (keyboard *KeyBoard) handleRelease(event web.Event) {
+	element := event.CurrentTarget().HTMLElement()
+	parts := strings.Split(element.ID(), "-")
+	octave, _ := strconv.Atoi(parts[1])
+	note := strings.ReplaceAll(parts[2], "s", "#")
+
+	osc, ok := keyboard.oscs[octave][note]
+	if !ok || osc == nil {
+		return
+	}
+	osc.Stop(0)
+	keyboard.oscs[octave][note] = nil
+}
 
 func getNotes() map[int]map[string]float64 {
 	notes := make(map[int]map[string]float64)
