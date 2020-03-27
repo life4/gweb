@@ -40,3 +40,5 @@ categories:
     items:
       - name: "oscilloscope"
         info: "a small example of visualization of an audio from the user microphone."
+      - name: "piano"
+        info: "play MIDI music! A good example of rendering sounds"
