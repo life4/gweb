@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
-	"strings"
 
 	"github.com/life4/gweb/audio"
 	"github.com/life4/gweb/web"
@@ -41,19 +39,15 @@ func (kbd KeyBoard) Render(doc web.Document) web.HTMLElement {
 		row.SetID(fmt.Sprintf("octave-%d", octave))
 
 		number := doc.CreateElement("span")
-		number.Style().SetDisplay("inline-block", false)
-		number.Style().SetWidth("40px", false)
-		number.Style().SetMargin("2px", false)
 		number.SetText(fmt.Sprintf("%d", octave))
+		number = StyleBlock(number)
 		row.Node().AppendChild(number.Node())
 
 		for _, note := range kbd.Notes() {
 			_, ok := kbd.notes[octave][note]
 			if !ok {
 				holder := doc.CreateElement("span")
-				holder.Style().SetDisplay("inline-block", false)
-				holder.Style().SetWidth("40px", false)
-				holder.Style().SetMargin("2px", false)
+				holder = StyleBlock(holder)
 				row.Node().AppendChild(holder.Node())
 				continue
 			}
@@ -110,20 +104,16 @@ func (kbd *KeyBoard) release(octave int, note string) {
 
 func (kbd *KeyBoard) handlePress(event web.Event) {
 	element := event.CurrentTarget().HTMLElement()
-	Key{element: element}.Press()
-	parts := strings.Split(element.ID(), "-")
-	octave, _ := strconv.Atoi(parts[1])
-	note := strings.ReplaceAll(parts[2], "s", "#")
-	kbd.press(octave, note)
+	key := KeyFromElement(element)
+	key.Press()
+	kbd.press(key.Octave, key.Note)
 }
 
 func (kbd *KeyBoard) handleRelease(event web.Event) {
 	element := event.CurrentTarget().HTMLElement()
-	Key{element: element}.Release()
-	parts := strings.Split(element.ID(), "-")
-	octave, _ := strconv.Atoi(parts[1])
-	note := strings.ReplaceAll(parts[2], "s", "#")
-	kbd.release(octave, note)
+	key := KeyFromElement(element)
+	key.Release()
+	kbd.release(key.Octave, key.Note)
 }
 
 func (kbd *KeyBoard) handleKeyDown(event web.Event) {
