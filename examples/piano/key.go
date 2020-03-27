@@ -49,6 +49,9 @@ func KeyFromElement(element web.HTMLElement) Key {
 func KeyFromNote(doc web.Document, octave int, note string) Key {
 	id := fmt.Sprintf("key-%d-%s", octave, strings.ReplaceAll(note, "#", "s"))
 	element := doc.Element(id)
+	if !element.Truthy() {
+		return Key{}
+	}
 	return Key{
 		element: element,
 		Octave:  octave,

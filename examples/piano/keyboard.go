@@ -13,6 +13,7 @@ type KeyBoard struct {
 	gain    *audio.GainNode
 	doc     web.Document
 	oscs    map[int]map[string]*audio.OscillatorNode
+	octave  int
 }
 
 func (kbd KeyBoard) Octaves() []int {
@@ -120,24 +121,49 @@ func (kbd *KeyBoard) handleRelease(event web.Event) {
 
 func (kbd *KeyBoard) handleKeyDown(event web.Event) {
 	keyCode := event.Get("keyCode").Int()
+	mod := len(kbd.Octaves())
+
+	// change octave if arrow up or down is pressed
+	if keyCode == 38 {
+		kbd.octave = (mod + kbd.octave - 1) % mod
+		return
+	}
+	if keyCode == 40 {
+		kbd.octave = (kbd.octave + 1) % mod
+		return
+	}
+
 	note, offset := keyToNote(keyCode)
 	if note == "" {
 		return
 	}
-	octave := 3 + offset
+	octave := (mod + kbd.octave + offset) % mod
 	key := KeyFromNote(kbd.doc, octave, note)
+
+	// if no key for the given note
+	if key.Note == "" {
+		return
+	}
+
 	key.Press()
 	kbd.press(octave, note)
 }
 
 func (kbd *KeyBoard) handleKeyUp(event web.Event) {
 	keyCode := event.Get("keyCode").Int()
+	mod := len(kbd.Octaves())
+
 	note, offset := keyToNote(keyCode)
 	if note == "" {
 		return
 	}
-	octave := 3 + offset
+	octave := (mod + kbd.octave + offset) % mod
 	key := KeyFromNote(kbd.doc, octave, note)
+
+	// if no key for the given note
+	if key.Note == "" {
+		return
+	}
 	key.Release()
 	kbd.release(octave, note)
 }

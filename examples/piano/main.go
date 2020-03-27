@@ -24,6 +24,7 @@ func main() {
 		context: &audioContext,
 		gain:    &gain,
 		oscs:    make(map[int]map[string]*audio.OscillatorNode),
+		octave:  3,
 	}
 	element := keyboard.Render(doc)
 	body.Node().AppendChild(element.Node())
