@@ -30,42 +30,52 @@ func (v Value) New(args ...interface{}) Value {
 
 // new methods
 
+// Represents the current value into Canvas
 func (v Value) Canvas() Canvas {
 	return Canvas{HTMLElement: v.HTMLElement()}
 }
 
+// Represents the current value into Element
 func (v Value) Element() Element {
 	return Element{Value: v}
 }
 
+// Represents the current value into Embed
 func (v Value) Embed() Embed {
 	return Embed{HTMLElement: v.HTMLElement()}
 }
 
+// Represents the current value into Event
 func (v Value) Event() Event {
 	return Event{Value: v}
 }
 
+// Represents the current value into EventTarget
 func (v Value) EventTarget() EventTarget {
 	return EventTarget{Value: v}
 }
 
+// Represents the current value into HTMLElement
 func (v Value) HTMLElement() HTMLElement {
 	return HTMLElement{Element: v.Element()}
 }
 
+// Represents the current value into audio.MediaStream
 func (v Value) MediaStream() audio.MediaStream {
 	return audio.MediaStream{Value: v.Value}
 }
 
+// Represents the current value into Node
 func (v Value) Node() Node {
 	return Node{value: v}
 }
 
+// Represents the current value into Promise
 func (v Value) Promise() Promise {
 	return Promise{Value: v}
 }
 
+// Represents the current value as slice of values
 func (v *Value) Values() (items []Value) {
 	len := v.Get("length").Int()
 	for i := 0; i < len; i++ {
@@ -75,6 +85,7 @@ func (v *Value) Values() (items []Value) {
 	return items
 }
 
+// Represents the current value as slice of strings
 func (v Value) Strings() (items []string) {
 	len := v.Get("length").Int()
 	for i := 0; i < len; i++ {
