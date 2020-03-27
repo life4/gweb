@@ -40,25 +40,31 @@ func (kbd KeyBoard) Render(doc web.Document) web.HTMLElement {
 		row := doc.CreateElement("div")
 		row.SetID(fmt.Sprintf("octave-%d", octave))
 
+		number := doc.CreateElement("span")
+		number.Style().SetDisplay("inline-block", false)
+		number.Style().SetWidth("40px", false)
+		number.Style().SetMargin("2px", false)
+		number.SetText(fmt.Sprintf("%d", octave))
+		row.Node().AppendChild(number.Node())
+
 		for _, note := range kbd.Notes() {
 			_, ok := kbd.notes[octave][note]
 			if !ok {
 				holder := doc.CreateElement("span")
 				holder.Style().SetDisplay("inline-block", false)
 				holder.Style().SetWidth("40px", false)
+				holder.Style().SetMargin("2px", false)
 				row.Node().AppendChild(holder.Node())
 				continue
 			}
 
-			key := doc.CreateElement("button")
-			key.SetText(note)
-			key.SetID(fmt.Sprintf("key-%d-%s", octave, strings.ReplaceAll(note, "#", "s")))
-			key.Style().SetWidth("40px", false)
-			key.EventTarget().Listen(web.EventTypeMouseDown, kbd.handlePress)
-			// key.EventTarget().Listen(web.EventTypeMouseOver, kbd.handlePress)
-			key.EventTarget().Listen(web.EventTypeMouseUp, kbd.handleRelease)
-			key.EventTarget().Listen(web.EventTypeMouseLeave, kbd.handleRelease)
-			row.Node().AppendChild(key.Node())
+			key := Key{Octave: octave, Note: note}
+			element := key.Render(doc)
+			element.EventTarget().Listen(web.EventTypeMouseDown, kbd.handlePress)
+			// element.EventTarget().Listen(web.EventTypeMouseOver, kbd.handlePress)
+			element.EventTarget().Listen(web.EventTypeMouseUp, kbd.handleRelease)
+			element.EventTarget().Listen(web.EventTypeMouseLeave, kbd.handleRelease)
+			row.Node().AppendChild(element.Node())
 		}
 
 		root.Node().AppendChild(row.Node())
@@ -104,6 +110,7 @@ func (kbd *KeyBoard) release(octave int, note string) {
 
 func (kbd *KeyBoard) handlePress(event web.Event) {
 	element := event.CurrentTarget().HTMLElement()
+	Key{element: element}.Press()
 	parts := strings.Split(element.ID(), "-")
 	octave, _ := strconv.Atoi(parts[1])
 	note := strings.ReplaceAll(parts[2], "s", "#")
@@ -112,6 +119,7 @@ func (kbd *KeyBoard) handlePress(event web.Event) {
 
 func (kbd *KeyBoard) handleRelease(event web.Event) {
 	element := event.CurrentTarget().HTMLElement()
+	Key{element: element}.Release()
 	parts := strings.Split(element.ID(), "-")
 	octave, _ := strconv.Atoi(parts[1])
 	note := strings.ReplaceAll(parts[2], "s", "#")
