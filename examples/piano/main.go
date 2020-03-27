@@ -21,9 +21,8 @@ func main() {
 
 	keyboard := KeyBoard{
 		notes:   getNotes(),
-		context: &audioContext,
-		gain:    &gain,
-		oscs:    make(map[int]map[string]*audio.OscillatorNode),
+		context: audioContext,
+		sounds:  make(map[int]map[string]*Sound),
 		octave:  3,
 	}
 	element := keyboard.Render(doc)

@@ -9,10 +9,9 @@ import (
 
 type KeyBoard struct {
 	notes   map[int]map[string]float64
-	context *audio.AudioContext
-	gain    *audio.GainNode
+	context audio.AudioContext
 	doc     web.Document
-	oscs    map[int]map[string]*audio.OscillatorNode
+	sounds  map[int]map[string]*Sound
 	octave  int
 }
 
@@ -72,37 +71,32 @@ func (kbd KeyBoard) Render(doc web.Document) web.HTMLElement {
 	return root
 }
 
-func (kbd KeyBoard) play(octave int, note string) audio.OscillatorNode {
-	osc := kbd.context.Oscillator()
-	osc.Connect(kbd.gain.AudioNode, 0, 0)
-	osc.SetShape(audio.ShapeTriangle)
+func (kbd KeyBoard) play(octave int, note string) Sound {
 	freq := kbd.notes[octave][note]
-	osc.Frequency().Set(freq)
-	osc.Start(0)
-	return osc
+	return Play(kbd.context, freq)
 }
 
 func (kbd *KeyBoard) press(octave int, note string) {
-	old, ok := kbd.oscs[octave][note]
+	old, ok := kbd.sounds[octave][note]
 	if ok && old != nil {
 		return
 	}
 
-	osc := kbd.play(octave, note)
-	oscs := kbd.oscs[octave]
-	if oscs == nil {
-		kbd.oscs[octave] = make(map[string]*audio.OscillatorNode)
+	sound := kbd.play(octave, note)
+	sounds := kbd.sounds[octave]
+	if sounds == nil {
+		kbd.sounds[octave] = make(map[string]*Sound)
 	}
-	kbd.oscs[octave][note] = &osc
+	kbd.sounds[octave][note] = &sound
 }
 
 func (kbd *KeyBoard) release(octave int, note string) {
-	osc, ok := kbd.oscs[octave][note]
-	if !ok || osc == nil {
+	sound, ok := kbd.sounds[octave][note]
+	if !ok || sound == nil {
 		return
 	}
-	osc.Stop(0)
-	kbd.oscs[octave][note] = nil
+	sound.Stop()
+	kbd.sounds[octave][note] = nil
 }
 
 func (kbd *KeyBoard) handlePress(event web.Event) {
