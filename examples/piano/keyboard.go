@@ -126,6 +126,10 @@ func (kbd *KeyBoard) handleKeyDown(event web.Event) {
 		kbd.octave = (kbd.octave + 1) % mod
 		return
 	}
+	// change octave on numbers pressed
+	if keyCode >= 48 && keyCode <= 48+mod {
+		kbd.octave = keyCode - 48
+	}
 
 	note, offset := keyToNote(keyCode)
 	if note == "" {
