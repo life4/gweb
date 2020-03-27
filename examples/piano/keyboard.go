@@ -76,7 +76,7 @@ func (kbd KeyBoard) play(octave int, note string) Sound {
 	return Play(kbd.context, freq)
 }
 
-func (kbd *KeyBoard) press(octave int, note string) {
+func (kbd *KeyBoard) Press(octave int, note string) {
 	old, ok := kbd.sounds[octave][note]
 	if ok && old != nil {
 		return
@@ -90,7 +90,7 @@ func (kbd *KeyBoard) press(octave int, note string) {
 	kbd.sounds[octave][note] = &sound
 }
 
-func (kbd *KeyBoard) release(octave int, note string) {
+func (kbd *KeyBoard) Release(octave int, note string) {
 	sound, ok := kbd.sounds[octave][note]
 	if !ok || sound == nil {
 		return
@@ -99,36 +99,55 @@ func (kbd *KeyBoard) release(octave int, note string) {
 	kbd.sounds[octave][note] = nil
 }
 
+func (kbd *KeyBoard) SetOctave(octave int) {
+	if octave == kbd.octave {
+		return
+	}
+	mod := len(kbd.Octaves())
+	kbd.octave = (mod + octave) % mod
+
+	// if octave has been changed, release all pressed keys
+	for octave, sounds := range kbd.sounds {
+		for note := range sounds {
+			key := KeyFromNote(kbd.doc, octave, note)
+			key.Release()
+			kbd.Release(octave, note)
+		}
+	}
+}
+
+// handlers
+
 func (kbd *KeyBoard) handlePress(event web.Event) {
 	element := event.CurrentTarget().HTMLElement()
 	key := KeyFromElement(element)
 	key.Press()
-	kbd.press(key.Octave, key.Note)
+	kbd.Press(key.Octave, key.Note)
 }
 
 func (kbd *KeyBoard) handleRelease(event web.Event) {
 	element := event.CurrentTarget().HTMLElement()
 	key := KeyFromElement(element)
 	key.Release()
-	kbd.release(key.Octave, key.Note)
+	kbd.Release(key.Octave, key.Note)
 }
 
 func (kbd *KeyBoard) handleKeyDown(event web.Event) {
 	keyCode := event.Get("keyCode").Int()
-	mod := len(kbd.Octaves())
 
 	// change octave if arrow up or down is pressed
 	if keyCode == 38 {
-		kbd.octave = (mod + kbd.octave - 1) % mod
+		kbd.SetOctave(kbd.octave - 1)
 		return
 	}
 	if keyCode == 40 {
-		kbd.octave = (kbd.octave + 1) % mod
+		kbd.SetOctave(kbd.octave + 1)
 		return
 	}
 	// change octave on numbers pressed
+	mod := len(kbd.Octaves())
 	if keyCode >= 48 && keyCode <= 48+mod {
-		kbd.octave = keyCode - 48
+		kbd.SetOctave(keyCode - 48)
 	}
 
 	note, offset := keyToNote(keyCode)
@@ -144,7 +163,7 @@ func (kbd *KeyBoard) handleKeyDown(event web.Event) {
 	}
 
 	key.Press()
-	kbd.press(octave, note)
+	kbd.Press(octave, note)
 }
 
 func (kbd *KeyBoard) handleKeyUp(event web.Event) {
@@ -163,8 +182,10 @@ func (kbd *KeyBoard) handleKeyUp(event web.Event) {
 		return
 	}
 	key.Release()
-	kbd.release(octave, note)
+	kbd.Release(octave, note)
 }
+
+// funcs
 
 func getNotes() map[int]map[string]float64 {
 	notes := make(map[int]map[string]float64)
