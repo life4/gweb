@@ -11,6 +11,7 @@ type KeyBoard struct {
 	notes   map[int]map[string]float64
 	context *audio.AudioContext
 	gain    *audio.GainNode
+	doc     web.Document
 	oscs    map[int]map[string]*audio.OscillatorNode
 }
 
@@ -66,6 +67,7 @@ func (kbd KeyBoard) Render(doc web.Document) web.HTMLElement {
 
 	doc.EventTarget().Listen(web.EventTypeKeyDown, kbd.handleKeyDown)
 	doc.EventTarget().Listen(web.EventTypeKeyUp, kbd.handleKeyUp)
+	kbd.doc = doc
 	return root
 }
 
@@ -117,19 +119,27 @@ func (kbd *KeyBoard) handleRelease(event web.Event) {
 }
 
 func (kbd *KeyBoard) handleKeyDown(event web.Event) {
-	key := event.Get("keyCode").Int()
-	note, offset := keyToNote(key)
-	if note != "" {
-		kbd.press(3+offset, note)
+	keyCode := event.Get("keyCode").Int()
+	note, offset := keyToNote(keyCode)
+	if note == "" {
+		return
 	}
+	octave := 3 + offset
+	key := KeyFromNote(kbd.doc, octave, note)
+	key.Press()
+	kbd.press(octave, note)
 }
 
 func (kbd *KeyBoard) handleKeyUp(event web.Event) {
-	key := event.Get("keyCode").Int()
-	note, offset := keyToNote(key)
-	if note != "" {
-		kbd.release(3+offset, note)
+	keyCode := event.Get("keyCode").Int()
+	note, offset := keyToNote(keyCode)
+	if note == "" {
+		return
 	}
+	octave := 3 + offset
+	key := KeyFromNote(kbd.doc, octave, note)
+	key.Release()
+	kbd.release(octave, note)
 }
 
 func getNotes() map[int]map[string]float64 {

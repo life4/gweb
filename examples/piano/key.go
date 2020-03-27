@@ -15,7 +15,7 @@ type Key struct {
 }
 
 func (key Key) Press() {
-	key.element.Style().SetBackgroundColor("#34495e", false)
+	key.element.Style().SetBackgroundColor("#2980b9", false)
 	key.element.Style().SetColor("#ecf0f1", false)
 }
 
@@ -39,6 +39,16 @@ func KeyFromElement(element web.HTMLElement) Key {
 	parts := strings.Split(element.ID(), "-")
 	octave, _ := strconv.Atoi(parts[1])
 	note := strings.ReplaceAll(parts[2], "s", "#")
+	return Key{
+		element: element,
+		Octave:  octave,
+		Note:    note,
+	}
+}
+
+func KeyFromNote(doc web.Document, octave int, note string) Key {
+	id := fmt.Sprintf("key-%d-%s", octave, strings.ReplaceAll(note, "#", "s"))
+	element := doc.Element(id)
 	return Key{
 		element: element,
 		Octave:  octave,
