@@ -20,7 +20,11 @@ func (key Key) Press() {
 }
 
 func (key Key) Release() {
-	key.element.Style().SetBackgroundColor("#2c3e50", false)
+	if strings.Contains(key.Note, "#") {
+		key.element.Style().SetBackgroundColor("#7f8c8d", false)
+	} else {
+		key.element.Style().SetBackgroundColor("#2c3e50", false)
+	}
 	key.element.Style().SetColor("#bdc3c7", false)
 }
 
