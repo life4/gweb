@@ -5,10 +5,12 @@ import (
 	"syscall/js"
 )
 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
 type Promise struct {
 	Value
 }
 
+// Register callback for error handling
 func (promise Promise) Catch(handler func(reason js.Value)) {
 	wrapper := func(then js.Value, args []js.Value) interface{} {
 		handler(args[0])
@@ -17,6 +19,7 @@ func (promise Promise) Catch(handler func(reason js.Value)) {
 	promise.Call("catch", js.FuncOf(wrapper))
 }
 
+// Register callback for sucsessful result handling
 func (promise Promise) Then(handler func(value js.Value)) {
 	wrapper := func(then js.Value, args []js.Value) interface{} {
 		handler(args[0])
@@ -25,6 +28,7 @@ func (promise Promise) Then(handler func(value js.Value)) {
 	promise.Call("then", js.FuncOf(wrapper))
 }
 
+// Blocking call that returns values of sucsess and error
 func (promise Promise) Get() (msg Value, err Value) {
 	// we'll wait only for one (the first) handler
 	wg := sync.WaitGroup{}

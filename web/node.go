@@ -25,6 +25,8 @@ type Node struct {
 
 // PROPERTIES
 
+// Returns the base URL of the document containing the Node.
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/baseURI
 func (node Node) BaseURI() string {
 	return node.value.Get("baseURI").String()
 }
@@ -51,20 +53,26 @@ func (node Node) Document() Document {
 	}
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeName
 func (node Node) Name() string {
 	return node.value.Get("nodeName").String()
 }
 
+// Returns the type of the node.
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
 func (node Node) Type() NodeType {
 	return NodeType(node.value.Get("nodeType").Int())
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeValue
 func (node Node) Value() string {
 	return node.value.Get("nodeValue").OptionalString()
 }
 
 // METHODS
 
+// Clean up all the text nodes under this element (merge adjacent, remove empty).
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/normalize
 func (node Node) Normalize() {
 	node.value.Call("normalize")
 }
@@ -75,10 +83,12 @@ func (node Node) Clone(deep bool) Node {
 
 // TREE
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild
 func (node Node) AppendChild(child Node) {
 	node.value.Call("appendChild", child.value)
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/childNodes
 func (node Node) ChildNodes() []HTMLElement {
 	nodes := node.value.Get("childNodes")
 	values := nodes.Values()
@@ -89,22 +99,28 @@ func (node Node) ChildNodes() []HTMLElement {
 	return elements
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/firstChild
 func (node Node) FirstChild() HTMLElement {
 	return node.value.Get("firstChild").HTMLElement()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/hasChildNodes
 func (node Node) HasChildNodes() bool {
 	return node.value.Call("hasChildNodes").Bool()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/parentElement
 func (node Node) Parent() HTMLElement {
 	return node.value.Get("parentElement").HTMLElement()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild
 func (node Node) RemoveChild(child Node) {
 	node.value.Call("removeChild", child.value)
 }
 
+// Remove all children.
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/removeChild
 func (node Node) RemoveChildren() {
 	for {
 		child := node.FirstChild()
@@ -115,6 +131,7 @@ func (node Node) RemoveChildren() {
 	}
 }
 
+// Remove the node from the parent node.
 func (node Node) Remove() bool {
 	parent := node.Parent()
 	if parent.Type() == js.TypeNull {
