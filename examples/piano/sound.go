@@ -23,11 +23,15 @@ func Play(context audio.AudioContext, freq float64) Sound {
 	osc.Start(0)
 
 	return Sound{
+		gain:    gain,
 		osc:     osc,
 		context: context,
 	}
 }
 
 func (sound *Sound) Stop() {
-	sound.osc.Stop(0)
+	// fade out
+	time := sound.context.CurrentTime() + 2
+	sound.gain.Gain().AtTime(time).ExponentialRampTo(0.01)
+	sound.osc.Stop(time)
 }
