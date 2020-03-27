@@ -118,17 +118,17 @@ func (kbd *KeyBoard) handleRelease(event web.Event) {
 
 func (kbd *KeyBoard) handleKeyDown(event web.Event) {
 	key := event.Get("keyCode").Int()
-	note := keyToNote(key)
+	note, offset := keyToNote(key)
 	if note != "" {
-		kbd.press(2, note)
+		kbd.press(3+offset, note)
 	}
 }
 
 func (kbd *KeyBoard) handleKeyUp(event web.Event) {
 	key := event.Get("keyCode").Int()
-	note := keyToNote(key)
+	note, offset := keyToNote(key)
 	if note != "" {
-		kbd.release(2, note)
+		kbd.release(3+offset, note)
 	}
 }
 
@@ -249,22 +249,57 @@ func getNotes() map[int]map[string]float64 {
 	return notes
 }
 
-func keyToNote(key int) string {
+func keyToNote(key int) (string, int) {
 	switch key + 32 {
 	case int('z'):
-		return "A"
+		return "A", 1
 	case int('x'):
-		return "B"
+		return "B", 1
 	case int('c'):
-		return "C"
+		return "C", 1
 	case int('v'):
-		return "D"
+		return "D", 1
 	case int('b'):
-		return "E"
+		return "E", 1
 	case int('n'):
-		return "F"
+		return "F", 1
 	case int('m'):
-		return "G"
+		return "G", 1
 	}
-	return ""
+
+	switch key + 32 {
+	case int('a'):
+		return "A", 0
+	case int('s'):
+		return "B", 0
+	case int('d'):
+		return "C", 0
+	case int('f'):
+		return "D", 0
+	case int('g'):
+		return "E", 0
+	case int('h'):
+		return "F", 0
+	case int('j'):
+		return "G", 0
+	}
+
+	switch key + 32 {
+	case int('q'):
+		return "A", -1
+	case int('w'):
+		return "B", -1
+	case int('e'):
+		return "C", -1
+	case int('r'):
+		return "D", -1
+	case int('t'):
+		return "E", -1
+	case int('y'):
+		return "F", -1
+	case int('u'):
+		return "G", -1
+	}
+
+	return "", 0
 }
