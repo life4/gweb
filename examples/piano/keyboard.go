@@ -16,9 +16,9 @@ type KeyBoard struct {
 	oscs    map[int]map[string]*audio.OscillatorNode
 }
 
-func (keyboard KeyBoard) Octaves() []int {
+func (kbd KeyBoard) Octaves() []int {
 	max := 0
-	for octave := range keyboard.notes {
+	for octave := range kbd.notes {
 		if octave > max {
 			max = octave
 		}
@@ -30,18 +30,18 @@ func (keyboard KeyBoard) Octaves() []int {
 	return result
 }
 
-func (keyboard KeyBoard) Notes() []string {
+func (kbd KeyBoard) Notes() []string {
 	return []string{"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"}
 }
 
-func (keyboard KeyBoard) Render(doc web.Document) web.HTMLElement {
+func (kbd KeyBoard) Render(doc web.Document) web.HTMLElement {
 	root := doc.CreateElement("div")
-	for _, octave := range keyboard.Octaves() {
+	for _, octave := range kbd.Octaves() {
 		row := doc.CreateElement("div")
 		row.SetID(fmt.Sprintf("octave-%d", octave))
 
-		for _, note := range keyboard.Notes() {
-			_, ok := keyboard.notes[octave][note]
+		for _, note := range kbd.Notes() {
+			_, ok := kbd.notes[octave][note]
 			if !ok {
 				holder := doc.CreateElement("span")
 				holder.Style().SetDisplay("inline-block", false)
@@ -54,56 +54,84 @@ func (keyboard KeyBoard) Render(doc web.Document) web.HTMLElement {
 			key.SetText(note)
 			key.SetID(fmt.Sprintf("key-%d-%s", octave, strings.ReplaceAll(note, "#", "s")))
 			key.Style().SetWidth("40px", false)
-			key.EventTarget().Listen(web.EventTypeMouseDown, keyboard.handlePress)
-			// key.EventTarget().Listen(web.EventTypeMouseOver, keyboard.handlePress)
-			key.EventTarget().Listen(web.EventTypeMouseUp, keyboard.handleRelease)
-			key.EventTarget().Listen(web.EventTypeMouseLeave, keyboard.handleRelease)
+			key.EventTarget().Listen(web.EventTypeMouseDown, kbd.handlePress)
+			// key.EventTarget().Listen(web.EventTypeMouseOver, kbd.handlePress)
+			key.EventTarget().Listen(web.EventTypeMouseUp, kbd.handleRelease)
+			key.EventTarget().Listen(web.EventTypeMouseLeave, kbd.handleRelease)
 			row.Node().AppendChild(key.Node())
 		}
 
 		root.Node().AppendChild(row.Node())
 	}
+
+	doc.EventTarget().Listen(web.EventTypeKeyDown, kbd.handleKeyDown)
+	doc.EventTarget().Listen(web.EventTypeKeyUp, kbd.handleKeyUp)
 	return root
 }
 
-func (keyboard KeyBoard) play(octave int, note string) audio.OscillatorNode {
-	osc := keyboard.context.Oscillator()
-	osc.Connect(keyboard.gain.AudioNode, 0, 0)
+func (kbd KeyBoard) play(octave int, note string) audio.OscillatorNode {
+	osc := kbd.context.Oscillator()
+	osc.Connect(kbd.gain.AudioNode, 0, 0)
 	osc.SetShape(audio.ShapeTriangle)
-	freq := keyboard.notes[octave][note]
+	freq := kbd.notes[octave][note]
 	osc.Frequency().Set(freq)
 	osc.Start(0)
 	return osc
 }
 
-func (keyboard *KeyBoard) handlePress(event web.Event) {
-	element := event.CurrentTarget().HTMLElement()
-	parts := strings.Split(element.ID(), "-")
-	octave, _ := strconv.Atoi(parts[1])
-	note := strings.ReplaceAll(parts[2], "s", "#")
-
-	osc := keyboard.play(octave, note)
-
-	oscs := keyboard.oscs[octave]
-	if oscs == nil {
-		keyboard.oscs[octave] = make(map[string]*audio.OscillatorNode)
+func (kbd *KeyBoard) press(octave int, note string) {
+	old, ok := kbd.oscs[octave][note]
+	if ok && old != nil {
+		return
 	}
 
-	keyboard.oscs[octave][note] = &osc
+	osc := kbd.play(octave, note)
+	oscs := kbd.oscs[octave]
+	if oscs == nil {
+		kbd.oscs[octave] = make(map[string]*audio.OscillatorNode)
+	}
+	kbd.oscs[octave][note] = &osc
 }
 
-func (keyboard *KeyBoard) handleRelease(event web.Event) {
-	element := event.CurrentTarget().HTMLElement()
-	parts := strings.Split(element.ID(), "-")
-	octave, _ := strconv.Atoi(parts[1])
-	note := strings.ReplaceAll(parts[2], "s", "#")
-
-	osc, ok := keyboard.oscs[octave][note]
+func (kbd *KeyBoard) release(octave int, note string) {
+	osc, ok := kbd.oscs[octave][note]
 	if !ok || osc == nil {
 		return
 	}
 	osc.Stop(0)
-	keyboard.oscs[octave][note] = nil
+	kbd.oscs[octave][note] = nil
+}
+
+func (kbd *KeyBoard) handlePress(event web.Event) {
+	element := event.CurrentTarget().HTMLElement()
+	parts := strings.Split(element.ID(), "-")
+	octave, _ := strconv.Atoi(parts[1])
+	note := strings.ReplaceAll(parts[2], "s", "#")
+	kbd.press(octave, note)
+}
+
+func (kbd *KeyBoard) handleRelease(event web.Event) {
+	element := event.CurrentTarget().HTMLElement()
+	parts := strings.Split(element.ID(), "-")
+	octave, _ := strconv.Atoi(parts[1])
+	note := strings.ReplaceAll(parts[2], "s", "#")
+	kbd.release(octave, note)
+}
+
+func (kbd *KeyBoard) handleKeyDown(event web.Event) {
+	key := event.Get("keyCode").Int()
+	note := keyToNote(key)
+	if note != "" {
+		kbd.press(2, note)
+	}
+}
+
+func (kbd *KeyBoard) handleKeyUp(event web.Event) {
+	key := event.Get("keyCode").Int()
+	note := keyToNote(key)
+	if note != "" {
+		kbd.release(2, note)
+	}
 }
 
 func getNotes() map[int]map[string]float64 {
@@ -221,4 +249,24 @@ func getNotes() map[int]map[string]float64 {
 		"C": 4186.009044809578154,
 	}
 	return notes
+}
+
+func keyToNote(key int) string {
+	switch key + 32 {
+	case int('z'):
+		return "A"
+	case int('x'):
+		return "B"
+	case int('c'):
+		return "C"
+	case int('v'):
+		return "D"
+	case int('b'):
+		return "E"
+	case int('n'):
+		return "F"
+	case int('m'):
+		return "G"
+	}
+	return ""
 }
