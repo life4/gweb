@@ -48,10 +48,21 @@ func (context AudioContext) BiquadFilter() BiquadFilterNode {
 	return BiquadFilterNode{AudioNode: node}
 }
 
+// Gain creates a GainNode, which can be used to control the overall volume of the audio graph.
+// https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createGain
+// https://developer.mozilla.org/en-US/docs/Web/API/GainNode
 func (context AudioContext) Gain() GainNode {
 	value := context.Call("createGain")
 	node := AudioNode{Value: value}
 	return GainNode{AudioNode: node}
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/createOscillator
+// https://developer.mozilla.org/en-US/docs/Web/API/OscillatorNode
+func (context AudioContext) Oscillator() OscillatorNode {
+	value := context.Call("createOscillator")
+	node := AudioNode{Value: value}
+	return OscillatorNode{AudioNode: node}
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource
