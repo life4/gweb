@@ -61,10 +61,22 @@ name = el.Get("name").String()
 
 GWeb is a collection of a few packages:
 
-+ `web` -- window, manipulations with DOM.
-+ `audio` -- [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API). Use `web.GetWindow().AudioContext()` as an entrypoint.
-+ `canvas` -- canvas-related objects. Use `web.GetWindow().Document().CreateCanvas()` to get started.
-+ `css` -- manage styles for HTML elements.
++ `web` ([docs](https://pkg.go.dev/github.com/life4/gweb/web?tab=doc)) -- window, manipulations with DOM.
++ `audio` ([docs](https://pkg.go.dev/github.com/life4/gweb/audio?tab=doc)) -- [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API). Use `web.GetWindow().AudioContext()` as an entrypoint.
++ `canvas` ([docs](https://pkg.go.dev/github.com/life4/gweb/canvas?tab=doc)) -- canvas-related objects. Use `web.GetWindow().Document().CreateCanvas()` to get started.
++ `css` ([docs](https://pkg.go.dev/github.com/life4/gweb/css?tab=doc)) -- manage styles for HTML elements.
+
+## Contributing
+
+Contributions are welcome! GWeb is a Open-Source project and you can help to make it better. Some ideas what can be improved:
+
++ Every function and object should have short description based on [MDN Web API docs](https://developer.mozilla.org/en-US/docs/Web/API). Some descriptions are missed.
++ Also, every function that calls a Web API method should have a link in docs for that method.
++ Typos are very possible, don't be shy to fix it if you've spotted one.
++ More objects and methods? Of course! Our goal is to cover everything in WebAPI! Well, excluding deprecated things. See [Features](#features) section to get feeling what should be there.
++ Found a bug? Fix it!
+
+And even if you don't have spare time for making PRs, you still can help by talking to your friends and subscribers about GWeb. Thank you :heart:
 
 ## Similar projects
 
