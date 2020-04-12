@@ -20,6 +20,7 @@ func GetWindow() Window {
 
 // CONSTRUCTORS
 
+// https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
 func (window Window) AudioContext() audio.AudioContext {
 	constructor := window.Get("AudioContext")
 	value := constructor.New().Value

@@ -19,6 +19,8 @@ const (
 	NOTATION_NODE               = NodeType(12) // deprecated
 )
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Node
+// https://developer.mozilla.org/en-US/docs/Web/API/ParentNode
 type Node struct {
 	value Value
 }
@@ -31,10 +33,17 @@ func (node Node) BaseURI() string {
 	return node.value.Get("baseURI").String()
 }
 
+// Returns the number of children of this Node which are elements.
+// https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/childElementCount
 func (node Node) ChildrenCount() int {
 	return node.value.Get("childElementCount").Int()
 }
 
+// A boolean indicating whether or not the Node is connected
+// (directly or indirectly) to the context object, e.g.
+// the Document object in the case of the normal DOM,
+// or the ShadowRoot in the case of a shadow DOM.
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected
 func (node Node) Connected() bool {
 	return node.value.Get("isConnected").Bool()
 }
@@ -77,6 +86,8 @@ func (node Node) Normalize() {
 	node.value.Call("normalize")
 }
 
+// Clone a Node, and optionally, all of its contents.
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode
 func (node Node) Clone(deep bool) Node {
 	return node.value.Call("cloneNode", deep).Node()
 }

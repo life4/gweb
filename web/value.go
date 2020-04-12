@@ -13,16 +13,19 @@ type Value struct {
 
 // overloaded methods
 
+// Call calls the given method of the object.
 func (v Value) Call(method string, args ...interface{}) Value {
 	result := v.Value.Call(method, args...)
 	return Value{Value: result}
 }
 
+// Get returns the given property of the value
 func (v Value) Get(property string) Value {
 	result := v.Value.Get(property)
 	return Value{Value: result}
 }
 
+// Creates new instance of the JS class.
 func (v Value) New(args ...interface{}) Value {
 	result := v.Value.New(args...)
 	return Value{Value: result}
