@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
 
-GOOS=js GOARCH=wasm go test -exec=wasmbrowsertest ./web/
+export GOPATH=$(go env GOPATH)
+GOOS=js GOARCH=wasm go test -exec=$GOPATH/bin/wasmbrowsertest ./web/
 
 examples=( "ball" "bootstrap" "breakout" "draw" "events" "hello" "oscilloscope" "pacman" "server" "styling" "templates" "triangle" )
 
