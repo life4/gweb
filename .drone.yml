@@ -1,0 +1,22 @@
+kind: pipeline
+type: docker
+name: default
+trigger:
+  branch: master
+
+steps:
+  - name: golangci-lint
+    image: golangci/golangci-lint:latest
+    depends_on:
+      - clone
+    environment:
+      GOOS: js
+      GOARCH: wasm
+    commands:
+      - golangci-lint run ./
+
+  - name: test
+    image: golang
+    commands:
+    - go mod download
+    - ./test.sh
