@@ -13,7 +13,7 @@ steps:
       GOOS: js
       GOARCH: wasm
     commands:
-      - golangci-lint run ./
+      - golangci-lint run
 
   - name: test
     image: golang
