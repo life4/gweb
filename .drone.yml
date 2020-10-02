@@ -18,5 +18,6 @@ steps:
   - name: test
     image: golang
     commands:
-    - go mod download
-    - ./test.sh
+      - go mod download
+      - go install github.com/agnivade/wasmbrowsertest
+      - ./test.sh
