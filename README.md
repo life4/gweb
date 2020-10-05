@@ -6,12 +6,12 @@ See examples on [gweb.orsinium.dev](https://gweb.orsinium.dev/).
 
 ## Features
 
-+ **Strictly typed**. It's a wrapper around `syscall/js` that helps you to avoid runtime errors (you'll get them a lot with a raw `syscall/js`).
-+ **Backward compatible**. Almost every type is a wrapper around `js.Value`. So, if something missed, you always can fallback to the classic `syscall/js` calls.
-+ **Hand crafted**. It's hard to make usable autogeneration of WebAPI since Go is strictly typed language without union types. So we carefully transalted everything with applying Go best practices.
-+ **Cleaned up**. The library provides only useful methods and attributes from WebAPI. No obsolete and deprecated methods, no experimental API that supported only by a few engines. Only what we really need right now.
-+ **Almost the same API as in JS**. If you have a experience with [vanilla JS](https://stackoverflow.com/a/20435744), you almost learnt everything about the libray.
-+ **But better**. WebAPI has a long history with incremental changes and spaces for unimplemented dreams. However, we can see the full picture to provide better experience and more namespaces.
++ **Strictly typed**. It's a wrapper around `syscall/js` that helps you to avoid runtime errors (you'll get them a lot with raw `syscall/js`).
++ **Backward compatible**. Almost every type is a wrapper around `js.Value`. So if something missed, you can always fall back to the classic `syscall/js` calls.
++ **Hand crafted**. It's hard to make a usable autogeneration of WebAPI since Go is a strictly typed language without union types. So we carefully translated everything while applying Go best practices.
++ **Cleaned up**. The library provides only useful methods and attributes from WebAPI. No obsolete and deprecated methods, no experimental APIs that are only supported by a few engines. Only what we really need right now.
++ **Almost the same API as in JS**. If you have experience with [vanilla JS](https://stackoverflow.com/a/20435744), you have almost learnt everything about the libray.
++ **But better**. WebAPI has a long history of incremental changes and spaces for unimplemented dreams. However, we can see the full picture to provide a better experience and more namespaces.
 + **Documented**. Every method is documented to save your time and reduce googling.
 
 ## Installation
@@ -20,7 +20,7 @@ See examples on [gweb.orsinium.dev](https://gweb.orsinium.dev/).
 GOOS=js GOARCH=wasm go get github.com/life4/gweb
 ```
 
-If you're using VSCode, it's recommend to create in your project `.vscode/settings.json` file with the following content:
+If you're using VSCode, it's recommend to create a `.vscode/settings.json` file in your project with the following content:
 
 ```json
 {
@@ -62,7 +62,7 @@ name = el.Get("name").String()
 GWeb is a collection of a few packages:
 
 + `web` ([docs](https://pkg.go.dev/github.com/life4/gweb/web?tab=doc)) -- window, manipulations with DOM.
-+ `audio` ([docs](https://pkg.go.dev/github.com/life4/gweb/audio?tab=doc)) -- [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API). Use `web.GetWindow().AudioContext()` as an entrypoint.
++ `audio` ([docs](https://pkg.go.dev/github.com/life4/gweb/audio?tab=doc)) -- [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API). Use `web.GetWindow().AudioContext()` as an entry point.
 + `canvas` ([docs](https://pkg.go.dev/github.com/life4/gweb/canvas?tab=doc)) -- canvas-related objects. Use `web.GetWindow().Document().CreateCanvas()` to get started.
 + `css` ([docs](https://pkg.go.dev/github.com/life4/gweb/css?tab=doc)) -- manage styles for HTML elements.
 
