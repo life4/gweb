@@ -20,41 +20,14 @@ tasks:
     cmds:
       - go test -exec={{.GOPATH}}/bin/wasmbrowsertest ./web/
 
-  test:example:
+  test:examples:
     env:
       GOOS: js
       GOARCH: wasm
     cmds:
-      - go build -o /tmp/bin "./examples/{{.NAME}}"
-
-  test:examples:
-    cmds:
-      - task: test:example
-        vars: {NAME: ball}
-      - task: test:example
-        vars: {NAME: bootstrap}
-      - task: test:example
-        vars: {NAME: breakout}
-      - task: test:example
-        vars: {NAME: draw}
-      - task: test:example
-        vars: {NAME: events}
-      - task: test:example
-        vars: {NAME: hello}
-      - task: test:example
-        vars: {NAME: oscilloscope}
-      - task: test:example
-        vars: {NAME: pacman}
-      - task: test:example
-        vars: {NAME: piano}
-      - task: test:example
-        vars: {NAME: server}
-      - task: test:example
-        vars: {NAME: styling}
-      - task: test:example
-        vars: {NAME: templates}
-      - task: test:example
-        vars: {NAME: triangle}
+      - rm -rf /tmp/gweb-bin
+      - mkdir -p /tmp/gweb-bin/
+      - go build -o /tmp/gweb-bin/ ./...
 
   test:
     cmds:

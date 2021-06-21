@@ -62,6 +62,13 @@ func (window Window) Screen() Screen {
 	return Screen{Value: window.Get("screen")}
 }
 
+// Create an object used to send HTTP requests.
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/XMLHttpRequest
+func (window Window) HTTPRequest() HTTPRequest {
+	return HTTPRequest{Value: window.Get("XMLHttpRequest").New()}
+}
+
 // OTHER GETTERS
 
 // Returns the height of the content area of the browser window including, if rendered, the horizontal scrollbar.
