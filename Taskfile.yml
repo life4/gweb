@@ -1,0 +1,62 @@
+# https://taskfile.dev
+version: '3'
+
+vars:
+  GOPATH:
+    sh: go env GOPATH
+
+tasks:
+  install:
+    cmds:
+      - go mod download
+      - go install github.com/agnivade/wasmbrowsertest
+
+  test:library:
+    deps:
+      - install
+    env:
+      GOOS: js
+      GOARCH: wasm
+    cmds:
+      - go test -exec={{.GOPATH}}/bin/wasmbrowsertest ./web/
+
+  test:example:
+    env:
+      GOOS: js
+      GOARCH: wasm
+    cmds:
+      - go build -o /tmp/bin "./examples/{{.NAME}}"
+
+  test:examples:
+    cmds:
+      - task: test:example
+        vars: {NAME: ball}
+      - task: test:example
+        vars: {NAME: bootstrap}
+      - task: test:example
+        vars: {NAME: breakout}
+      - task: test:example
+        vars: {NAME: draw}
+      - task: test:example
+        vars: {NAME: events}
+      - task: test:example
+        vars: {NAME: hello}
+      - task: test:example
+        vars: {NAME: oscilloscope}
+      - task: test:example
+        vars: {NAME: pacman}
+      - task: test:example
+        vars: {NAME: piano}
+      - task: test:example
+        vars: {NAME: server}
+      - task: test:example
+        vars: {NAME: styling}
+      - task: test:example
+        vars: {NAME: templates}
+      - task: test:example
+        vars: {NAME: triangle}
+
+  test:
+    cmds:
+      - task: test:library
+      - task: test:examples
