@@ -24,12 +24,13 @@ func TestHTTPRequest_POST(t *testing.T) {
 	is.Equal(resp.StatusCode(), 200)
 	is.Equal(resp.Status(), "")
 	is.Equal(resp.Headers().Get("Content-Type"), "application/json")
-	is.Equal(resp.Headers().Values(), []string{"content-length: 772", "content-type: application/json"})
+	is.Equal(resp.Headers().Values(), []string{"content-length: 723", "content-type: application/json"})
 
 	data := struct {
 		Data string `json:"data"`
 		URL  string `json:"url"`
 	}{}
+	// is.Equal(string(resp.Body()), "")
 	err := json.Unmarshal(resp.Body(), &data)
 	is.Nil(err)
 	is.Equal(data.URL, "https://httpbin.org/post")

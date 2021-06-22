@@ -1,7 +1,6 @@
 package web
 
 import (
-	"encoding/base64"
 	"strings"
 	"sync"
 	"syscall/js"
@@ -34,9 +33,9 @@ func (req HTTPRequest) Send(body []byte) HTTPResponse {
 	if body == nil {
 		req.Call("send", nil)
 	} else {
-		// https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/atob
-		encoded := base64.StdEncoding.EncodeToString(body)
-		req.Call("send", req.window.Call("atob", encoded))
+		encoded := req.window.Get("Uint8Array").New(len(body))
+		js.CopyBytesToJS(encoded.Value, body)
+		req.Call("send", encoded)
 	}
 
 	wg.Wait()
