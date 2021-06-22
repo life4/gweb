@@ -24,5 +24,5 @@ Build all:
 
 ```bash
 python3 -m pip install -r requirements.txt
-python3 build_all.py hello
+python3 build_all.py
 ```

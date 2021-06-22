@@ -89,8 +89,6 @@ func (resp HTTPResponse) Body() []byte {
 	if raw.IsNull() {
 		return nil
 	}
-	// arraybuffer
-	println(raw.String())
 	raw = resp.window.Get("Uint8Array").New(raw)
 	dec := make([]byte, raw.Length())
 	js.CopyBytesToGo(dec, raw.Value)
