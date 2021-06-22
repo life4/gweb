@@ -1,0 +1,40 @@
+# https://taskfile.dev
+version: '3'
+
+vars:
+  GOPATH:
+    sh: go env GOPATH
+
+tasks:
+  install:
+    cmds:
+      - go mod download
+      - go install github.com/agnivade/wasmbrowsertest
+
+  test:library:
+    deps:
+      - install
+    env:
+      GOOS: js
+      GOARCH: wasm
+    cmds:
+      - go test -exec={{.GOPATH}}/bin/wasmbrowsertest ./web/
+
+  test:examples:
+    env:
+      GOOS: js
+      GOARCH: wasm
+    cmds:
+      - rm -rf /tmp/gweb-bin
+      - mkdir -p /tmp/gweb-bin/
+      - go build -o /tmp/gweb-bin/ ./...
+
+  test:
+    desc: "run go test for the library and examples"
+    cmds:
+      - task: test:library
+      - task: test:examples
+
+  refs:
+    cmds:
+      - python3 generate_refs.py > refs.md

@@ -16,8 +16,10 @@ steps:
       - golangci-lint run
 
   - name: test
-    image: golang
+    image: "golang:1.16.5-alpine3.13"
     commands:
-      - go mod download
-      - go install github.com/agnivade/wasmbrowsertest
-      - ./test.sh
+      - apk add --no-cache wget
+      - wget https://taskfile.dev/install.sh
+      - sh install.sh -- latest
+      - rm install.sh
+      - ./bin/task test

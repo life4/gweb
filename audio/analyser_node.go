@@ -28,7 +28,7 @@ func (analyser AnalyserNode) TimeDomain() TimeDomainBytes {
 }
 
 // FFTSize represents the window size in samples that is used
-// when performing a Fast Fourier Transform (FFT) to get frequency domain data..
+// when performing a Fast Fourier Transform (FFT) to get frequency domain data.
 // https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/fftSize
 func (analyser AnalyserNode) FFTSize() int {
 	return analyser.Get("fftSize").Int()
@@ -57,7 +57,7 @@ func (analyser AnalyserNode) SmoothingTimeConstant() float64 {
 // SETTERS
 
 // FFTSize represents the window size in samples that is used
-// when performing a Fast Fourier Transform (FFT) to get frequency domain data..
+// when performing a Fast Fourier Transform (FFT) to get frequency domain data.
 // https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/fftSize
 func (analyser AnalyserNode) SetFFTSize(value int) {
 	analyser.Set("fftSize", value)

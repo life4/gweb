@@ -62,6 +62,22 @@ func (window Window) Screen() Screen {
 	return Screen{Value: window.Get("screen")}
 }
 
+// Create an object used to send HTTP requests (XMLHttpRequest),
+// open it (initialize) and set the response type (responseType) to binary.
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/XMLHttpRequest
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/open
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType
+func (window Window) HTTPRequest(method, url string) HTTPRequest {
+	req := HTTPRequest{
+		Value:  window.Get("XMLHttpRequest").New(),
+		window: window,
+	}
+	req.Call("open", method, url, true)
+	req.Set("responseType", "arraybuffer")
+	return req
+}
+
 // OTHER GETTERS
 
 // Returns the height of the content area of the browser window including, if rendered, the horizontal scrollbar.

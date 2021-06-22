@@ -1,9 +1,9 @@
 categories:
-  - name: "DOM"
+  - name: DOM
     items:
-      - name: "hello"
+      - name: hello
         info: 'a small "hello world": set title, create element, add element onto the page.'
-      - name: "styling"
+      - name: styling
         info: "how to set CSS attributes for an object."
       - name: events
         info: how to handle events like mouse movement.
@@ -16,7 +16,7 @@ categories:
           how to dynamically load CSS (on example of
           [Bootstrap](https://getbootstrap.com/))
           and do something when it is ready.
-  - name: "Canvas"
+  - name: Canvas
     items:
       - name: triangle
         info: '"hello world" for `<canvas>`: make black background and draw a red triangle.'
@@ -36,12 +36,16 @@ categories:
           classic video game (famous because of clone
           [Arkanoid](https://en.wikipedia.org/wiki/Arkanoid))
           with a bit more natural (hence annoying) physic.
-  - name: "Audio"
+  - name: Audio
     items:
-      - name: "oscilloscope"
+      - name: oscilloscope
         info: "a small example of visualization of an audio from the user microphone."
-      - name: "piano"
+      - name: piano
         info: >
           play MIDI music! A good example of rendering sounds. Based on
           [Simple synth keyboard](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Simple_synth)
           MDN example.
+  - name: Networking
+    items:
+      - name: http_request
+        info: how to make an HTTP request
