@@ -2,7 +2,8 @@
 
 **gweb** -- strictly typed [WebAPI](https://en.wikipedia.org/wiki/Web_API) library on top of [syscall/js](https://golang.org/pkg/syscall/js/). Like [flow](https://github.com/facebook/flow) or [TypeScript](https://www.typescriptlang.org/) but for Go. You need it if you want to interact with browser from [wasm-compiled](https://github.com/golang/go/wiki/WebAssembly) Go program.
 
-See examples on [gweb.orsinium.dev](https://gweb.orsinium.dev/) and [refs.md](./refs.md) for mapping of JS Web API to gweb functions.
++ Examples: [gweb.orsinium.dev](https://gweb.orsinium.dev/)
++ Mapping of JS Web API to GWeb functions: [refs.md](./refs.md)
 
 ## Features
 
