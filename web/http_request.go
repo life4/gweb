@@ -40,7 +40,10 @@ func (req HTTPRequest) Send(body []byte) HTTPResponse {
 	}
 
 	wg.Wait()
-	return HTTPResponse{value: req.Value}
+	return HTTPResponse{
+		value:  req.Value,
+		window: req.window,
+	}
 }
 
 // Abort aborts the request if it has already been sent.
@@ -87,12 +90,11 @@ func (resp HTTPResponse) Body() []byte {
 	if raw.IsNull() {
 		return nil
 	}
-	// https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa
-	enc := resp.window.Call("btoa", raw).String()
-	dec, err := base64.StdEncoding.DecodeString(enc)
-	if err != nil {
-		panic(err)
-	}
+	// arraybuffer
+	println(raw.String())
+	raw = resp.window.Get("Uint8Array").New(raw)
+	dec := make([]byte, raw.Length())
+	js.CopyBytesToGo(dec, raw.Value)
 	return dec
 }
 

@@ -74,7 +74,7 @@ func (window Window) HTTPRequest(method, url string) HTTPRequest {
 		window: window,
 	}
 	req.Call("open", method, url, true)
-	req.Set("responseType", "blob")
+	req.Set("responseType", "arraybuffer")
 	return req
 }
 
