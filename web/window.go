@@ -62,11 +62,17 @@ func (window Window) Screen() Screen {
 	return Screen{Value: window.Get("screen")}
 }
 
-// Create an object used to send HTTP requests.
+// Create an object used to send HTTP requests (XMLHttpRequest),
+// open it (initialize) and set the response type (responseType) to binary.
 // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
 // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/XMLHttpRequest
-func (window Window) HTTPRequest() HTTPRequest {
-	return HTTPRequest{Value: window.Get("XMLHttpRequest").New()}
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/open
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType
+func (window Window) HTTPRequest(method, url string) HTTPRequest {
+	req := HTTPRequest{Value: window.Get("XMLHttpRequest").New()}
+	req.Call("open", method, url, true)
+	req.Set("responseType", "blob")
+	return req
 }
 
 // OTHER GETTERS

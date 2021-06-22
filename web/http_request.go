@@ -2,6 +2,7 @@ package web
 
 import (
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -12,17 +13,24 @@ type HTTPRequest struct {
 	Value
 }
 
-// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/open
-func (req HTTPRequest) Open(method, url string) {
-	req.Call("open", method, url, false)
-	// req.Set("responseType", "blob")
-}
-
+// Send the HTTP request. This operation is blocking on the Go side
+// but doesn't block JS-side main thread.
 // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/send
 func (req HTTPRequest) Send(body []byte) HTTPResponse {
+	wg := sync.WaitGroup{}
+	wg.Add(1)
+	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequestEventTarget/onload
+	req.EventTarget().Listen(EventTypeLoad, func(e Event) {
+		wg.Done()
+	})
+
 	if body == nil {
 		req.Call("send", "")
+	} else {
+		// https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/atob
 	}
+
+	wg.Wait()
 	return HTTPResponse{value: req.Value}
 }
 
@@ -107,3 +115,5 @@ func (h Headers) Values() []string {
 	vals := h.value.Call("getAllResponseHeaders").String()
 	return strings.Split(strings.TrimSpace(vals), "\r\n")
 }
+
+// https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa
