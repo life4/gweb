@@ -61,10 +61,6 @@ func (doc *Document) Referrer() string {
 	return doc.Get("referrer").String()
 }
 
-func (doc *Document) InputEncoding() string {
-	return doc.Get("inputEncoding").String()
-}
-
 // https://developer.mozilla.org/en-US/docs/Web/API/Document/readyState
 func (doc *Document) ReadyState() string {
 	return doc.Get("readyState").String()
@@ -135,12 +131,14 @@ func (doc *Document) LastModified() time.Time {
 
 // SETTERS
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/title
 func (doc Document) SetTitle(title string) {
 	doc.Set("title", title)
 }
 
 // METHODS
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement
 func (doc Document) CreateElement(name string) HTMLElement {
 	return doc.Call("createElement", name).HTMLElement()
 }
@@ -149,6 +147,7 @@ func (doc Document) CreateCanvas() Canvas {
 	return doc.CreateElement("canvas").Canvas()
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementById
 func (doc Document) Element(id string) HTMLElement {
 	return doc.Call("getElementById", id).HTMLElement()
 }
@@ -159,6 +158,7 @@ type Fullscreen struct {
 	value Value
 }
 
+// https://developer.mozilla.org/en-US/docs/Web/API/Document/fullscreenEnabled
 func (scroll *Scroll) Available() bool {
 	return scroll.value.Get("fullscreenEnabled").Bool()
 }

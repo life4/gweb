@@ -44,11 +44,6 @@ func TestDocumentReferrer(t *testing.T) {
 	assert.Equal(t, d.Referrer(), "")
 }
 
-func TestDocumentInputEncoding(t *testing.T) {
-	d := GetWindow().Document()
-	assert.Equal(t, d.InputEncoding(), "UTF-8")
-}
-
 func TestDocumentReadyState(t *testing.T) {
 	d := GetWindow().Document()
 	assert.Equal(t, d.ReadyState(), "complete")
