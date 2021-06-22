@@ -1,6 +1,7 @@
 package web
 
 import (
+	"encoding/base64"
 	"strings"
 	"sync"
 	"time"
@@ -11,6 +12,7 @@ import (
 // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/XMLHttpRequest
 type HTTPRequest struct {
 	Value
+	window Window
 }
 
 // Send the HTTP request. This operation is blocking on the Go side
@@ -25,9 +27,11 @@ func (req HTTPRequest) Send(body []byte) HTTPResponse {
 	})
 
 	if body == nil {
-		req.Call("send", "")
+		req.Call("send", nil)
 	} else {
 		// https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/atob
+		encoded := base64.StdEncoding.EncodeToString(body)
+		req.Call("send", req.window.Call("atob", encoded))
 	}
 
 	wg.Wait()
@@ -65,7 +69,23 @@ func (req HTTPRequest) SetHeader(header, value string) {
 }
 
 type HTTPResponse struct {
-	value Value
+	value  Value
+	window Window
+}
+
+// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/response
+func (resp HTTPResponse) Body() []byte {
+	raw := resp.value.Get("response")
+	if raw.IsNull() {
+		return nil
+	}
+	// https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa
+	enc := resp.window.Call("btoa", raw).String()
+	dec, err := base64.StdEncoding.DecodeString(enc)
+	if err != nil {
+		panic(err)
+	}
+	return dec
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseText
@@ -90,7 +110,7 @@ func (resp HTTPResponse) Status() string {
 }
 
 func (resp HTTPResponse) Headers() Headers {
-	return Headers(resp)
+	return Headers{value: resp.value}
 }
 
 // Encapsulates methods to work with HTTP response headers.
@@ -115,5 +135,3 @@ func (h Headers) Values() []string {
 	vals := h.value.Call("getAllResponseHeaders").String()
 	return strings.Split(strings.TrimSpace(vals), "\r\n")
 }
-
-// https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/btoa

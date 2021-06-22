@@ -69,7 +69,10 @@ func (window Window) Screen() Screen {
 // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/open
 // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/responseType
 func (window Window) HTTPRequest(method, url string) HTTPRequest {
-	req := HTTPRequest{Value: window.Get("XMLHttpRequest").New()}
+	req := HTTPRequest{
+		Value:  window.Get("XMLHttpRequest").New(),
+		window: window,
+	}
 	req.Call("open", method, url, true)
 	req.Set("responseType", "blob")
 	return req
