@@ -9,6 +9,7 @@ type EventTarget struct {
 	Value
 }
 
+// Listen registers callback for the given event.
 // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
 func (target EventTarget) Listen(event EventType, handler func(event Event)) {
 	wrapped := func(this js.Value, args []js.Value) interface{} {
