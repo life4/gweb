@@ -22,4 +22,4 @@ steps:
       - wget https://taskfile.dev/install.sh
       - sh install.sh -- latest
       - rm install.sh
-      - task test
+      - ./bin/task test
