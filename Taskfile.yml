@@ -30,6 +30,11 @@ tasks:
       - go build -o /tmp/gweb-bin/ ./...
 
   test:
+    desc: "run go test for the library and examples"
     cmds:
       - task: test:library
       - task: test:examples
+
+  refs:
+    cmds:
+      - python3 generate_refs.py > refs.md
