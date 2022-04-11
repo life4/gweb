@@ -11,7 +11,7 @@ type Value struct {
 
 // overloaded methods
 
-func (v Value) Call(method string, args ...interface{}) Value {
+func (v Value) Call(method string, args ...any) Value {
 	result := v.Value.Call(method, args...)
 	return Value{Value: result}
 }
@@ -21,7 +21,7 @@ func (v Value) Get(property string) Value {
 	return Value{Value: result}
 }
 
-func (v Value) New(args ...interface{}) Value {
+func (v Value) New(args ...any) Value {
 	result := v.Value.New(args...)
 	return Value{Value: result}
 }

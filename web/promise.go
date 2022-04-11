@@ -12,7 +12,7 @@ type Promise struct {
 
 // Register callback for error handling
 func (promise Promise) Catch(handler func(reason js.Value)) {
-	wrapper := func(then js.Value, args []js.Value) interface{} {
+	wrapper := func(then js.Value, args []js.Value) any {
 		handler(args[0])
 		return nil
 	}
@@ -21,7 +21,7 @@ func (promise Promise) Catch(handler func(reason js.Value)) {
 
 // Register callback for sucsessful result handling
 func (promise Promise) Then(handler func(value js.Value)) {
-	wrapper := func(then js.Value, args []js.Value) interface{} {
+	wrapper := func(then js.Value, args []js.Value) any {
 		handler(args[0])
 		return nil
 	}

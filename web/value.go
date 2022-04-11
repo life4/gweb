@@ -14,8 +14,8 @@ type Value struct {
 // overloaded methods
 
 // Call calls the given method of the object.
-func (v Value) Call(method string, args ...interface{}) Value {
-	result := v.Value.Call(method, args...)
+func (v Value) Call(method string, args ...any) Value {
+	result := v.Value.Call(method, unwrapValues(args)...)
 	return Value{Value: result}
 }
 
@@ -26,12 +26,17 @@ func (v Value) Get(property string) Value {
 }
 
 // Creates new instance of the JS class.
-func (v Value) New(args ...interface{}) Value {
-	result := v.Value.New(args...)
+func (v Value) New(args ...any) Value {
+	result := v.Value.New(unwrapValues(args)...)
 	return Value{Value: result}
 }
 
 // new methods
+
+// Casts web.Value to js.Value
+func (v Value) JSValue() js.Value {
+	return v.Value
+}
 
 // Represents the current value into Canvas
 func (v Value) Canvas() Canvas {
@@ -108,4 +113,17 @@ func (v Value) OptionalString() string {
 	default:
 		panic("bad type")
 	}
+}
+
+func unwrapValues(args []any) []any {
+	values := make([]any, len(args))
+	for i, arg := range args {
+		switch arg := arg.(type) {
+		case Value:
+			values[i] = arg.Value
+		default:
+			values[i] = arg
+		}
+	}
+	return values
 }

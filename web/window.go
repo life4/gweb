@@ -144,7 +144,7 @@ func (window Window) SetScrollY(pixels int) {
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Window/scrollY
 func (window Window) RequestAnimationFrame(handler func(), recursive bool) {
-	wrapped := func(this js.Value, args []js.Value) interface{} {
+	wrapped := func(this js.Value, args []js.Value) any {
 		handler()
 		if recursive {
 			window.RequestAnimationFrame(handler, true)

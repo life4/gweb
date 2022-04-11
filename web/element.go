@@ -271,9 +271,9 @@ func (cls Class) Append(names ...string) {
 	if len(names) == 0 {
 		return
 	}
-	casted := make([]interface{}, len(names))
+	casted := make([]any, len(names))
 	for i, name := range names {
-		casted[i] = interface{}(name)
+		casted[i] = any(name)
 	}
 	cls.value.Get("classList").Call("add", casted...)
 }
@@ -283,9 +283,9 @@ func (cls Class) Remove(names ...string) {
 	if len(names) == 0 {
 		return
 	}
-	casted := make([]interface{}, len(names))
+	casted := make([]any, len(names))
 	for i, name := range names {
-		casted[i] = interface{}(name)
+		casted[i] = any(name)
 	}
 	cls.value.Get("classList").Call("remove", casted...)
 }

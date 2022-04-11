@@ -6,6 +6,11 @@ type MediaStream struct {
 	js.Value
 }
 
+// Casts audio.MediaStream to js.Value
+func (stream MediaStream) JSValue() js.Value {
+	return stream.Value
+}
+
 // PROPERTIES
 
 // https://developer.mozilla.org/en-US/docs/Web/API/MediaStream/active
