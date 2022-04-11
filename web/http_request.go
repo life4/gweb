@@ -22,7 +22,7 @@ func (req HTTPRequest) Send(body []byte) HTTPResponse {
 	wg := sync.WaitGroup{}
 	wg.Add(1)
 	// https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/onreadystatechange
-	req.Set("onreadystatechange", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+	req.Set("onreadystatechange", js.FuncOf(func(this js.Value, args []js.Value) any {
 		state := req.Get("readyState").Int()
 		if state == 4 || state == 0 {
 			wg.Done()

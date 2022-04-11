@@ -7,36 +7,36 @@ type Console struct {
 
 // LOGGING
 
-func (console Console) log(fname, format string, args []interface{}) {
+func (console Console) log(fname, format string, args []any) {
 	if format == "" {
 		console.Call(fname, args...)
 	} else {
-		console.Call(fname, append([]interface{}{format}, args...)...)
+		console.Call(fname, append([]any{format}, args...)...)
 	}
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Console/log
-func (console Console) Log(format string, args ...interface{}) {
+func (console Console) Log(format string, args ...any) {
 	console.log("log", format, args)
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Console/debug
-func (console Console) Debug(format string, args ...interface{}) {
+func (console Console) Debug(format string, args ...any) {
 	console.log("debug", format, args)
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Console/info
-func (console Console) Info(format string, args ...interface{}) {
+func (console Console) Info(format string, args ...any) {
 	console.log("info", format, args)
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Console/warn
-func (console Console) Warning(format string, args ...interface{}) {
+func (console Console) Warning(format string, args ...any) {
 	console.log("warn", format, args)
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Console/error
-func (console Console) Error(format string, args ...interface{}) {
+func (console Console) Error(format string, args ...any) {
 	console.log("error", format, args)
 }
 
@@ -106,6 +106,6 @@ func (console Console) TimeLog(label string) {
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Console/trace
-func (console Console) Trace(args ...interface{}) {
+func (console Console) Trace(args ...any) {
 	console.Call("trace", args...)
 }

@@ -16,7 +16,7 @@ steps:
       - golangci-lint run
 
   - name: test
-    image: "golang:1.16.5-alpine3.13"
+    image: "golang:alpine3.15"
     commands:
       - apk add --no-cache wget
       - wget https://taskfile.dev/install.sh

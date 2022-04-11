@@ -18,7 +18,7 @@ tasks:
       GOOS: js
       GOARCH: wasm
     cmds:
-      - go test -exec={{.GOPATH}}/bin/wasmbrowsertest ./web/
+      - go test -exec={{.GOPATH}}/bin/wasmbrowsertest -buildvcs=false ./web/
 
   test:examples:
     env:
@@ -27,7 +27,7 @@ tasks:
     cmds:
       - rm -rf /tmp/gweb-bin
       - mkdir -p /tmp/gweb-bin/
-      - go build -o /tmp/gweb-bin/ ./...
+      - go build -buildvcs=false -o /tmp/gweb-bin/ ./...
 
   test:
     desc: "run go test for the library and examples"
