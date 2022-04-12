@@ -1,0 +1,4 @@
+[build]
+publish = "public/"
+command = "./examples/build_all.py"
+environment = {GO_VERSION = "1.18", PYTHON_VERSION = "3.8"}

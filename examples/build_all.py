@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import subprocess
 from argparse import ArgumentParser
 from pathlib import Path
@@ -7,25 +8,29 @@ import yaml
 from jinja2 import Environment, FileSystemLoader
 
 
+ROOT = Path(__file__).absolute().parent
 env = Environment(
-    loader=FileSystemLoader('.'),
+    loader=FileSystemLoader(ROOT),
     extensions=['jinja2_markdown.MarkdownExtension'],
 )
 
-
 parser = ArgumentParser()
-parser.add_argument('-o', '--output', help='path to build output')
+parser.add_argument(
+    '-o', '--output',
+    default=str(ROOT.parent / 'public'),
+    help='path to build output',
+)
 
 
 def make_index():
-    data = yaml.safe_load(Path('index.yml').open())
+    with (ROOT / 'index.yml').open(encoding='utf8') as stream:
+        data = yaml.safe_load(stream)
     template = env.get_template('index.html.j2')
     return template.render(**data)
 
 
 def get_examples():
-    root = Path(__file__).absolute().parent
-    for path in root.iterdir():
+    for path in ROOT.iterdir():
         if not path.is_dir():
             continue
         if not (path / 'main.go').exists():

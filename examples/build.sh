@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-mkdir -p build
-cp ./frontend/* ./build/
-cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" ./build/script.js
-GOOS=js GOARCH=wasm go build -o build/frontend.wasm ./$1/
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+mkdir -p $SCRIPT_DIR/build
+cp $SCRIPT_DIR/frontend/* $SCRIPT_DIR/build/
+cp "$(go env GOROOT)/misc/wasm/wasm_exec.js" $SCRIPT_DIR/build/script.js
+GOOS=js GOARCH=wasm go build -o $SCRIPT_DIR/build/frontend.wasm $SCRIPT_DIR/$1/
