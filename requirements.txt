@@ -1,0 +1,3 @@
+# requirements for netlify to run examples/build_all.py
+jinja2
+pyyaml
