@@ -11,7 +11,7 @@ import (
 
 func TestDocumentURL(t *testing.T) {
 	d := GetWindow().Document()
-	assert.True(t, strings.HasPrefix(d.URL(), "http://localhost:"), "bad URL")
+	assert.True(t, strings.HasPrefix(d.URL(), "http://127.0.0.1:"), "bad URL")
 }
 
 func TestDocumentCookie(t *testing.T) {
@@ -36,7 +36,7 @@ func TestDocumentDocType(t *testing.T) {
 
 func TestDocumentDomain(t *testing.T) {
 	d := GetWindow().Document()
-	assert.Equal(t, d.Domain(), "localhost")
+	assert.Equal(t, d.Domain(), "127.0.0.1")
 }
 
 func TestDocumentReferrer(t *testing.T) {
