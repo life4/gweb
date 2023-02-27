@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	listen = flag.String("listen", "localhost:1337", "listen address")
+	listen = flag.String("listen", "127.0.0.1:1337", "listen address")
 	dir    = flag.String("dir", "build", "directory to serve")
 )
 
