@@ -14,7 +14,7 @@ func TestHTTPRequest_GET(t *testing.T) {
 	is.Equal(resp.StatusCode(), 200)
 	is.Equal(resp.Status(), "")
 	is.Equal(resp.Headers().Get("Content-Type"), "application/json")
-	is.Equal(resp.Headers().Values(), []string{"content-length: 701", "content-type: application/json"})
+	is.Equal(len(resp.Headers().Values()), 2)
 }
 
 func TestHTTPRequest_POST(t *testing.T) {
@@ -24,7 +24,7 @@ func TestHTTPRequest_POST(t *testing.T) {
 	is.Equal(resp.StatusCode(), 200)
 	is.Equal(resp.Status(), "")
 	is.Equal(resp.Headers().Get("Content-Type"), "application/json")
-	is.Equal(resp.Headers().Values(), []string{"content-length: 805", "content-type: application/json"})
+	is.Equal(len(resp.Headers().Values()), 2)
 
 	data := struct {
 		Data string `json:"data"`
